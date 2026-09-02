@@ -67,11 +67,15 @@ assets. Keep this repo free of app code, and the app repo free of this.
 | `design/screenshots/` | Full-resolution app screenshots, 2400x1600 @2x. |
 | `design/brand/` | The 1710px master logo. |
 | `src/assets/` | Image **sources** for the site. Full resolution — see below. |
-| `src/pages/index.astro` | The only route. Composes the sections, nothing else. |
+| `src/pages/index.astro` | The main route. Composes the sections, nothing else. |
+| `src/pages/privacy.astro` | Privacy policy. Prose only — see **Analytics and the legal pages**. |
+| `src/pages/legal.astro` | Legal notice / imprint. Who operates the site. |
 | `src/components/` | The page, in pieces. |
-| `src/layouts/Layout.astro` | Shell: fonts, meta, OG tags, canonical. |
+| `src/layouts/Layout.astro` | Shell: fonts, meta, OG tags, canonical, analytics beacon. |
+| `src/layouts/Legal.astro` | Prose shell for the two legal pages. Carries their type styles. |
 | `src/styles/global.css` | The `@theme` block. Tokens live here, not in markup. |
-| `src/config.ts` | Every real URL, and the download placeholders. |
+| `src/config.ts` | Every real URL, the company details, and the download placeholders. |
+| `src/env.d.ts` | Types the one build-time env var. |
 | `src/lib/images.ts` | `srcset` builder used by `Screenshot.astro`. |
 
 The scripts that regenerate the screenshots live in the app repo
@@ -244,11 +248,65 @@ way Netlify does; the equivalent is a step in that workflow running
 `wrangler deploy` with a `CLOUDFLARE_API_TOKEN` secret, which has the advantage
 that the release job then knows whether the deploy succeeded.
 
+## Analytics and the legal pages
+
+**There is no cookie banner, and adding one would be a mistake.** The rule that
+produces consent banners is ePrivacy Article 5(3): you must ask before storing
+or reading information on the visitor's device. Nothing here does that, so
+there is nothing to consent to. A banner would be pure friction with no legal
+work to do.
+
+That is a constraint on what may be added later, not just a description of
+today. **Anything that sets a cookie, writes to local storage, or fingerprints
+the visitor changes the answer** and drags a consent flow onto the page with
+it. Weigh that cost before adding one.
+
+### The measurement
+
+Cloudflare Web Analytics, chosen over Plausible because it is free and already
+inside the account that hosts the site. Cookieless: no identifier reaches the
+browser, and visit uniqueness is computed server-side from a hash Cloudflare
+discards.
+
+The beacon is emitted by `Layout.astro`, and only when
+`PUBLIC_CF_BEACON_TOKEN` is set — see `.env.example`. Unset, no script is
+emitted at all, which is what keeps dev, previews and forks out of the
+production numbers. Set it in **Workers Builds → Settings → Variables**.
+
+This is the *second* deliberate exception to the zero-JS rule, after the
+platform picker. Both are third-party-free in the sense that matters: the
+picker talks to nobody, and the beacon is the page's only outbound
+third-party request.
+
+### The pages
+
+`privacy.astro` and `legal.astro`, both on `layouts/Legal.astro`, which carries
+their prose styles as scoped `:global()` rules — legal pages are the only place
+on the site with real reading length, so they get a 42rem measure and a smaller
+type scale than the marketing sections. No new tokens were invented for them.
+
+**The privacy policy is a factual document, not boilerplate.** Every claim in
+it was checked against this repo and the app repo: no storage in
+`PlatformDownloads.astro`, no telemetry anywhere in the app, self-hosted fonts,
+and the updater's six-hourly GitHub check as the app's only outbound request.
+If any of those change, the policy is wrong and must change with them.
+
+A legal notice is there because EU rules entitle a visitor to identify the
+operator of an online service before downloading from it. Terms of Use and a
+separate cookie policy were considered and deliberately skipped: GPL-3.0
+governs the app, and a page saying "we set no cookies" is one line, not a page.
+
 ## Placeholders that must be replaced
 
 - Every download href is `#` — all three live in `src/config.ts`.
 - `v0.1.0` is the real number in the app's `package.json`, but **no release
   exists behind it yet**.
+- **`COMPANY` in `src/config.ts`** — registered address, KvK number, VAT number
+  and contact email are all bracketed gaps. They render in amber on the legal
+  pages, deliberately: an unfilled placeholder should be embarrassing on a live
+  page rather than quietly plausible. The legal notice does not do its job
+  until these are real, so fill them from the KvK register before launch.
+- `PUBLIC_CF_BEACON_TOKEN` is not set anywhere yet, so nothing is measured.
 
 ## Copy rules
 
