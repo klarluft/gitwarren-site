@@ -1,0 +1,32 @@
+---
+import Eyebrow from "./Eyebrow.astro";
+import Screenshot from "./Screenshot.astro";
+import untracked from "../assets/untracked.png";
+---
+
+<section
+  id="how-it-works"
+  class="mx-auto flex w-full max-w-page flex-col gap-stack px-gutter pt-section"
+>
+  <Eyebrow>Before the commit</Eyebrow>
+
+  <h2 class="max-w-[880px] font-display text-h2">
+    An agent&#39;s output isn&#39;t a commit. It&#39;s a dirty worktree.
+  </h2>
+
+  <p class="max-w-[730px] text-body text-muted">
+    That is the gap. By the time work has been committed, pushed and opened as a
+    pull request, you have already accepted its shape &mdash; and the moment when
+    a correction was cheap has passed. GitWarren finds the worktree where the
+    branch is checked out, wherever it happens to live on disk, and folds its
+    staged, unstaged and untracked files into one diff you can read and comment
+    on.
+  </p>
+
+  <Screenshot
+    src={untracked}
+    alt="An untracked file under review, with an agent comment anchored to it"
+    caption="A file the agent created and never added to git — reviewed, and commented on, before it was ever a commit."
+    class="mt-[28px] max-w-shot max-sm:hidden"
+  />
+</section>

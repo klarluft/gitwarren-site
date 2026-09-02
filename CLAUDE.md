@@ -3,20 +3,24 @@
 The marketing site for **GitWarren**, a desktop app for local git code review.
 
 This file carries the decisions already made, so you don't have to re-derive
-them. The design is settled; the site is not built yet.
+them. The design is settled, and the page is built.
 
 ---
 
-## First thing to do
-
-Nothing is scaffolded. Step one:
+## Working on it
 
 ```bash
-npm create astro@latest . -- --template minimal --typescript strict --no-git
-npx astro add tailwind
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # static output into dist/
+npm run check    # astro check — must stay at 0 errors
 ```
 
-Then build the page from `design/canvas/Main.dc.html` (see **The design**).
+The page is one route, `src/pages/index.astro`, composed from
+`src/components/`. The design system lives in `src/styles/global.css` as a
+Tailwind v4 `@theme` block — colours, type scale and spacing are tokens there,
+not values scattered through the markup. See **The design** for what it was
+built from.
 
 ## Why this is a separate repo from the app
 
@@ -26,10 +30,18 @@ and a CI job that rebuilds `better-sqlite3` against Electron headers. Marketing
 copy should pay none of those costs, and GPL is the wrong licence for brand
 assets. Keep this repo free of app code, and the app repo free of this.
 
-- Domain: **gitwarren.com** (owned; point DNS at Netlify)
-- Host: **Netlify** free tier — chosen over GitHub Pages for deploy previews on
-  PRs. Downloads redirect to GitHub release assets, so host bandwidth is
-  irrelevant.
+- Domain: **gitwarren.com** (owned; point DNS at Cloudflare)
+- Host: **Cloudflare Workers** free tier, static assets only — `wrangler.jsonc`
+  has no `main`, so Cloudflare serves `dist/` from its edge without running a
+  Worker script. Workers Builds gives preview URLs on pull requests, which is
+  the only thing the host is actually being asked for here: downloads redirect
+  to GitHub release assets, so host bandwidth is irrelevant.
+
+  Chosen over **Cloudflare Pages** because Pages is in maintenance mode —
+  it still works and is still supported, but new development goes to Workers,
+  and Cloudflare's own guidance for new projects is to start there. Chosen over
+  **Netlify** only marginally: Netlify would have done this fine, and its build
+  hook is simpler than the deploy path below.
 
 ## Stack
 
@@ -47,6 +59,12 @@ assets. Keep this repo free of app code, and the app repo free of this.
 | `design/screenshots/` | Full-resolution app screenshots, 2400x1600 @2x. |
 | `design/brand/` | The 1710px master logo. |
 | `src/assets/` | Image **sources** for the site. Full resolution — see below. |
+| `src/pages/index.astro` | The only route. Composes the sections, nothing else. |
+| `src/components/` | The page, in pieces. |
+| `src/layouts/Layout.astro` | Shell: fonts, meta, OG tags, canonical. |
+| `src/styles/global.css` | The `@theme` block. Tokens live here, not in markup. |
+| `src/config.ts` | Every real URL, and the download placeholders. |
+| `src/lib/images.ts` | `srcset` builder used by `Screenshot.astro`. |
 
 The scripts that regenerate the screenshots live in the app repo
 (`scripts/seed-demo.ts`, `scripts/capture-demo.mjs`) — see
@@ -148,6 +166,32 @@ The logo at **168px**, centred above the headline, with:
 **Wrap all of it in `prefers-reduced-motion`.** The artboards animate
 unconditionally because they are mockups; the real site must not.
 
+## How the two artboards were reconciled
+
+They specify 1280px and 390px and say nothing about the widths in between, and
+they differ in content as well as in size. The built page resolves that as
+follows — change these deliberately, not by accident:
+
+- **One set of copy, the desktop set.** The mobile artboard shortens several
+  paragraphs; duplicating text in show/hide pairs would hurt SEO and double the
+  maintenance, so the fuller wording is used at every width. The mobile
+  artboard governs *layout* only.
+- **Everything scales continuously.** Display type, gutters and section rhythm
+  are `clamp()`s interpolating linearly between the two artboards, so 900px is
+  covered rather than snapping at a breakpoint.
+- **The breakpoint is 640px** (`sm`), where the artboards themselves diverge.
+  Nav links appear at 768px (`md`); the three-card grids go to three columns at
+  1024px (`lg`), because three columns any narrower leaves ~24 characters a
+  line.
+- **The hero screenshot is art-directed**, not just scaled: `narrow.png` below
+  640px, `hero.png` above. A 2400px-wide app UI is unreadable at 390px.
+- **The two section screenshots are dropped below 640px**, as the mobile
+  artboard does, for the same reason. They are lazy-loaded, so a phone does not
+  pay for them.
+- **Fonts are self-hosted** via `@fontsource` (latin subsets only) rather than
+  linked from Google Fonts as the artboards do, and the two above-the-fold
+  faces are preloaded. Same faces, two fewer third-party connections.
+
 ## Download links
 
 electron-builder names assets with the version in them
@@ -155,14 +199,19 @@ electron-builder names assets with the version in them
 work as a static URL.
 
 1. Fetch the GitHub releases API **at build time** in Astro; bake real URLs in.
-2. Add a Netlify build hook and have the app repo's `release.yml` ping it after
-   a successful release, so the buttons refresh on every release.
+   They land in `src/config.ts`, which is where the `#` placeholders are now —
+   nothing else on the page needs to change.
+2. Have the app repo's `release.yml` redeploy this site after a successful
+   release, so the buttons refresh. Cloudflare has no one-line build-hook URL
+   the way Netlify does; the equivalent is a step in that workflow running
+   `wrangler deploy` with a `CLOUDFLARE_API_TOKEN` secret, which has the
+   advantage that the release job then knows whether the deploy succeeded.
 3. Detect OS/arch client-side to pick the primary button — Apple silicon vs
    Intel is worth getting right.
 
 ## Placeholders that must be replaced
 
-- Every download href is `#`.
+- Every download href is `#` — all three live in `src/config.ts`.
 - `v0.1.0` is the real number in the app's `package.json`, but **no release
   exists behind it yet**.
 

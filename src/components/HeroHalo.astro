@@ -1,0 +1,181 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
+
+/*
+  The hero halo, at the values in design/canvas/Main.dc.html (>=640px) and
+  Mobile.dc.html (<640px).
+
+  The colour source is the app icon itself, blurred past recognition, so the
+  hero glows in the logo's own colours rather than in invented ones.
+
+  The artboards animate unconditionally because they are mockups. Here every
+  animation sits inside `prefers-reduced-motion: no-preference`, and the
+  reduced-motion fallback holds the bloom at a fixed opacity so the
+  composition still reads.
+*/
+---
+
+<div class="halo" aria-hidden="true">
+  <div class="bloom">
+    <Image src={logo} alt="" width={320} height={320} loading="eager" />
+  </div>
+
+  <svg class="rings rings--narrow" viewBox="0 0 520 520" fill="none">
+    <g class="ring-outer">
+      <circle
+        cx="260"
+        cy="260"
+        r="228"
+        stroke="#f0b429"
+        stroke-opacity="0.12"
+        stroke-dasharray="3 14"></circle>
+    </g>
+    <g class="ring-inner">
+      <circle cx="260" cy="260" r="164" stroke="#35d6c4" stroke-opacity="0.16"></circle>
+    </g>
+  </svg>
+
+  <svg class="rings rings--wide" viewBox="0 0 1020 1020" fill="none">
+    <g class="ring-outer">
+      <circle
+        cx="510"
+        cy="510"
+        r="440"
+        stroke="#f0b429"
+        stroke-opacity="0.10"
+        stroke-dasharray="3 16"></circle>
+      <circle cx="510" cy="510" r="352" stroke="#ff4d9d" stroke-opacity="0.10"></circle>
+    </g>
+    <g class="ring-inner">
+      <circle
+        cx="510"
+        cy="510"
+        r="268"
+        stroke="#35d6c4"
+        stroke-opacity="0.16"
+        stroke-dasharray="2 12"></circle>
+      <circle cx="510" cy="510" r="200" stroke="#f0b429" stroke-opacity="0.22"></circle>
+    </g>
+  </svg>
+
+  <div class="scrim"></div>
+</div>
+
+<style>
+  .halo {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Narrow artboard */
+    --bloom-size: 520px;
+    --bloom-top: -40px;
+    --bloom-blur: 78px;
+    --bloom-alpha: 0.72;
+    --breathe-from: 0.6;
+    --breathe-to: 0.85;
+    --rings-size: 520px;
+    --rings-top: -40px;
+    --scrim-height: 640px;
+  }
+
+  @media (min-width: 640px) {
+    .halo {
+      /* Wide artboard */
+      --bloom-size: 900px;
+      --bloom-top: 26px;
+      --bloom-blur: 110px;
+      --bloom-alpha: 0.7;
+      --breathe-from: 0.58;
+      --breathe-to: 0.82;
+      --rings-size: 1020px;
+      --rings-top: -34px;
+      --scrim-height: 1120px;
+    }
+  }
+
+  .bloom {
+    position: absolute;
+    top: var(--bloom-top);
+    left: 50%;
+    width: var(--bloom-size);
+    height: var(--bloom-size);
+    margin-left: calc(var(--bloom-size) / -2);
+    /* Mid-point of the breathing range, for reduced motion. */
+    opacity: 0.7;
+    will-change: opacity, transform;
+  }
+
+  .bloom :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: blur(var(--bloom-blur)) saturate(2);
+    opacity: var(--bloom-alpha);
+  }
+
+  .rings {
+    position: absolute;
+    top: var(--rings-top);
+    left: 50%;
+    width: var(--rings-size);
+    height: var(--rings-size);
+    margin-left: calc(var(--rings-size) / -2);
+  }
+
+  .rings--wide { display: none; }
+  .rings--narrow { display: block; }
+
+  @media (min-width: 640px) {
+    .rings--wide { display: block; }
+    .rings--narrow { display: none; }
+  }
+
+  .ring-outer,
+  .ring-inner {
+    transform-origin: 50% 50%;
+  }
+
+  /* Keeps the headline's contrast over the bloom. */
+  .scrim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--scrim-height);
+    background: radial-gradient(
+      ellipse 84% 58% at 50% 14%,
+      rgba(18, 17, 16, 0.24) 0%,
+      rgba(18, 17, 16, 0.92) 72%
+    );
+  }
+
+  @media (min-width: 640px) {
+    .scrim {
+      background: radial-gradient(
+        ellipse 64% 54% at 50% 28%,
+        rgba(18, 17, 16, 0.26) 0%,
+        rgba(18, 17, 16, 0.92) 74%
+      );
+    }
+  }
+
+  @keyframes halo-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes halo-spin-back {
+    to { transform: rotate(-360deg); }
+  }
+
+  @keyframes halo-breathe {
+    0%, 100% { opacity: var(--breathe-from); transform: scale(1); }
+    50% { opacity: var(--breathe-to); transform: scale(1.05); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ring-outer { animation: halo-spin 90s linear infinite; }
+    .ring-inner { animation: halo-spin-back 60s linear infinite; }
+    .bloom { animation: halo-breathe 9s ease-in-out infinite; }
+  }
+</style>

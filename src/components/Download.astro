@@ -1,0 +1,35 @@
+---
+import { Image } from "astro:assets";
+import Button from "./Button.astro";
+import logo from "../assets/logo.png";
+import { DOWNLOADS } from "../config";
+---
+
+<section
+  id="download"
+  class="mx-auto flex w-full max-w-page flex-col items-center gap-stack px-gutter pt-section"
+>
+  <Image
+    src={logo}
+    alt="The GitWarren app icon"
+    width={144}
+    height={144}
+    class="block size-[72px]"
+  />
+
+  <h2 class="max-w-[780px] text-center font-display text-h2xl">
+    Read the diff before you push it.
+  </h2>
+
+  <div
+    class="mt-2.5 flex w-full flex-col items-stretch gap-[11px] sm:w-auto sm:flex-row sm:items-center sm:gap-[14px]"
+  >
+    <Button href={DOWNLOADS.macos}>Download for macOS</Button>
+    <Button href={DOWNLOADS.windows} variant="secondary">Windows</Button>
+    <Button href={DOWNLOADS.linux} variant="secondary">Linux</Button>
+  </div>
+
+  <p class="text-center font-mono text-note text-faint">
+    Free and open source under GPL-3.0
+  </p>
+</section>

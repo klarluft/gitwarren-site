@@ -1,0 +1,49 @@
+---
+import Eyebrow from "./Eyebrow.astro";
+import Screenshot from "./Screenshot.astro";
+import Card from "./Card.astro";
+import agents from "../assets/agents.png";
+---
+
+<section
+  id="agents"
+  class="mx-auto flex w-full max-w-page flex-col gap-stack px-gutter pt-section"
+>
+  <Eyebrow>Agents in the loop</Eyebrow>
+
+  <h2 class="max-w-[900px] font-display text-h2">
+    Your agents take part in the review &mdash; they aren&#39;t just the subject
+    of it.
+  </h2>
+
+  <p class="max-w-[730px] text-body text-muted">
+    GitWarren ships an MCP server over stdio. Point Claude Code, Codex or any MCP
+    client at it and it gets the same seventeen tools the app itself uses: open a
+    review, read the whole discussion, reply in a thread, leave a comment on a
+    line, resolve one. Ask an agent to explain its own diff, or to answer the
+    question you left on line 40 &mdash; in the review, where the answer stays.
+  </p>
+
+  <Screenshot
+    src={agents}
+    alt="An agent review comment and a human reply in the same thread"
+    caption="An agent’s comment and the reply, in one thread — attributed, and never mistakable for a person."
+    class="mt-[28px] max-w-shot max-sm:hidden"
+  />
+
+  <div class="mt-[38px] grid grid-cols-1 gap-cards lg:grid-cols-3">
+    <Card title="Always attributed">
+      A machine-written comment is always marked as one, and the tool&#39;s name
+      comes from the MCP handshake rather than from whatever the model decides to
+      call itself that day.
+    </Card>
+    <Card title="Two agents stay two">
+      Each MCP session is given its own id, so two agents working at the same
+      time are told apart in the thread without either having to cooperate.
+    </Card>
+    <Card title="Yours to edit">
+      You can edit or delete anything in a review. An agent is held to its own
+      messages &mdash; it can fix its own typo, not quietly rewrite yours.
+    </Card>
+  </div>
+</section>

@@ -1,0 +1,95 @@
+---
+import { Image } from "astro:assets";
+import HeroHalo from "./HeroHalo.astro";
+import Eyebrow from "./Eyebrow.astro";
+import Button from "./Button.astro";
+import Screenshot from "./Screenshot.astro";
+import logo from "../assets/logo.png";
+import hero from "../assets/hero.png";
+import narrow from "../assets/narrow.png";
+import { DOWNLOADS, REPO, VERSION } from "../config";
+---
+
+<section class="relative overflow-hidden">
+  <HeroHalo />
+
+  <div
+    class="relative mx-auto flex w-full max-w-page flex-col items-start gap-herostack px-gutter pt-herotop sm:items-center"
+  >
+    <Image
+      src={logo}
+      alt="The GitWarren logo"
+      width={336}
+      height={336}
+      loading="eager"
+      fetchpriority="high"
+      class="hero-logo block"
+    />
+
+    <Eyebrow>Local review for AI-written code</Eyebrow>
+
+    <h1 class="max-w-[940px] font-display text-h1 sm:text-center">
+      Review what your agents wrote,<br class="hidden lg:inline" /> before GitHub
+      ever sees it.
+    </h1>
+
+    <p class="max-w-[690px] text-lead text-muted sm:text-center">
+      An agent finishes a task and leaves you a worktree full of changes that
+      aren&#39;t committed yet. Every other review tool waits for a pull request.
+      GitWarren reads the worktree directly &mdash; staged, unstaged and
+      untracked &mdash; so you read the diff on your own machine first.
+    </p>
+
+    <div
+      class="mt-1.5 flex w-full flex-col items-stretch gap-[11px] sm:mt-2 sm:w-auto sm:flex-row sm:items-center sm:gap-[14px]"
+    >
+      <Button href={DOWNLOADS.macos}>
+        <svg
+          width="17"
+          height="17"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 3v13"></path>
+          <path d="m7 12 5 5 5-5"></path>
+          <path d="M4 21h16"></path>
+        </svg>
+        Download for macOS
+      </Button>
+      <Button href={REPO} variant="secondary">Source on GitHub</Button>
+    </div>
+
+    <p class="w-full text-center font-mono text-note text-faint">
+      {VERSION} &middot; Apple silicon and Intel &middot; Windows and Linux too
+    </p>
+
+    <Screenshot
+      src={hero}
+      narrowSrc={narrow}
+      alt="A GitWarren review showing uncommitted changes folded into the diff"
+      dots
+      eager
+      class="mt-[26px] w-full max-w-shot sm:mt-[46px]"
+    />
+  </div>
+</section>
+
+<style>
+  .hero-logo {
+    width: clamp(6.5rem, 4.747rem + 7.191vw, 10.5rem);
+    height: auto;
+    filter: drop-shadow(0 0 40px rgba(255, 77, 157, 0.45));
+  }
+
+  @media (min-width: 640px) {
+    .hero-logo {
+      filter: drop-shadow(0 0 60px rgba(255, 77, 157, 0.45))
+        drop-shadow(0 0 30px rgba(53, 214, 196, 0.35));
+    }
+  }
+</style>

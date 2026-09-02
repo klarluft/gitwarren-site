@@ -6,8 +6,8 @@ dist/
 # dependencies
 node_modules/
 
-# netlify
-.netlify/
+# cloudflare
+.wrangler/
 
 # the assembled design canvas: ~2.6 MB of editor payload, regenerated from
 # design/canvas/ by the /design skill

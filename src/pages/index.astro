@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import BeforeCommit from "../components/BeforeCommit.astro";
+import Agents from "../components/Agents.astro";
+import LocalByConstruction from "../components/LocalByConstruction.astro";
+import Download from "../components/Download.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout
+  title="GitWarren — review what your agents wrote, before GitHub ever sees it"
+  description="A desktop app for local git code review. GitWarren reads the worktree directly — staged, unstaged and untracked — so you read an agent's diff on your own machine, before it becomes a commit."
+>
+  <Nav />
+  <main>
+    <Hero />
+    <BeforeCommit />
+    <Agents />
+    <LocalByConstruction />
+    <Download />
+  </main>
+  <Footer />
+</Layout>

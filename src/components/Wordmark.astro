@@ -1,0 +1,23 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
+
+interface Props {
+  href?: string;
+}
+
+const { href = "/" } = Astro.props;
+---
+
+<a href={href} class="flex items-center gap-[9px] sm:gap-[10px]">
+  <Image
+    src={logo}
+    alt=""
+    width={26}
+    height={26}
+    densities={[1, 2]}
+    loading="eager"
+    class="block size-6 sm:size-[26px]"
+  />
+  <span class="font-wordmark text-wordmark font-semibold">GitWarren</span>
+</a>

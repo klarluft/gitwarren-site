@@ -1,0 +1,27 @@
+---
+import { LICENCE, RELEASES, REPO } from "../config";
+
+const links = [
+  { label: "GitHub", href: REPO },
+  { label: "Licence", href: LICENCE },
+  { label: "Releases", href: RELEASES },
+];
+---
+
+<footer class="mt-footertop border-t border-line">
+  <div
+    class="mx-auto flex w-full max-w-page flex-col gap-4 px-gutter py-[clamp(1.625rem,1.4062rem+0.8989vw,2.125rem)] text-[13px] text-faint sm:flex-row sm:items-center sm:justify-between sm:text-sm"
+  >
+    <span>GitWarren &mdash; a Klarluft B.V. project</span>
+
+    <nav class="flex gap-7">
+      {
+        links.map(({ label, href }) => (
+          <a href={href} class="transition-colors hover:text-white">
+            {label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</footer>

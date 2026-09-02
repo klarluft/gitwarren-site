@@ -1,0 +1,30 @@
+---
+import Eyebrow from "./Eyebrow.astro";
+import Card from "./Card.astro";
+---
+
+<section
+  class="mx-auto flex w-full max-w-page flex-col gap-stack px-gutter pt-section"
+>
+  <Eyebrow>Local by construction</Eyebrow>
+
+  <h2 class="max-w-[700px] font-display text-h2">
+    None of it leaves your machine.
+  </h2>
+
+  <div class="mt-[22px] grid grid-cols-1 gap-cards lg:grid-cols-3">
+    <Card title="No account">
+      Nothing to sign up for and nothing to sign in to. GitWarren is one
+      person&#39;s app, on one machine, with no notion of anybody else.
+    </Card>
+    <Card title="Nothing cached">
+      Every branch name, commit and diff on screen is read from git at the moment
+      it is shown &mdash; so nothing can quietly go stale behind your back.
+    </Card>
+    <Card title="One SQLite file">
+      Your reviews and comments live in a single file in your application-data
+      directory. Delete it and GitWarren is gone. Your repositories are
+      untouched.
+    </Card>
+  </div>
+</section>

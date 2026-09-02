@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "gitwarren-site",
+  "compatibility_date": "2026-09-02",
+
+  // Static-only: no `main` entrypoint, so Cloudflare serves the build output
+  // straight from its edge without running a Worker script.
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
