@@ -2,7 +2,13 @@
 import { Image } from "astro:assets";
 import Button from "./Button.astro";
 import logo from "../assets/logo.png";
-import { DOWNLOADS } from "../config";
+import type { Downloads } from "../lib/releases";
+
+interface Props {
+  downloads: Downloads;
+}
+
+const { downloads } = Astro.props;
 ---
 
 <section
@@ -24,9 +30,9 @@ import { DOWNLOADS } from "../config";
   <div
     class="mt-2.5 flex w-full flex-col items-stretch gap-[11px] sm:w-auto sm:flex-row sm:items-center sm:gap-[14px]"
   >
-    <Button href={DOWNLOADS.macos}>Download for macOS</Button>
-    <Button href={DOWNLOADS.windows} variant="secondary">Windows</Button>
-    <Button href={DOWNLOADS.linux} variant="secondary">Linux</Button>
+    <Button href={downloads.macos}>Download for macOS</Button>
+    <Button href={downloads.windows} variant="secondary">Windows</Button>
+    <Button href={downloads.linux} variant="secondary">Linux</Button>
   </div>
 
   <p class="text-center font-mono text-note text-faint">

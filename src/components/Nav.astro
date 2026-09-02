@@ -2,9 +2,12 @@
 import Wordmark from "./Wordmark.astro";
 import { REPO } from "../config";
 
+// Absolute, so they still work from the 404 page rather than scrolling to
+// nothing. On the front page the browser treats them as same-document
+// navigation and scrolls as usual.
 const links = [
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Agents", href: "#agents" },
+  { label: "How it works", href: "/#how-it-works" },
+  { label: "Agents", href: "/#agents" },
   { label: "Source", href: REPO },
 ];
 ---
@@ -27,7 +30,7 @@ const links = [
       </div>
 
       <a
-        href="#download"
+        href="/#download"
         class="flex min-h-[44px] items-center rounded-[7px] bg-accent px-[18px] font-medium text-ground transition-colors hover:bg-[#f7c344] sm:min-h-0 sm:px-5 sm:py-[10px]"
       >
         Download

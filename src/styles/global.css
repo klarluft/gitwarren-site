@@ -1,4 +1,12 @@
-@import "tailwindcss";
+/*
+  `source(none)` disables Tailwind's automatic content detection, which
+  otherwise scans every non-ignored file in the repo — including CLAUDE.md and
+  README.md. Class names written in prose there were generating real utilities,
+  and worse, editing a sentence changed the stylesheet hash and busted every
+  visitor's cache for nothing.
+*/
+@import "tailwindcss" source(none);
+@source "../**/*.astro";
 
 /*
   The design system from design/canvas/Main.dc.html (1280px) and Mobile.dc.html

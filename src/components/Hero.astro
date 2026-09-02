@@ -7,7 +7,14 @@ import Screenshot from "./Screenshot.astro";
 import logo from "../assets/logo.png";
 import hero from "../assets/hero.png";
 import narrow from "../assets/narrow.png";
-import { DOWNLOADS, REPO, VERSION } from "../config";
+import { REPO } from "../config";
+import type { Downloads } from "../lib/releases";
+
+interface Props {
+  downloads: Downloads;
+}
+
+const { downloads } = Astro.props;
 ---
 
 <section class="relative overflow-hidden">
@@ -43,7 +50,7 @@ import { DOWNLOADS, REPO, VERSION } from "../config";
     <div
       class="mt-1.5 flex w-full flex-col items-stretch gap-[11px] sm:mt-2 sm:w-auto sm:flex-row sm:items-center sm:gap-[14px]"
     >
-      <Button href={DOWNLOADS.macos}>
+      <Button href={downloads.macos}>
         <svg
           width="17"
           height="17"
@@ -65,7 +72,8 @@ import { DOWNLOADS, REPO, VERSION } from "../config";
     </div>
 
     <p class="w-full text-center font-mono text-note text-faint">
-      {VERSION} &middot; Apple silicon and Intel &middot; Windows and Linux too
+      {downloads.version} &middot; Apple silicon and Intel &middot; Windows and Linux
+      too
     </p>
 
     <Screenshot

@@ -7,6 +7,21 @@
   // straight from its edge without running a Worker script.
   "assets": {
     "directory": "./dist",
+    // Serves dist/404.html for unknown paths.
     "not_found_handling": "404-page"
-  }
+  },
+
+  // Adding `routes` turns both of these off by default. Keep them on: the
+  // workers.dev URL is how a deploy gets verified without touching the live
+  // domain, and preview_urls is what gives pull requests their own URL —
+  // the reason this is on Cloudflare at all.
+  "workers_dev": true,
+  "preview_urls": true,
+
+  // Both hostnames serve the site; every page carries a canonical pointing at
+  // the apex, so the www copy is not treated as duplicate content.
+  "routes": [
+    { "pattern": "gitwarren.com", "custom_domain": true },
+    { "pattern": "www.gitwarren.com", "custom_domain": true }
+  ]
 }

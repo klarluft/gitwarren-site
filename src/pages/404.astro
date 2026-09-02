@@ -1,0 +1,39 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Button from "../components/Button.astro";
+import { RELEASES } from "../config";
+---
+
+<Layout
+  title="Not found — GitWarren"
+  description="That page doesn't exist. GitWarren is a desktop app for reviewing git worktrees locally, before anything is committed."
+>
+  <Nav />
+  <main>
+    <section
+      class="mx-auto flex w-full max-w-page flex-col items-start gap-stack px-gutter pt-section sm:items-center"
+    >
+      <Eyebrow>404</Eyebrow>
+
+      <h1 class="max-w-[700px] font-display text-h2 sm:text-center">
+        That page isn&#39;t here.
+      </h1>
+
+      <p class="max-w-[560px] text-body text-muted sm:text-center">
+        Nothing at this address. The page you wanted may have moved, or the link
+        that brought you here may be out of date.
+      </p>
+
+      <div
+        class="mt-2 flex w-full flex-col items-stretch gap-[11px] sm:w-auto sm:flex-row sm:items-center sm:gap-[14px]"
+      >
+        <Button href="/">Back to the front page</Button>
+        <Button href={RELEASES} variant="secondary">Downloads</Button>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>

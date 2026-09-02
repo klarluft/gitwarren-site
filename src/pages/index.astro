@@ -7,6 +7,11 @@ import Agents from "../components/Agents.astro";
 import LocalByConstruction from "../components/LocalByConstruction.astro";
 import Download from "../components/Download.astro";
 import Footer from "../components/Footer.astro";
+import { fetchDownloads } from "../lib/releases";
+import { FALLBACK_VERSION } from "../config";
+
+// Resolved once at build time and handed to both places that link downloads.
+const downloads = await fetchDownloads(FALLBACK_VERSION);
 ---
 
 <Layout
@@ -15,11 +20,11 @@ import Footer from "../components/Footer.astro";
 >
   <Nav />
   <main>
-    <Hero />
+    <Hero downloads={downloads} />
     <BeforeCommit />
     <Agents />
     <LocalByConstruction />
-    <Download />
+    <Download downloads={downloads} />
   </main>
   <Footer />
 </Layout>
