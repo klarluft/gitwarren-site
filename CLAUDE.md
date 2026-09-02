@@ -14,7 +14,15 @@ npm install
 npm run dev      # http://localhost:4321
 npm run build    # static output into dist/
 npm run check    # astro check — must stay at 0 errors
+npm test         # the download-platform decision matrix
 ```
+
+**If you are working from a git worktree under `.claude/worktrees/`** and the
+build dies with `Tsconfig not found astro/tsconfigs/strict`, the cause is
+outside the worktree: the resolver walks up and finds the parent checkout's
+`tsconfig.json`, which cannot resolve the bare specifier without its own
+`node_modules`. Fix it with `npm ci` in the repository root. CI is unaffected,
+because there is no checkout above it.
 
 The page is one route, `src/pages/index.astro`, composed from
 `src/components/`. The design system lives in `src/styles/global.css` as a
@@ -198,16 +206,43 @@ electron-builder names assets with the version in them
 (`GitWarren-0.1.0-arm64.dmg`), so `releases/latest/download/<name>` will not
 work as a static URL.
 
-1. Fetch the GitHub releases API **at build time** in Astro; bake real URLs in.
-   They land in `src/config.ts`, which is where the `#` placeholders are now —
-   nothing else on the page needs to change.
-2. Have the app repo's `release.yml` redeploy this site after a successful
-   release, so the buttons refresh. Cloudflare has no one-line build-hook URL
-   the way Netlify does; the equivalent is a step in that workflow running
-   `wrangler deploy` with a `CLOUDFLARE_API_TOKEN` secret, which has the
-   advantage that the release job then knows whether the deploy succeeded.
-3. Detect OS/arch client-side to pick the primary button — Apple silicon vs
-   Intel is worth getting right.
+**Done.** `src/lib/releases.ts` fetches the API at build time and hands the
+URLs to the two components that link downloads.
+
+Use `/releases`, never `/releases/latest`: the latter excludes prereleases,
+v0.1.0 is flagged as one, and it 404s. The fetch never throws — a rate-limited
+or offline build falls back to the releases page rather than failing or, worse,
+shipping dead links.
+
+### The one piece of JavaScript
+
+`src/components/PlatformDownloads.astro` picks the right build for the visitor.
+This is the deliberate exception to the zero-JS rule, because without it a
+Windows visitor's primary CTA is a macOS disk image and an Intel Mac gets an
+Apple-silicon build that will not run.
+
+It is progressive enhancement, and must stay that way:
+
+- Every button is server-rendered with a working Apple-silicon target.
+- The platform names in the hero's version line are **real links** to each
+  build, server-rendered. That is what makes a wrong guess recoverable, so do
+  not turn them back into plain text.
+- The decision is a pure function in `src/lib/platform.ts`, tested by
+  `npm test`. Change the matrix there, not in the component.
+
+**Mac architecture detection is a heuristic and will sometimes be wrong.**
+`navigator.platform` reports `MacIntel` on Apple silicon too — deliberately —
+so the signals are `userAgentData.getHighEntropyValues`, which Safari does not
+implement, then the WebGL renderer string. An unknown architecture keeps the
+Apple-silicon default rather than guessing Intel.
+
+### Still to do
+
+Have the app repo's `release.yml` redeploy this site after a successful
+release, so the buttons refresh. Cloudflare has no one-line build-hook URL the
+way Netlify does; the equivalent is a step in that workflow running
+`wrangler deploy` with a `CLOUDFLARE_API_TOKEN` secret, which has the advantage
+that the release job then knows whether the deploy succeeded.
 
 ## Placeholders that must be replaced
 

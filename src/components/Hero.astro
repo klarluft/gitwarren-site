@@ -15,6 +15,10 @@ interface Props {
 }
 
 const { downloads } = Astro.props;
+
+// Quiet enough to stay a footnote, obvious enough to be clickable.
+const alt =
+  "underline decoration-dotted decoration-faint/50 underline-offset-4 transition-colors hover:text-ink hover:decoration-faint";
 ---
 
 <section class="relative overflow-hidden">
@@ -50,7 +54,7 @@ const { downloads } = Astro.props;
     <div
       class="mt-1.5 flex w-full flex-col items-stretch gap-[11px] sm:mt-2 sm:w-auto sm:flex-row sm:items-center sm:gap-[14px]"
     >
-      <Button href={downloads.macos}>
+      <Button href={downloads.macosArm} data-download="primary">
         <svg
           width="17"
           height="17"
@@ -66,14 +70,22 @@ const { downloads } = Astro.props;
           <path d="m7 12 5 5 5-5"></path>
           <path d="M4 21h16"></path>
         </svg>
-        Download for macOS
+        <span data-download-label>Download for macOS</span>
       </Button>
       <Button href={REPO} variant="secondary">Source on GitHub</Button>
     </div>
 
+    {/*
+      The copy is the artboard's, word for word. The platform names are now
+      the links to their own builds, so an Intel Mac has a correct path
+      without relying on the detection script below.
+    */}
     <p class="w-full text-center font-mono text-note text-faint">
-      {downloads.version} &middot; Apple silicon and Intel &middot; Windows and Linux
-      too
+      {downloads.version}{" · "}
+      <a href={downloads.macosArm} class={alt}>Apple silicon</a>{" and "}
+      <a href={downloads.macosIntel} class={alt}>Intel</a>{" · "}
+      <a href={downloads.windows} class={alt}>Windows</a>{" and "}
+      <a href={downloads.linux} class={alt}>Linux</a>{" too"}
     </p>
 
     <Screenshot

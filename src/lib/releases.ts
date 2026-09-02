@@ -11,12 +11,17 @@ import { RELEASES, REPO } from "../config";
 export interface Downloads {
   /** Tag of the release these point at, e.g. "v0.1.0". */
   version: string;
-  macos: string;
+  macosArm: string;
+  macosIntel: string;
   windows: string;
   linux: string;
+  linuxArm: string;
   /** False when the API could not be reached and every link falls back. */
   resolved: boolean;
 }
+
+/** The platforms the primary button can resolve to. */
+export type PlatformKey = "macosArm" | "macosIntel" | "windows" | "linux" | "linuxArm";
 
 interface GitHubAsset {
   name: string;
@@ -40,13 +45,13 @@ const API = `https://api.github.com/repos/${REPO.split("github.com/")[1]}/releas
 /** electron-builder's own artefacts, never user downloads. */
 const NOT_A_DOWNLOAD = /\.(blockmap|yml|yaml)$/i;
 
-const PICKERS: Record<"macos" | "windows" | "linux", RegExp> = {
-  // Apple silicon. Intel Macs need the x64 build from the releases page —
-  // see the note in CLAUDE.md about client-side arch detection.
-  macos: /-arm64\.dmg$/i,
+const PICKERS: Record<PlatformKey, RegExp> = {
+  macosArm: /-arm64\.dmg$/i,
+  macosIntel: /-x64\.dmg$/i,
   // The universal NSIS installer: no arch suffix, carries both x64 and arm64.
   windows: /^GitWarren-[\d.]+\.exe$/i,
   linux: /x86_64\.AppImage$/i,
+  linuxArm: /-arm64\.AppImage$/i,
 };
 
 function pick(assets: GitHubAsset[], pattern: RegExp): string | null {
@@ -64,9 +69,11 @@ function pick(assets: GitHubAsset[], pattern: RegExp): string | null {
 export async function fetchDownloads(fallbackVersion: string): Promise<Downloads> {
   const fallback: Downloads = {
     version: fallbackVersion,
-    macos: RELEASES,
+    macosArm: RELEASES,
+    macosIntel: RELEASES,
     windows: RELEASES,
     linux: RELEASES,
+    linuxArm: RELEASES,
     resolved: false,
   };
 
@@ -89,20 +96,25 @@ export async function fetchDownloads(fallbackVersion: string): Promise<Downloads
       return fallback;
     }
 
-    const macos = pick(release.assets, PICKERS.macos);
-    const windows = pick(release.assets, PICKERS.windows);
-    const linux = pick(release.assets, PICKERS.linux);
+    const found = Object.fromEntries(
+      (Object.keys(PICKERS) as PlatformKey[]).map((key) => [
+        key,
+        pick(release.assets, PICKERS[key]),
+      ]),
+    ) as Record<PlatformKey, string | null>;
 
-    for (const [platform, url] of Object.entries({ macos, windows, linux })) {
+    for (const [platform, url] of Object.entries(found)) {
       if (!url) console.warn(`[releases] no ${platform} asset in ${release.tag_name}`);
     }
 
     return {
       version: release.tag_name,
-      macos: macos ?? RELEASES,
-      windows: windows ?? RELEASES,
-      linux: linux ?? RELEASES,
-      resolved: Boolean(macos && windows && linux),
+      macosArm: found.macosArm ?? RELEASES,
+      macosIntel: found.macosIntel ?? RELEASES,
+      windows: found.windows ?? RELEASES,
+      linux: found.linux ?? RELEASES,
+      linuxArm: found.linuxArm ?? RELEASES,
+      resolved: Object.values(found).every(Boolean),
     };
   } catch (error) {
     console.warn(`[releases] fetch failed (${String(error)}); using fallback links`);
