@@ -43,12 +43,36 @@ assets. Keep this repo free of app code, and the app repo free of this.
 | Path | What |
 | --- | --- |
 | `design/canvas/` | The design source. `.dc.html` artboards + `canvas.json`. |
-| `design/screenshots/` | Full-resolution app screenshots, 2x. |
-| `src/assets/` | Web-optimised images the site actually ships. |
+| `design/canvas/images/` | Tiny copies for the canvas payload only. Not for the site. |
+| `design/screenshots/` | Full-resolution app screenshots, 2400x1600 @2x. |
+| `design/brand/` | The 1710px master logo. |
+| `src/assets/` | Image **sources** for the site. Full resolution — see below. |
 
 The scripts that regenerate the screenshots live in the app repo
 (`scripts/seed-demo.ts`, `scripts/capture-demo.mjs`) — see
 `design/screenshots/README.md`.
+
+## Images
+
+`src/assets/` holds full-resolution **sources**, not shippable files:
+
+| File | Size | From |
+| --- | --- | --- |
+| `hero.png` | 2400x1600 | `design/screenshots/01-review-files-uncommitted.png` |
+| `untracked.png` | 2400x1600 | `design/screenshots/09-untracked-file.png` |
+| `agents.png` | 2400x1600 | `design/screenshots/08-agent-thread.png` |
+| `narrow.png` | 1520x1800 | `design/screenshots/07-files-narrow.png` |
+| `logo.png` | 600x600 | `design/brand/gitwarren-logo.png` |
+
+**Use Astro's `<Image>` / `<Picture>` component on them** so the build emits
+sized WebP/AVIF derivatives. Do not serve these files directly, and do not
+hand-compress them first — that throws away the quality the pipeline needs.
+
+The hero renders at ~1040 CSS px, so a 2400px source covers 2x comfortably.
+
+Ignore `design/canvas/images/` entirely: those are ~50 KB, 880px copies that
+exist only because the design canvas re-publishes its whole payload on every
+save.
 
 ## The design
 

@@ -38,14 +38,17 @@ timing — and rebuild in Astro. Do not try to serve them.
 
 ## Images
 
-The artboards reference images by bare filename. Those files live in
-`../../src/assets/`:
+The artboards reference images by bare filename. Those files are in `images/`:
 
 `logo.png`, `hero.jpg`, `untracked.jpg`, `agents.jpg`, `narrow.jpg`
 
-They are compressed for the web (the whole canvas re-publishes on every save,
-so each is kept small). For anything needing more resolution, go back to
-`../screenshots/` or the 1710px logo source.
+**These are deliberately tiny** — around 50 KB each, 880px wide. The whole
+canvas re-publishes on every save, so its payload has a size budget. They are
+for the canvas only.
+
+**Do not use them on the site.** The site's sources are the full-resolution
+originals in `../../src/assets/` (2400x1600 lossless). Anything needing more
+than the canvas has, take from `../screenshots/` or `../brand/`.
 
 ## Editing the canvas
 

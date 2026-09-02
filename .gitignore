@@ -20,3 +20,6 @@ design/canvas/*.html
 
 # os
 .DS_Store
+
+# claude code worktrees
+.claude/worktrees/
