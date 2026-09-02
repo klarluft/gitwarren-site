@@ -45,7 +45,10 @@ assets. Keep this repo free of app code, and the app repo free of this.
 | `design/canvas/` | The design source. `.dc.html` artboards + `canvas.json`. |
 | `design/screenshots/` | Full-resolution app screenshots, 2x. |
 | `src/assets/` | Web-optimised images the site actually ships. |
-| `tools/screenshots/` | Scripts that regenerate the screenshots. See its README. |
+
+The scripts that regenerate the screenshots live in the app repo
+(`scripts/seed-demo.ts`, `scripts/capture-demo.mjs`) — see
+`design/screenshots/README.md`.
 
 ## The design
 

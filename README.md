@@ -22,7 +22,9 @@ linked from that file.
 | `design/canvas/` | Design source — `.dc.html` artboards and `canvas.json`. |
 | `design/screenshots/` | Full-resolution app screenshots, 2x. |
 | `src/assets/` | Web-optimised images the site ships. |
-| `tools/screenshots/` | Scripts that regenerate the screenshots. |
+
+Screenshots are regenerated from the app repo — see
+[`design/screenshots/README.md`](design/screenshots/README.md).
 
 ## Development
 
