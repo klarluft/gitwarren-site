@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    body {
+      margin: 0;
+      background: #121110;
+      color: #f2efe9;
+      font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: #f2efe9; text-decoration: none; }
+    a:hover { color: #ffffff; }
+    p { margin: 0; text-wrap: pretty; }
+    h1, h2, h3 { margin: 0; font-weight: 400; }
+
+    @keyframes halo-spin { to { transform: rotate(360deg); } }
+    @keyframes halo-spin-back { to { transform: rotate(-360deg); } }
+    @keyframes halo-breathe {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.05); }
+    }
+    .ring-outer { animation: halo-spin 90s linear infinite; transform-origin: 50% 50%; }
+    .ring-inner { animation: halo-spin-back 60s linear infinite; transform-origin: 50% 50%; }
+    .bloom { animation: halo-breathe 9s ease-in-out infinite; }
+  </style>
+</helmet>
+
+<div style="background: #121110">
+
+  <!-- nav -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid #232120">
+    <div style="display: flex; align-items: center; gap: 9px">
+      <img src="logo.png" alt="" style="display: block; width: 24px; height: 24px">
+      <span style="font-family: 'Outfit', system-ui, sans-serif; font-size: 19px; font-weight: 600; letter-spacing: -0.015em">GitWarren</span>
+    </div>
+    <a href="#" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; color: #121110; background: #f0b429; border-radius: 7px; font-size: 15px; font-weight: 500">Download</a>
+  </div>
+
+  <!-- hero -->
+  <div style="position: relative; overflow: hidden">
+
+    <!-- Same halo as the desktop hero, scaled down. -->
+    <div class="bloom" style="position: absolute; top: -40px; left: 50%; width: 520px; height: 520px; margin-left: -260px; pointer-events: none">
+      <img src="logo.png" alt="" style="display: block; width: 100%; height: 100%; filter: blur(78px) saturate(2); opacity: 0.72">
+    </div>
+    <svg width="520" height="520" viewBox="0 0 520 520" fill="none" style="position: absolute; top: -40px; left: 50%; margin-left: -260px; pointer-events: none">
+      <g class="ring-outer">
+        <circle cx="260" cy="260" r="228" stroke="#f0b429" stroke-opacity="0.12" stroke-dasharray="3 14"></circle>
+      </g>
+      <g class="ring-inner">
+        <circle cx="260" cy="260" r="164" stroke="#35d6c4" stroke-opacity="0.16"></circle>
+      </g>
+    </svg>
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 640px; background: radial-gradient(ellipse 84% 58% at 50% 14%, rgba(18,17,16,0.24) 0%, rgba(18,17,16,0.92) 72%); pointer-events: none"></div>
+
+    <div style="position: relative; display: flex; flex-direction: column; gap: 20px; padding: 42px 22px 0 22px">
+
+      <img src="logo.png" alt="The GitWarren logo" style="display: block; width: 104px; height: 104px; filter: drop-shadow(0 0 40px rgba(255,77,157,0.45))">
+    <div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em; color: #f0b429">LOCAL REVIEW FOR AI-WRITTEN CODE</div>
+
+    <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-size: 43px; line-height: 1.06; letter-spacing: -0.015em">
+      Review what your agents wrote, before GitHub ever sees it.
+    </h1>
+
+    <p style="font-size: 16px; line-height: 1.62; color: #a8a29a">
+      An agent finishes a task and leaves you a worktree full of changes that aren&#39;t committed yet. GitWarren reads that worktree directly &mdash; staged, unstaged and untracked &mdash; so you read the diff on your own machine first.
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 11px; margin-top: 6px">
+      <a href="#" style="display: flex; align-items: center; justify-content: center; min-height: 52px; background: #f0b429; color: #121110; font-size: 16px; font-weight: 600; border-radius: 8px">Download for macOS</a>
+      <a href="#" style="display: flex; align-items: center; justify-content: center; min-height: 52px; border: 1px solid #35322e; color: #f2efe9; font-size: 16px; border-radius: 8px">Source on GitHub</a>
+    </div>
+
+    <div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #8f8a82; text-align: center; margin-top: 2px">
+      v0.1.0 &middot; Windows and Linux too
+    </div>
+
+    <div style="width: 100%; margin-top: 26px; border: 1px solid #2a2825; border-radius: 11px; overflow: hidden; background: #0c0b0a">
+      <img src="narrow.jpg" alt="A GitWarren diff on a narrow screen" style="display: block; width: 100%">
+      </div>
+    </div>
+  </div>
+
+  <!-- before the commit -->
+  <div style="display: flex; flex-direction: column; gap: 16px; padding: 62px 22px 0 22px">
+    <div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em; color: #f0b429">BEFORE THE COMMIT</div>
+
+    <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-size: 33px; line-height: 1.12; letter-spacing: -0.01em">
+      An agent&#39;s output isn&#39;t a commit. It&#39;s a dirty worktree.
+    </h2>
+
+    <p style="font-size: 16px; line-height: 1.65; color: #a8a29a">
+      By the time work has been committed, pushed and opened as a pull request, you have already accepted its shape. GitWarren finds the worktree where the branch is checked out and folds its staged, unstaged and untracked files into one diff.
+    </p>
+  </div>
+
+  <!-- agents in the loop -->
+  <div style="display: flex; flex-direction: column; gap: 16px; padding: 62px 22px 0 22px">
+    <div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em; color: #f0b429">AGENTS IN THE LOOP</div>
+
+    <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-size: 33px; line-height: 1.12; letter-spacing: -0.01em">
+      Your agents take part in the review, not just in the writing.
+    </h2>
+
+    <p style="font-size: 16px; line-height: 1.65; color: #a8a29a">
+      An MCP server over stdio gives Claude Code, Codex or any MCP client the same seventeen tools the app uses &mdash; read the discussion, reply in a thread, comment on a line. Ask an agent to explain its own diff, in the review, where the answer stays.
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 8px; padding: 22px; border: 1px solid #232120; border-radius: 11px; background: #161513; margin-top: 6px">
+      <h3 style="font-size: 17px; font-weight: 600">Always attributed</h3>
+      <p style="font-size: 14px; line-height: 1.6; color: #a8a29a">A machine-written comment is always marked as one, and the tool&#39;s name comes from the MCP handshake &mdash; not from whatever the model calls itself that day.</p>
+    </div>
+  </div>
+
+  <!-- local -->
+  <div style="display: flex; flex-direction: column; gap: 12px; padding: 56px 22px 0 22px">
+    <div style="display: flex; flex-direction: column; gap: 8px; padding: 22px; border: 1px solid #232120; border-radius: 11px; background: #161513">
+      <h3 style="font-size: 17px; font-weight: 600">No account</h3>
+      <p style="font-size: 14px; line-height: 1.6; color: #a8a29a">One person&#39;s app, on one machine, with no notion of anybody else.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; padding: 22px; border: 1px solid #232120; border-radius: 11px; background: #161513">
+      <h3 style="font-size: 17px; font-weight: 600">Nothing cached</h3>
+      <p style="font-size: 14px; line-height: 1.6; color: #a8a29a">Every branch, commit and diff is read from git at the moment it is shown.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; padding: 22px; border: 1px solid #232120; border-radius: 11px; background: #161513">
+      <h3 style="font-size: 17px; font-weight: 600">One SQLite file</h3>
+      <p style="font-size: 14px; line-height: 1.6; color: #a8a29a">Delete it and GitWarren is gone. Your repositories are untouched.</p>
+    </div>
+  </div>
+
+  <!-- download -->
+  <div style="display: flex; flex-direction: column; gap: 18px; padding: 62px 22px 0 22px">
+    <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-size: 33px; line-height: 1.1; letter-spacing: -0.01em">
+      Read the diff before you push it.
+    </h2>
+    <a href="#" style="display: flex; align-items: center; justify-content: center; min-height: 52px; background: #f0b429; color: #121110; font-size: 16px; font-weight: 600; border-radius: 8px">Download for macOS</a>
+    <p style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #8f8a82; text-align: center">
+      Free and open source under GPL-3.0
+    </p>
+  </div>
+
+  <div style="margin-top: 54px; padding: 26px 22px; border-top: 1px solid #232120">
+    <span style="font-size: 13px; color: #8f8a82">GitWarren &mdash; a Klarluft B.V. project</span>
+  </div>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":390,"height":3100}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

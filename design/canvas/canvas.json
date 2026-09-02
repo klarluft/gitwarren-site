@@ -1,0 +1,44 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "Landing page" },
+    { "id": "page-2", "name": "Not chosen" }
+  ],
+  "artboards": [
+    { "file": "Main.dc.html", "page": "page-1", "x": 0, "y": 0, "w": 1280, "h": 6100, "title": "Landing page — desktop", "print": "flow" },
+    { "file": "Mobile.dc.html", "page": "page-1", "x": 1400, "y": 0, "w": 390, "h": 3260, "title": "Landing page — mobile", "print": "flow" },
+    { "file": "Wordmark.dc.html", "page": "page-1", "x": 1900, "y": 0, "w": 940, "h": 1180, "title": "Wordmark — typeface options" },
+
+    { "file": "HeroSpectrum.dc.html", "page": "page-2", "x": 0, "y": 0, "w": 1280, "h": 950, "title": "B — Spectrum (not chosen)" },
+    { "file": "HeroPortal.dc.html", "page": "page-2", "x": 1400, "y": 0, "w": 1280, "h": 950, "title": "C — Portal (not chosen)" },
+    { "file": "HeroRabbit.dc.html", "page": "page-2", "x": 2800, "y": 0, "w": 1280, "h": 950, "title": "D — Rabbit (not chosen)" },
+    { "file": "TerminalLocal.dc.html", "page": "page-2", "x": 0, "y": 1090, "w": 1200, "h": 820, "title": "Direction: Terminal (not chosen)" },
+    { "file": "Blueprint.dc.html", "page": "page-2", "x": 1400, "y": 1090, "w": 1200, "h": 820, "title": "Direction: Blueprint (not chosen)" }
+  ],
+  "annotations": [
+    {
+      "id": "leading",
+      "page": "page-1",
+      "x": 0,
+      "y": -250,
+      "w": 600,
+      "text": "Option A (Halo) is now the real hero, at the top of the full page and on mobile.\n\nThe logo is the high-resolution file, cropped to the artwork and colour-reduced so it stays light enough to ship — 58 KB instead of 273, with no visible banding.\n\nDownload links are placeholders; v0.1.0 has no release behind it yet."
+    },
+    {
+      "id": "wordmark",
+      "page": "page-1",
+      "x": 1900,
+      "y": -250,
+      "w": 560,
+      "text": "Outfit (7) is set — in the nav on both the desktop page and mobile.\n\nThe rest are kept as a record of what was considered. Headlines stay Instrument Serif and body copy stays IBM Plex Sans; only the wordmark changed.\n\nAt the bottom: two quieter treatments, still open if you ever want the name to recede further behind the mark."
+    },
+    {
+      "id": "alternates",
+      "page": "page-2",
+      "x": 0,
+      "y": -250,
+      "w": 600,
+      "text": "Everything that wasn't chosen, kept for reference.\n\nB, C and D are the other three hero treatments. Terminal and Blueprint are the two original whole-page directions, which still carry the older 'review your own code' positioning."
+    }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}

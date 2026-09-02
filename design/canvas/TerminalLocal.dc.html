@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <style>
+    body {
+      margin: 0;
+      background: #0a0a0a;
+      color: #e6e6e6;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: #7ee787; text-decoration: none; }
+    a:hover { color: #a5f3b4; }
+    p { margin: 0; }
+    h1, h2 { margin: 0; font-weight: 400; }
+  </style>
+</helmet>
+
+<div style="background: #0a0a0a; min-height: 820px; display: flex; flex-direction: column">
+
+  <!-- top rail -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; border-bottom: 1px solid #1c1c1c; font-size: 12px; color: #838383">
+    <span>gitwarren <span style="color: #2e2e2e">/</span> local code review <span style="color: #2e2e2e">/</span> v0.1.0</span>
+    <span style="display: flex; gap: 22px">
+      <a href="#" style="color: #838383">source</a>
+      <a href="#" style="color: #838383">licence</a>
+      <a href="#">download</a>
+    </span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; padding: 68px 40px 0 40px; align-items: start">
+
+    <!-- left: the pitch -->
+    <div style="display: flex; flex-direction: column; gap: 26px">
+      <div style="font-size: 12px; letter-spacing: 0.1em; color: #7ee787">&gt; NO SERVER. NO ACCOUNT. NO NETWORK.</div>
+
+      <h1 style="font-size: 42px; line-height: 1.16; font-weight: 700; letter-spacing: -0.02em">
+        Review the code<br>before it&#39;s a commit.
+      </h1>
+
+      <p style="font-size: 14px; line-height: 1.8; color: #9a9a9a; max-width: 480px">
+        GitWarren reads your working tree directly. Staged, unstaged, untracked &mdash; it all lands in the diff, next to the commits, before anything is pushed anywhere.
+      </p>
+
+      <div style="display: flex; gap: 12px; margin-top: 6px">
+        <a href="#" style="display: flex; align-items: center; min-height: 46px; padding: 0 22px; background: #7ee787; color: #0a0a0a; font-size: 13px; font-weight: 700; border-radius: 3px">DOWNLOAD FOR MACOS</a>
+        <a href="#" style="display: flex; align-items: center; min-height: 46px; padding: 0 22px; border: 1px solid #2a2a2a; color: #e6e6e6; font-size: 13px; border-radius: 3px">WINDOWS / LINUX</a>
+      </div>
+    </div>
+
+    <!-- right: a status block -->
+    <div style="border: 1px solid #1c1c1c; border-radius: 4px; background: #0d0d0d; overflow: hidden">
+      <div style="padding: 11px 16px; border-bottom: 1px solid #1c1c1c; font-size: 11px; color: #838383">~/github.com/klarluft/gitwarren-app</div>
+      <div style="padding: 20px 16px; font-size: 13px; line-height: 1.95">
+        <div style="color: #838383">$ git status --short</div>
+        <div><span style="color: #7ee787">M&nbsp;</span><span style="color: #838383">&nbsp;</span>src/renderer/src/lib/shortcuts.ts</div>
+        <div><span style="color: #838383">&nbsp;</span><span style="color: #e8a33d">M</span> src/renderer/src/features/review-files-tab.tsx</div>
+        <div><span style="color: #e05d5d">??</span> src/renderer/src/features/shortcut-help.tsx</div>
+        <div style="height: 14px"></div>
+        <div style="color: #838383">$ # every other tool sees none of this</div>
+        <div style="color: #838383">$ # gitwarren reviews all three</div>
+      </div>
+      <div style="padding: 13px 16px; border-top: 1px solid #1c1c1c; font-size: 12px; color: #e8a33d; background: #14110b">
+        1 staged &middot; 1 unstaged &middot; 1 untracked &mdash; all in the diff
+      </div>
+    </div>
+  </div>
+
+  <!-- three facts -->
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin-top: 76px; background: #1c1c1c; border-top: 1px solid #1c1c1c">
+    <div style="background: #0a0a0a; padding: 30px 40px; display: flex; flex-direction: column; gap: 9px">
+      <div style="font-size: 12px; color: #7ee787">01</div>
+      <div style="font-size: 14px; font-weight: 500">Nothing cached</div>
+      <p style="font-size: 12px; line-height: 1.7; color: #7a7a7a">Every branch and diff is read from git at the moment it is shown.</p>
+    </div>
+    <div style="background: #0a0a0a; padding: 30px 40px; display: flex; flex-direction: column; gap: 9px">
+      <div style="font-size: 12px; color: #7ee787">02</div>
+      <div style="font-size: 14px; font-weight: 500">One SQLite file</div>
+      <p style="font-size: 12px; line-height: 1.7; color: #7a7a7a">Your reviews live in one file. Delete it and the app is gone.</p>
+    </div>
+    <div style="background: #0a0a0a; padding: 30px 40px; display: flex; flex-direction: column; gap: 9px">
+      <div style="font-size: 12px; color: #7ee787">03</div>
+      <div style="font-size: 14px; font-weight: 500">MCP over stdio</div>
+      <p style="font-size: 12px; line-height: 1.7; color: #7a7a7a">Local agents get the same seventeen tools the app uses.</p>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":1200,"height":820}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

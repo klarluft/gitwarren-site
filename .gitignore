@@ -1,0 +1,22 @@
+# build output
+dist/
+.astro/
+.output/
+
+# dependencies
+node_modules/
+
+# netlify
+.netlify/
+
+# the assembled design canvas: ~2.6 MB of editor payload, regenerated from
+# design/canvas/ by the /design skill
+design/canvas/*.html
+!design/canvas/*.dc.html
+
+# env
+.env
+.env.production
+
+# os
+.DS_Store

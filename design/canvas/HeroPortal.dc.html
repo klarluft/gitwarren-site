@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    body {
+      margin: 0;
+      background: #0d0c0b;
+      color: #f6f3ee;
+      font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: #f6f3ee; text-decoration: none; }
+    a:hover { color: #ffffff; }
+    p { margin: 0; text-wrap: pretty; }
+    h1 { margin: 0; font-weight: 400; }
+
+    @keyframes portal-turn { to { transform: rotate(360deg); } }
+    @keyframes portal-glow {
+      0%, 100% { opacity: 0.62; }
+      50% { opacity: 0.9; }
+    }
+    .portal { animation: portal-turn 200s linear infinite; transform-origin: 50% 50%; }
+    .portal-bloom { animation: portal-glow 11s ease-in-out infinite; }
+  </style>
+</helmet>
+
+<div style="position: relative; overflow: hidden; min-height: 950px; background: #0d0c0b">
+
+  <!-- the mark, enormous, turning almost imperceptibly -->
+  <div class="portal" style="position: absolute; top: 60px; left: 50%; width: 860px; height: 860px; margin-left: -430px; pointer-events: none">
+    <img src="logo.png" alt="The GitWarren logo" style="display: block; width: 100%; height: 100%; filter: saturate(1.5) blur(1px); opacity: 0.62">
+  </div>
+
+  <!-- bloom on top of it, to spill colour past the circle -->
+  <div class="portal-bloom" style="position: absolute; top: 60px; left: 50%; width: 860px; height: 860px; margin-left: -430px; pointer-events: none">
+    <img src="logo.png" alt="" style="display: block; width: 100%; height: 100%; filter: blur(90px) saturate(2.2); opacity: 0.85">
+  </div>
+
+  <!-- scrim: darkest through the middle band where the headline sits -->
+  <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; background: linear-gradient(180deg, rgba(13,12,11,0.82) 0%, rgba(13,12,11,0.30) 22%, rgba(13,12,11,0.86) 46%, rgba(13,12,11,0.94) 66%, rgba(13,12,11,0.99) 100%)"></div>
+
+  <!-- a sharp outer ring to give the portal an edge -->
+  <svg width="900" height="900" viewBox="0 0 900 900" fill="none" style="position: absolute; top: 40px; left: 50%; margin-left: -450px; pointer-events: none">
+    <circle cx="450" cy="450" r="440" stroke="#f0b429" stroke-opacity="0.22"></circle>
+    <circle cx="450" cy="450" r="448" stroke="#ff4d9d" stroke-opacity="0.10"></circle>
+  </svg>
+
+  <!-- nav -->
+  <div style="position: relative; display: flex; align-items: center; justify-content: space-between; padding: 28px 100px">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <img src="logo.png" alt="" style="display: block; width: 26px; height: 26px">
+      <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; letter-spacing: 0.01em">GitWarren</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 34px; font-size: 15px; color: #b5aea5">
+      <a href="#" style="color: #b5aea5">How it works</a>
+      <a href="#" style="color: #b5aea5">Agents</a>
+      <a href="#" style="color: #b5aea5">Source</a>
+      <a href="#" style="color: #0d0c0b; background: #f0b429; padding: 10px 20px; border-radius: 7px; font-weight: 500">Download</a>
+    </div>
+  </div>
+
+  <!-- hero, sitting across the middle of the portal -->
+  <div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 28px; padding: 268px 100px 0 100px">
+
+    <div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.18em; color: #f0b429">LOCAL REVIEW FOR AI-WRITTEN CODE</div>
+
+    <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-size: 80px; line-height: 1.04; letter-spacing: -0.02em; text-align: center; max-width: 940px; text-shadow: 0 2px 40px rgba(13,12,11,0.9)">
+      Review what your agents wrote,<br>before GitHub ever sees it.
+    </h1>
+
+    <p style="font-size: 19px; line-height: 1.62; color: #cfc8bf; text-align: center; max-width: 640px; text-shadow: 0 1px 24px rgba(13,12,11,0.9)">
+      An agent leaves you a worktree full of changes that aren&#39;t committed yet. GitWarren reads that worktree directly.
+    </p>
+
+    <div style="display: flex; align-items: center; gap: 14px; margin-top: 10px">
+      <a href="#" style="background: #f0b429; color: #0d0c0b; font-size: 16px; font-weight: 600; padding: 16px 30px; border-radius: 8px">Download for macOS</a>
+      <a href="#" style="border: 1px solid #4d4842; color: #f6f3ee; font-size: 16px; padding: 16px 28px; border-radius: 8px; backdrop-filter: blur(6px)">Source on GitHub</a>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":1280,"height":950}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

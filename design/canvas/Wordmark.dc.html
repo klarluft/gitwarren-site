@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Space+Grotesk:wght@500;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Archivo:wght@600;700&family=Outfit:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <style>
+    body {
+      margin: 0;
+      background: #121110;
+      color: #f2efe9;
+      font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    p { margin: 0; }
+    h2 { margin: 0; font-weight: 400; }
+    .label {
+      font-family: 'IBM Plex Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: #f0b429;
+    }
+    .note { font-size: 13px; line-height: 1.55; color: #8f8a82; }
+  </style>
+</helmet>
+
+<div style="background: #121110; padding: 52px 56px 60px 56px; display: flex; flex-direction: column; gap: 34px">
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <div class="label">WORDMARK &mdash; TYPEFACE OPTIONS</div>
+    <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-size: 38px; line-height: 1.14; letter-spacing: -0.01em">
+      The app name, at nav size and large.
+    </h2>
+    <p class="note" style="max-width: 620px">
+      Each row is the real lockup: the 26px mark, then the name as it sits in the top bar, then the same name at 46px so the letterforms are legible. Body copy stays IBM Plex Sans in every case.
+    </p>
+  </div>
+
+  <!-- 1 — Instrument Serif (current) -->
+  <div style="display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 30px; align-items: center; padding-top: 26px; border-top: 1px solid #232120">
+    <div style="display: flex; flex-direction: column; gap: 5px">
+      <div style="font-size: 14px; font-weight: 600">1 &middot; Instrument Serif</div>
+      <div class="note" style="font-size: 12px">Current. Editorial, a little literary.</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 40px">
+      <div style="display: flex; align-items: center; gap: 10px; width: 210px">
+        <img src="logo.png" alt="" style="display: block; width: 26px; height: 26px">
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; letter-spacing: 0.01em">GitWarren</span>
+      </div>
+      <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 46px; letter-spacing: -0.005em">GitWarren</span>
+    </div>
+  </div>
+
+  <!-- 2 — Bricolage Grotesque -->
+  <div style="display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 30px; align-items: center; padding-top: 26px; border-top: 1px solid #232120">
+    <div style="display: flex; flex-direction: column; gap: 5px">
+      <div style="font-size: 14px; font-weight: 600">2 &middot; Bricolage Grotesque</div>
+      <div class="note" style="font-size: 12px">Contemporary, slightly irregular. Most character.</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 40px">
+      <div style="display: flex; align-items: center; gap: 10px; width: 210px">
+        <img src="logo.png" alt="" style="display: block; width: 26px; height: 26px">
+        <span style="font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -0.015em">GitWarren</span>
+      </div>
+      <span style="font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 44px; font-weight: 700; letter-spacing: -0.025em">GitWarren</span>
+    </div>
+  </div>
+
+  <!-- 3 — Space Grotesk -->
+  <div style="display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 30px; align-items: center; padding-top: 26px; border-top: 1px solid #232120">
+    <div style="display: flex; flex-direction: column; gap: 5px">
+      <div style="font-size: 14px; font-weight: 600">3 &middot; Space Grotesk</div>
+      <div class="note" style="font-size: 12px">Technical without being a terminal font.</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 40px">
+      <div style="display: flex; align-items: center; gap: 10px; width: 210px">
+        <img src="logo.png" alt="" style="display: block; width: 26px; height: 26px">
+        <span style="font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -0.02em">GitWarren</span>
+      </div>
+      <span style="font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 44px; font-weight: 700; letter-spacing: -0.03em">GitWarren</span>
+    </div>
+  </div>
+
+  <!-- 4 — IBM Plex Mono -->
+  <div style="display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 30px; align-items: center; padding-top: 26px; border-top: 1px solid #232120">
+    <div style="display: flex; flex-direction: column; gap: 5px">
+      <div style="font-size: 14px; font-weight: 600">4 &middot; IBM Plex Mono</div>
+      <div class="note" style="font-size: 12px">Already on the page for refs and versions. Reads as a dev tool.</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 40px">
+      <div style="display: flex; align-items: center; gap: 10px; width: 210px">
+        <img src="logo.png" alt="" style="display: block; width: 26px; height: 26px">
+        <span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 19px; font-weight: 600; letter-spacing: -0.03em">GitWarren</span>
+      </div>
+      <span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 40px; font-weight: 600; letter-spacing: -0.04em">GitWarren</span>
+    </div>
+  </div>
+
+  <!-- 5 — Newsreader -->
+  <div style="display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 30px; align-items: center; padding-top: 26px; border-top: 1px solid #232120">
+    <div style="display: flex; flex-direction: column; gap: 5px">
+      <div style="font-size: 14px; font-weight: 600">5 &middot; Newsreader</div>
+      <div class="note" style="font-size: 12px">A serif with more weight than Instrument. Steadier.</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 40px">
+      <div style="display: flex; align-items: center; gap: 10px; width: 210px">
+        <img src="logo.png" alt="" style="display: block; width: 26px; height: 26px">
+        <span style="font-family: 'Newsreader', Georgia, serif; font-size: 21px; font-weight: 600; letter-spacing: -0.005em">GitWarren</span>
+      </div>
+      <span style="font-family: 'Newsreader', Georgia, serif; font-size: 45px; font-weight: 600; letter-spacing: -0.015em">GitWarren</span>
+    </div>
+  </div>
+
+  <!-- 6 — Archivo -->
+  <div style="display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 30px; align-items: center; padding-top: 26px; border-top: 1px solid #232120">
+    <div style="display: flex; flex-direction: column; gap: 5px">
+      <div style="font-size: 14px; font-weight: 600">6 &middot; Archivo</div>
+      <div class="note" style="font-size: 12px">Sturdy and plain. Gets out of the logo&#39;s way.</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 40px">
+      <div style="display: flex; align-items: center; gap: 10px; width: 210px">
+        <img src="logo.png" alt="" style="display: block; width: 26px; height: 26px">
+        <span style="font-family: 'Archivo', system-ui, sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -0.025em">GitWarren</span>
+      </div>
+      <span style="font-family: 'Archivo', system-ui, sans-serif; font-size: 44px; font-weight: 700; letter-spacing: -0.035em">GitWarren</span>
+    </div>
+  </div>
+
+  <!-- 7 — Outfit -->
+  <div style="display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 30px; align-items: center; padding-top: 26px; border-top: 1px solid #232120">
+    <div style="display: flex; flex-direction: column; gap: 5px">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <div style="font-size: 14px; font-weight: 600">7 &middot; Outfit</div>
+        <span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.1em; color: #121110; background: #f0b429; padding: 3px 7px; border-radius: 4px">CHOSEN</span>
+      </div>
+      <div class="note" style="font-size: 12px">Geometric and round &mdash; closest to the mark&#39;s curves.</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 40px">
+      <div style="display: flex; align-items: center; gap: 10px; width: 210px">
+        <img src="logo.png" alt="" style="display: block; width: 26px; height: 26px">
+        <span style="font-family: 'Outfit', system-ui, sans-serif; font-size: 21px; font-weight: 600; letter-spacing: -0.015em">GitWarren</span>
+      </div>
+      <span style="font-family: 'Outfit', system-ui, sans-serif; font-size: 45px; font-weight: 600; letter-spacing: -0.025em">GitWarren</span>
+    </div>
+  </div>
+
+  <!-- one-word alternative -->
+  <div style="display: flex; flex-direction: column; gap: 14px; padding-top: 30px; border-top: 1px solid #232120">
+    <div class="label">ONE MORE THING TO CONSIDER</div>
+    <p class="note" style="max-width: 640px">
+      With a mark this loud, the name can afford to be quiet. Two ways to do that &mdash; drop the camel case, or set it in caps with wide tracking:
+    </p>
+    <div style="display: flex; align-items: center; gap: 56px; margin-top: 6px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <img src="logo.png" alt="" style="display: block; width: 26px; height: 26px">
+        <span style="font-family: 'Outfit', system-ui, sans-serif; font-size: 21px; font-weight: 500; letter-spacing: -0.01em">gitwarren</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px">
+        <img src="logo.png" alt="" style="display: block; width: 26px; height: 26px">
+        <span style="font-family: 'Archivo', system-ui, sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.22em">GITWARREN</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":940,"height":1180}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

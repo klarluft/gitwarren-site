@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    body {
+      margin: 0;
+      background: #121110;
+      color: #f2efe9;
+      font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: #f2efe9; text-decoration: none; }
+    a:hover { color: #ffffff; }
+    p { margin: 0; text-wrap: pretty; }
+    h1 { margin: 0; font-weight: 400; }
+
+    @keyframes spectrum-slide {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    @keyframes drift {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-22px) rotate(4deg); }
+    }
+    .spectrum-bar {
+      background-image: linear-gradient(90deg, #ff4d9d, #b45cff, #4d9dff, #35d6c4, #7ee787, #f0b429, #ff6b3d, #ff4d9d);
+      background-size: 200% 100%;
+      animation: spectrum-slide 22s linear infinite;
+    }
+    .mark { animation: drift 14s ease-in-out infinite; }
+  </style>
+</helmet>
+
+<div style="position: relative; overflow: hidden; min-height: 950px; background: #121110">
+
+  <!-- colour wash, top right -->
+  <div style="position: absolute; top: -180px; right: -200px; width: 1100px; height: 1100px; pointer-events: none; background: radial-gradient(circle at 50% 50%, rgba(255,77,157,0.30) 0%, rgba(180,92,255,0.22) 32%, rgba(53,214,196,0.14) 55%, rgba(18,17,16,0) 72%)"></div>
+  <div style="position: absolute; bottom: -320px; left: -220px; width: 900px; height: 900px; pointer-events: none; background: radial-gradient(circle at 50% 50%, rgba(240,180,41,0.16) 0%, rgba(18,17,16,0) 68%)"></div>
+
+  <!-- the mark, bleeding off the right edge -->
+  <div class="mark" style="position: absolute; top: 176px; right: -130px; width: 600px; height: 600px; pointer-events: none">
+    <img src="logo.png" alt="The GitWarren logo" style="display: block; width: 100%; height: 100%; filter: saturate(1.25) drop-shadow(0 0 90px rgba(255,77,157,0.5))">
+  </div>
+
+  <!-- spectral rule -->
+  <div class="spectrum-bar" style="position: relative; height: 3px"></div>
+
+  <!-- nav -->
+  <div style="position: relative; display: flex; align-items: center; justify-content: space-between; padding: 26px 100px">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <img src="logo.png" alt="" style="display: block; width: 26px; height: 26px">
+      <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; letter-spacing: 0.01em">GitWarren</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 34px; font-size: 15px; color: #a8a29a">
+      <a href="#" style="color: #a8a29a">How it works</a>
+      <a href="#" style="color: #a8a29a">Agents</a>
+      <a href="#" style="color: #a8a29a">Source</a>
+      <a href="#" style="color: #121110; background: #f0b429; padding: 10px 20px; border-radius: 7px; font-weight: 500">Download</a>
+    </div>
+  </div>
+
+  <!-- hero, left aligned against the mark -->
+  <div style="position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 26px; padding: 128px 100px 0 100px; max-width: 780px">
+
+    <div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.18em; color: #f0b429">LOCAL REVIEW FOR AI-WRITTEN CODE</div>
+
+    <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-size: 74px; line-height: 1.04; letter-spacing: -0.02em">
+      Review what your agents wrote, before GitHub sees it.
+    </h1>
+
+    <p style="font-size: 19px; line-height: 1.62; color: #b8b2a9; max-width: 560px">
+      An agent leaves you a worktree full of changes that aren&#39;t committed yet. GitWarren reads that worktree directly &mdash; staged, unstaged and untracked &mdash; so you read the diff on your own machine first.
+    </p>
+
+    <div style="display: flex; align-items: center; gap: 14px; margin-top: 8px">
+      <a href="#" style="background: #f0b429; color: #121110; font-size: 16px; font-weight: 600; padding: 16px 30px; border-radius: 8px">Download for macOS</a>
+      <a href="#" style="border: 1px solid #46423c; color: #f2efe9; font-size: 16px; padding: 16px 28px; border-radius: 8px">Source on GitHub</a>
+    </div>
+
+    <div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; color: #8f8a82; margin-top: 4px">
+      v0.1.0 &middot; macOS, Windows, Linux &middot; GPL-3.0
+    </div>
+  </div>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":1280,"height":950}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
