@@ -30,9 +30,14 @@ const { downloads } = Astro.props;
   <div
     class="mt-2.5 flex w-full flex-col items-stretch gap-[11px] sm:w-auto sm:flex-row sm:items-center sm:gap-[14px]"
   >
-    <Button href={downloads.macos}>Download for macOS</Button>
+    {/*
+      This section is the explicit platform picker, so only the architecture
+      is adjusted here — never the label. Swapping "macOS" to "Windows" would
+      duplicate the button beside it.
+    */}
+    <Button href={downloads.macosArm} data-download="macos">Download for macOS</Button>
     <Button href={downloads.windows} variant="secondary">Windows</Button>
-    <Button href={downloads.linux} variant="secondary">Linux</Button>
+    <Button href={downloads.linux} data-download="linux" variant="secondary">Linux</Button>
   </div>
 
   <p class="text-center font-mono text-note text-faint">

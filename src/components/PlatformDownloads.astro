@@ -1,0 +1,118 @@
+---
+import type { Downloads } from "../lib/releases";
+
+interface Props {
+  downloads: Downloads;
+}
+
+const { downloads } = Astro.props;
+
+/*
+  The only JavaScript on the site, and it is pure progressive enhancement:
+  with it disabled every button keeps its server-rendered Apple-silicon
+  target, and the platform links under the hero already cover every build.
+
+  Worth the exception to the zero-JS rule because without it a Windows
+  visitor's primary call to action is a macOS disk image, and an Intel Mac
+  user is handed an Apple-silicon build that will not run.
+
+  The decision itself lives in src/lib/platform.ts so it can be tested.
+*/
+const targets: Record<string, { href: string; label: string }> = {
+  macosArm: { href: downloads.macosArm, label: "Download for macOS" },
+  macosIntel: { href: downloads.macosIntel, label: "Download for macOS" },
+  windows: { href: downloads.windows, label: "Download for Windows" },
+  linux: { href: downloads.linux, label: "Download for Linux" },
+  linuxArm: { href: downloads.linuxArm, label: "Download for Linux" },
+};
+---
+
+{/* Data, not code — it must reach the DOM verbatim rather than be bundled. */}
+<script
+  is:inline
+  id="download-targets"
+  type="application/json"
+  set:html={JSON.stringify(targets)}
+/>
+
+<script>
+  import { chooseBuild, readArchFromRenderer, readOs } from "../lib/platform";
+  import type { Arch } from "../lib/platform";
+
+  interface Target {
+    href: string;
+    label: string;
+  }
+
+  function targets(): Record<string, Target> {
+    const node = document.getElementById("download-targets");
+    if (!node?.textContent) return {};
+    try {
+      return JSON.parse(node.textContent) as Record<string, Target>;
+    } catch {
+      return {};
+    }
+  }
+
+  function archFromWebGl(): Arch {
+    try {
+      const canvas = document.createElement("canvas");
+      const gl = canvas.getContext("webgl");
+      if (!gl) return null;
+      const ext = gl.getExtension("WEBGL_debug_renderer_info");
+      if (!ext) return null;
+      return readArchFromRenderer(String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)));
+    } catch {
+      // Blocked or unavailable — fall through to the default.
+      return null;
+    }
+  }
+
+  async function detect(): Promise<string | null> {
+    const uad = (navigator as Navigator & { userAgentData?: any }).userAgentData;
+
+    const os = readOs(String(uad?.platform || navigator.platform || navigator.userAgent || ""));
+    if (os === null || os === "win") return chooseBuild(os, null);
+
+    let arch: Arch = null;
+    try {
+      const high = await uad?.getHighEntropyValues?.(["architecture"]);
+      if (high?.architecture === "arm") arch = "arm";
+      else if (high?.architecture) arch = "x86";
+    } catch {
+      // Not fatal; the renderer heuristic is next.
+    }
+    if (arch === null && os === "mac") arch = archFromWebGl();
+
+    return chooseBuild(os, arch);
+  }
+
+  detect()
+    .then((key) => {
+      const all = targets();
+      if (!key || !all[key]) return;
+      const target = all[key];
+
+      // The hero button follows the operating system and relabels.
+      const primary = document.querySelector<HTMLAnchorElement>('[data-download="primary"]');
+      if (primary) {
+        primary.href = target.href;
+        const label = primary.querySelector("[data-download-label]");
+        if (label) label.textContent = target.label;
+      }
+
+      // The picker buttons only ever change architecture — relabelling one
+      // would duplicate the button beside it.
+      if (key === "macosIntel") {
+        const mac = document.querySelector<HTMLAnchorElement>('[data-download="macos"]');
+        if (mac) mac.href = all.macosIntel.href;
+      }
+      if (key === "linuxArm") {
+        const linux = document.querySelector<HTMLAnchorElement>('[data-download="linux"]');
+        if (linux) linux.href = all.linuxArm.href;
+      }
+    })
+    .catch(() => {
+      // Leave the server-rendered defaults in place.
+    });
+</script>

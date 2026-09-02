@@ -7,6 +7,7 @@ import Agents from "../components/Agents.astro";
 import LocalByConstruction from "../components/LocalByConstruction.astro";
 import Download from "../components/Download.astro";
 import Footer from "../components/Footer.astro";
+import PlatformDownloads from "../components/PlatformDownloads.astro";
 import { fetchDownloads } from "../lib/releases";
 import { FALLBACK_VERSION } from "../config";
 
@@ -27,4 +28,5 @@ const downloads = await fetchDownloads(FALLBACK_VERSION);
     <Download downloads={downloads} />
   </main>
   <Footer />
+  <PlatformDownloads downloads={downloads} />
 </Layout>
