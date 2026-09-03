@@ -20,9 +20,14 @@ import sansWoff2 from "@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-n
 interface Props {
   title: string;
   description: string;
+  /**
+   * A schema.org object, emitted as JSON-LD. Built by the page, not here;
+   * the layout only adds the OG image to it, since that is derived here.
+   */
+  structuredData?: Record<string, unknown>;
 }
 
-const { title, description } = Astro.props;
+const { title, description, structuredData } = Astro.props;
 
 const site = Astro.site ?? new URL("https://gitwarren.com");
 const canonical = new URL(Astro.url.pathname, site);
@@ -86,6 +91,16 @@ const ogUrl = new URL(ogImage.src, site);
     <meta name="twitter:image" content={ogUrl.href} />
 
     <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    {
+      structuredData && (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify({ ...structuredData, image: ogUrl.href })}
+        />
+      )
+    }
   </head>
   <body>
     <slot />
