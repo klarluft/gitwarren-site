@@ -9,15 +9,47 @@ import Download from "../components/Download.astro";
 import Footer from "../components/Footer.astro";
 import PlatformDownloads from "../components/PlatformDownloads.astro";
 import { fetchDownloads } from "../lib/releases";
-import { FALLBACK_VERSION } from "../config";
+import { FALLBACK_VERSION, LICENCE, REPO } from "../config";
 
 // Resolved once at build time and handed to both places that link downloads.
 const downloads = await fetchDownloads(FALLBACK_VERSION);
+
+const site = (Astro.site ?? new URL("https://gitwarren.com")).href;
+
+// What a search engine is told this page is about. Every value is something
+// the page already says or links; the download URLs are the same ones the
+// buttons carry, so a rich result can offer the installer directly.
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "GitWarren",
+  url: site,
+  description:
+    "A desktop app for local git code review. Reads the worktree directly — staged, unstaged and untracked — so you can review what an AI coding agent wrote on your own machine, before it becomes a commit.",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "macOS, Windows, Linux",
+  softwareVersion: downloads.version.replace(/^v/, ""),
+  license: LICENCE,
+  isAccessibleForFree: true,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  downloadUrl: [
+    downloads.macosArm,
+    downloads.macosIntel,
+    downloads.windows,
+    downloads.linux,
+    downloads.linuxArm,
+  ],
+  sameAs: [REPO],
+  author: { "@type": "Organization", name: "Klarluft", url: "https://klarluft.com" },
+  keywords:
+    "code review, git, diff, uncommitted changes, worktree, AI coding agents, Claude Code, Codex, MCP server, local-first",
+};
 ---
 
 <Layout
   title="GitWarren — review what your agents wrote, before GitHub ever sees it"
   description="A desktop app for local git code review. GitWarren reads the worktree directly — staged, unstaged and untracked — so you read an agent's diff on your own machine, before it becomes a commit."
+  structuredData={structuredData}
 >
   <Nav />
   <main>

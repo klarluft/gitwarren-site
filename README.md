@@ -10,11 +10,10 @@ Static site, built with Astro and Tailwind v4, deployed on Cloudflare Workers.
 
 Built. One page, no client-side JavaScript.
 
-**Still placeholders:** every download href is `#`, in
-[`src/config.ts`](src/config.ts). They get baked in at build time from the
-GitHub releases API — `v0.1.0` has no release behind it yet. See
-[`CLAUDE.md`](CLAUDE.md) for that plan, and for the positioning, tokens, type
-system and hero treatment the page was built from.
+Download links are resolved at build time from the GitHub releases API, and
+the app repo redeploys this site whenever a release is published. See
+[`CLAUDE.md`](CLAUDE.md) for the positioning, tokens, type system and hero
+treatment the page was built from.
 
 The design canvas, which is the easiest way to see the page as intended, is
 linked from that file.

@@ -1,2 +1,9 @@
+# Cloudflare prepends its managed block (content signals and AI-crawler
+# disallows) to this file at the edge when "Manage robots.txt" is on for the
+# zone. Turn that off in the dashboard if you want assistants such as ChatGPT
+# and Claude to be able to read and recommend this page.
+
 User-agent: *
 Allow: /
+
+Sitemap: https://gitwarren.com/sitemap-index.xml

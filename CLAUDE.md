@@ -236,19 +236,33 @@ so the signals are `userAgentData.getHighEntropyValues`, which Safari does not
 implement, then the WebGL renderer string. An unknown architecture keeps the
 Apple-silicon default rather than guessing Intel.
 
-### Still to do
+### Redeploys
 
-Have the app repo's `release.yml` redeploy this site after a successful
-release, so the buttons refresh. Cloudflare has no one-line build-hook URL the
-way Netlify does; the equivalent is a step in that workflow running
-`wrangler deploy` with a `CLOUDFLARE_API_TOKEN` secret, which has the advantage
-that the release job then knows whether the deploy succeeded.
+The app repo's `.github/workflows/deploy-site.yml` rebuilds and deploys this
+site on every `release: published` event, so the buttons refresh on their own.
+It can also be run by hand from the Actions tab (`workflow_dispatch`) after a
+site change lands on `main`.
 
-## Placeholders that must be replaced
+## Discoverability
 
-- Every download href is `#` — all three live in `src/config.ts`.
-- `v0.1.0` is the real number in the app's `package.json`, but **no release
-  exists behind it yet**.
+What the build ships for search engines and link unfurls, and the parts that
+live outside this repo:
+
+- **Sitemap** — `@astrojs/sitemap` emits `sitemap-index.xml`; `public/robots.txt`
+  points at it. Submit it once in Google Search Console and Bing Webmaster
+  Tools; after that both pick up changes on their own.
+- **Structured data** — `src/pages/index.astro` builds a schema.org
+  `SoftwareApplication` object (version, platforms, licence, the same download
+  URLs the buttons carry) and hands it to `Layout.astro`, which emits it as
+  JSON-LD. Keep every value in it something the page already says.
+- **`public/llms.txt`** — a plain-text summary for AI assistants. Keep it in
+  step with the page copy.
+- **Cloudflare's managed robots.txt** is prepended at the edge when *Manage
+  robots.txt* is on for the zone. It disallows ClaudeBot, GPTBot and friends,
+  which stops assistants recommending the app. That is a dashboard setting,
+  not a file in this repo.
+- **OG image** is cropped from the hero at build time in `Layout.astro`. The
+  GitHub repo's social preview is a separate upload in the repo settings.
 
 ## Copy rules
 
