@@ -33,10 +33,10 @@ import { COMPANY, LEGAL, LICENCE, REPO } from "../config";
     <dd>{COMPANY.legalName}</dd>
 
     <dt>Address</dt>
-    <dd><span class="gap">{COMPANY.address}</span></dd>
+    <dd>{COMPANY.address}</dd>
 
     <dt>Contact</dt>
-    <dd><span class="gap">{COMPANY.email}</span></dd>
+    <dd><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></dd>
   </dl>
 
   <h2>Why there is no cookie banner</h2>
@@ -230,7 +230,7 @@ import { COMPANY, LEGAL, LICENCE, REPO } from "../config";
     Under the GDPR you may ask us for access to your personal data, or for its
     correction or erasure; you may ask us to restrict how we use it; you may
     object to processing based on legitimate interests; and you may ask for a
-    portable copy. Write to <span class="gap">{COMPANY.email}</span> and we will
+    portable copy. Write to <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a> and we will
     answer within a month.
   </p>
 

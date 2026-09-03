@@ -24,16 +24,16 @@ import { COMPANY, LICENCE, PRIVACY, REPO } from "../config";
     <dd>{COMPANY.legalName}</dd>
 
     <dt>Registered address</dt>
-    <dd><span class="gap">{COMPANY.address}</span></dd>
+    <dd>{COMPANY.address}</dd>
 
     <dt>Chamber of Commerce</dt>
-    <dd>KvK <span class="gap">{COMPANY.kvk}</span></dd>
+    <dd>KvK {COMPANY.kvk}</dd>
 
     <dt>VAT number</dt>
-    <dd><span class="gap">{COMPANY.vat}</span></dd>
+    <dd>{COMPANY.vat}</dd>
 
     <dt>Email</dt>
-    <dd><span class="gap">{COMPANY.email}</span></dd>
+    <dd><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></dd>
   </dl>
 
   <h2>The software</h2>
@@ -80,7 +80,8 @@ import { COMPANY, LICENCE, PRIVACY, REPO } from "../config";
   <h2>Getting in touch</h2>
 
   <p>
-    Email <span class="gap">{COMPANY.email}</span> for anything on this page. Bugs
+    Email <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a> for anything on
+    this page. Bugs
     and feature requests are better filed as <a href={`${REPO}/issues`} rel="noopener"
       >issues on the repository</a
     >, where they are public and get tracked.

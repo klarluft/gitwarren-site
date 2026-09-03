@@ -20,17 +20,18 @@ export const LEGAL = "/legal";
  * Klarluft B.V. is the controller for everything this site processes, and the
  * operator an EU visitor is entitled to be able to identify.
  *
- * The bracketed values are real gaps, not sample data — fill them from the KvK
- * register before launch. They render in amber on the legal pages, so an
- * unfilled one is impossible to miss.
+ * These are the details published on klarluft.com, and they are load-bearing:
+ * the legal notice exists to let a visitor identify who runs this service, so
+ * if the company moves or the contact address changes, this is what makes the
+ * page wrong. Keep it in step with the KvK register.
  */
 export const COMPANY = {
   legalName: "Klarluft B.V.",
-  address: "[REGISTERED ADDRESS]",
-  kvk: "[KVK NUMBER]",
-  vat: "[VAT NUMBER]",
-  email: "[CONTACT EMAIL]",
+  address: "Van Aerssenlaan 40C, 3039 KE Rotterdam, The Netherlands",
+  kvk: "86875590",
+  vat: "NL864128915B01",
+  email: "contact@klarluft.com",
 } as const;
 
 /** Shown on both legal pages so a visitor can see how current they are. */
-export const LEGAL_UPDATED = "2 September 2026";
+export const LEGAL_UPDATED = "3 September 2026";

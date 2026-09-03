@@ -321,12 +321,15 @@ governs the app, and a page saying "we set no cookies" is one line, not a page.
 
 ## Placeholders that must be replaced
 
-- **`COMPANY` in `src/config.ts`** — registered address, KvK number, VAT number
-  and contact email are all bracketed gaps. They render in amber on the legal
-  pages, deliberately: an unfilled placeholder should be embarrassing on a live
-  page rather than quietly plausible. The legal notice does not do its job
-  until these are real, so fill them from the KvK register before launch.
 - `PUBLIC_CF_BEACON_TOKEN` is not set anywhere yet, so nothing is measured.
+
+**`COMPANY` in `src/config.ts` is filled in**, from the details published on
+klarluft.com and cross-checked against the page source: Van Aerssenlaan 40C,
+3039 KE Rotterdam, KvK 86875590, VAT NL864128915B01,
+`contact@klarluft.com`. These are load-bearing rather than decorative — the
+legal notice exists so a visitor can identify who operates the service — so if
+the company moves or the contact address changes, both legal pages are wrong
+until `COMPANY` changes with it.
 
 ## Copy rules
 

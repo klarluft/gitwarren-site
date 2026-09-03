@@ -154,18 +154,6 @@ const { title, description, eyebrow, heading, intro } = Astro.props;
     color: var(--color-ink);
   }
 
-  /*
-    A fact we do not have yet. Marked in the accent colour on purpose: an
-    unfilled placeholder should be embarrassing on a live page, not quietly
-    plausible. See COMPANY in src/config.ts.
-  */
-  .prose :global(.gap) {
-    color: var(--color-accent);
-    font-family: var(--font-mono);
-    font-size: 0.9em;
-    white-space: nowrap;
-  }
-
   /* The lead-in panel each legal page opens with: the plain-language summary
      that a visitor reads instead of the whole page. */
   .prose :global(.summary) {
