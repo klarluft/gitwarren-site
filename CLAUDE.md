@@ -210,13 +210,85 @@ electron-builder names assets with the version in them
 (`GitWarren-0.1.0-arm64.dmg`), so `releases/latest/download/<name>` will not
 work as a static URL.
 
-**Done.** `src/lib/releases.ts` fetches the API at build time and hands the
-URLs to the two components that link downloads.
+**Done.** `src/lib/releases.ts` resolves them at build time and hands the URLs
+to the two components that link downloads.
 
-Use `/releases`, never `/releases/latest`: the latter excludes prereleases,
-v0.1.0 is flagged as one, and it 404s. The fetch never throws — a rate-limited
-or offline build falls back to the releases page rather than failing or, worse,
-shipping dead links.
+On the API, use `/releases`, never `/releases/latest`: the latter excludes
+prereleases, v0.1.0 is flagged as one, and it 404s. (The web fallback below
+*does* use `/releases/latest`, on github.com rather than the API, where it
+redirects instead of 404ing — a different endpoint with a different failure
+mode.)
+
+### Two lookups, because a build runner has no API quota
+
+Unauthenticated api.github.com is capped at **60 requests an hour per IP**, and
+a build runner shares its IP with every other tenant on the box. The quota is
+usually spent before the build asks, while a local build — its own IP, its own
+quota — resolves fine every time. That is exactly what went wrong: for several
+deploys the site said `v0.1.0` and pointed every button at the releases index,
+long after v0.1.3 had shipped, and nothing reproduced it in development.
+
+So `src/lib/releases.ts` has two lookups, and tries them in order:
+
+1. **`resolveFromApi`** — `api.github.com/.../releases`, retried three times on
+   403/429/5xx. Preferred because it sees prereleases and reads the real asset
+   names. Sends `GITHUB_TOKEN` if the environment has one (5000 an hour, per
+   token rather than per IP), which is worth setting where it is free — Actions
+   has `${{ github.token }}` — but is **not required**.
+2. **`resolveFromWeb`** — `github.com/.../releases/latest`, which answers 302
+   with the current tag in `Location`. Plain github.com, not the API, so there
+   is no budget to exhaust. From the tag it *constructs* the asset names and
+   `HEAD`s each one: 302 means the file is there, 404 means it is not, so
+   nothing ships unverified.
+
+The one difference, and why the web lookup is second: `/releases/latest` skips
+prereleases. If the newest release is flagged as one it resolves the newest
+stable instead — older, but true, with every link pointing at a real file.
+
+### Where the token lives
+
+Set in both places the site is built, so the API lookup is the one that
+normally answers and prereleases stay visible:
+
+- **Cloudflare Workers Builds** — dashboard, the Worker, **Settings → Build →
+  Build variables and secrets**, type *Secret*, name `GITHUB_TOKEN`. A
+  fine-grained PAT scoped to public repositories with **no permissions
+  selected**: fine-grained tokens carry public read implicitly, and reading a
+  public repo's releases needs nothing beyond that. The token exists to make
+  the request attributable, not to grant access.
+- **GitHub Actions**, in the app repo's `deploy-site.yml` — `${{ github.token }}`.
+  Nothing to create or rotate.
+
+**Do not confuse Settings → Build with Settings → Variables & Secrets.** The
+latter is *runtime*, and it refuses outright on this Worker — with no `main`
+there is no script to inject anything into. That refusal is correct and says
+nothing about the build. An hour went into that distinction; it is written down
+so the next hour does not.
+
+Neither is load-bearing. `resolveFromWeb` covers a build with no token at all,
+and both paths were verified to emit byte-identical URLs.
+
+**`SUFFIX` is the single naming table** both lookups derive from — the API one
+turns it into anchored match patterns, the web one into literal filenames.
+`npm test` pins it against the real v0.1.3 asset list, including that the
+Windows entry is the universal NSIS installer and not one of the per-arch
+`.exe` files sitting beside it. Change electron-builder's naming and that test
+is what tells you.
+
+### Failing rather than deploying a fallback
+
+If both lookups fail, `fetchDownloads` still returns fallback links and still
+never throws — but `assertResolved`, called in `src/pages/index.astro`, then
+**fails the build**.
+
+That is deliberate, and it replaces the previous behaviour of falling back
+quietly. A fallback build is not a degraded page, it is a *wrong* one: the
+buttons drop to the releases index and the version line reads
+`FALLBACK_VERSION`. Refusing to build leaves the last good deploy up, which is
+at worst one release behind rather than confidently stale. Both lookups failing
+now means the build has no network at all, so there is nothing to lose by
+stopping. `astro dev` is exempt so the site still runs offline, and
+`ALLOW_STALE_DOWNLOADS=1` forces a build through for the same reason.
 
 ### The one piece of JavaScript
 

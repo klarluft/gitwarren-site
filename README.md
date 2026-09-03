@@ -53,6 +53,13 @@ URLs on pull requests, or push a build by hand:
 npm run deploy
 ```
 
+Download URLs are resolved from the GitHub releases API at build time. That
+call is rate-limited on a shared build IP, so a `GITHUB_TOKEN` is set in the
+Worker's **build** variables — and if it is ever missing, the build falls
+through to a github.com lookup with no quota to exhaust. If *both* lookups fail
+the build stops rather than deploy a page pointing at the wrong release. See
+`CLAUDE.md` for the whole story.
+
 ## Licence
 
 All rights reserved. The app itself is GPL-3.0 and lives in its own repository.
