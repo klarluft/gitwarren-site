@@ -315,9 +315,24 @@ numbers: it happens on this zone only, and Workers Builds previews live on
 `*.workers.dev`.
 
 Two things silently break it. A `Cache-Control` containing `no-transform`
-stops Cloudflare rewriting the payload, and so does invalid HTML. The live
-check is a GET to `/cdn-cgi/rum`: **405** means the endpoint is armed, **404**
-means injection is not active.
+stops Cloudflare rewriting the payload, and so does invalid HTML.
+
+**To check whether injection is live, send a browser `User-Agent`.** Cloudflare
+only rewrites HTML for requests that look like a browser, so a plain `curl`
+sees no beacon on a working site and it is easy to conclude, wrongly, that
+injection is off:
+
+```bash
+curl -s -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) \
+  AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36" \
+  -H 'Accept: text/html' https://gitwarren.com | grep -o '"token":"[a-f0-9]*"'
+```
+
+The docs suggest a GET to `/cdn-cgi/rum` should answer **405** when the
+endpoint is armed. It does not here — it answers **404** even with injection
+demonstrably working — so that check is useless on this site. Grep the HTML
+instead, and read the token it prints: it identifies *which* Web Analytics
+site entry the data lands in, which is the failure worth catching.
 
 This is still the *second* deliberate exception to the zero-JS rule, after the
 platform picker — the page runs the beacon, even though the repo does not
