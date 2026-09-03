@@ -210,9 +210,37 @@ work as a static URL.
 URLs to the two components that link downloads.
 
 Use `/releases`, never `/releases/latest`: the latter excludes prereleases,
-v0.1.0 is flagged as one, and it 404s. The fetch never throws — a rate-limited
-or offline build falls back to the releases page rather than failing or, worse,
-shipping dead links.
+v0.1.0 is flagged as one, and it 404s.
+
+### The build needs a `GITHUB_TOKEN`
+
+Unauthenticated api.github.com is capped at **60 requests an hour per IP**, and
+a build runner shares its IP with every other tenant on the box. So the quota
+is usually already spent by the time the build asks, while a local build — its
+own IP, its own quota — resolves fine. That is exactly what went wrong: for
+several deploys gitwarren.com said `v0.1.0` and pointed every button at the
+releases index, long after v0.1.3 had shipped.
+
+Set `GITHUB_TOKEN` in the build environment and the limit becomes 5000 an hour,
+counted per token rather than per IP:
+
+- **Cloudflare Workers Builds** — a fine-grained PAT with **no scopes at all**
+  (the app repo is public, so public read is all it needs), added as a secret
+  in the Worker's build settings. This is a dashboard step, not a file here.
+- **GitHub Actions** — `GITHUB_TOKEN: ${{ github.token }}` on the build step
+  in the app repo's `deploy-site.yml`. No secret to create.
+
+`fetchDownloads` still never throws, and it retries a rate-limited or 5xx
+response three times. But `assertResolved` in `src/pages/index.astro` then
+**fails the build** if the API was never read.
+
+That is deliberate, and it replaces the previous behaviour of falling back
+quietly. A fallback build is not a degraded page, it is a *wrong* one: the
+buttons drop to the releases index and the version line reads
+`FALLBACK_VERSION`. Refusing to build leaves the last good deploy up, which is
+at worst one release behind rather than confidently stale. `astro dev` is
+exempt so the site still runs offline, and `ALLOW_STALE_DOWNLOADS=1` forces a
+build through for the same reason.
 
 ### The one piece of JavaScript
 

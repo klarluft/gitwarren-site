@@ -53,6 +53,11 @@ URLs on pull requests, or push a build by hand:
 npm run deploy
 ```
 
+The build environment needs a **`GITHUB_TOKEN`** — a fine-grained PAT with no
+scopes is enough. Without one, the releases API call is rate-limited on a
+shared build IP, and rather than ship a page whose download buttons point at
+the wrong release the build fails. See `CLAUDE.md` for the whole story.
+
 ## Licence
 
 All rights reserved. The app itself is GPL-3.0 and lives in its own repository.

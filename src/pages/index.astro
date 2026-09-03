@@ -8,11 +8,14 @@ import LocalByConstruction from "../components/LocalByConstruction.astro";
 import Download from "../components/Download.astro";
 import Footer from "../components/Footer.astro";
 import PlatformDownloads from "../components/PlatformDownloads.astro";
-import { fetchDownloads } from "../lib/releases";
+import { assertResolved, fetchDownloads } from "../lib/releases";
 import { FALLBACK_VERSION, LICENCE, REPO } from "../config";
 
 // Resolved once at build time and handed to both places that link downloads.
+// A production build that could not read the API stops here rather than
+// deploying fallback links over a page that was correct — see assertResolved.
 const downloads = await fetchDownloads(FALLBACK_VERSION);
+assertResolved(downloads, import.meta.env.DEV);
 
 const site = (Astro.site ?? new URL("https://gitwarren.com")).href;
 
