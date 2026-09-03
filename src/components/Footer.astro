@@ -1,10 +1,12 @@
 ---
-import { LICENCE, RELEASES, REPO } from "../config";
+import { LEGAL, LICENCE, PRIVACY, RELEASES, REPO } from "../config";
 
 const links = [
   { label: "GitHub", href: REPO },
   { label: "Licence", href: LICENCE },
   { label: "Releases", href: RELEASES },
+  { label: "Privacy", href: PRIVACY },
+  { label: "Legal notice", href: LEGAL },
 ];
 ---
 
@@ -14,7 +16,9 @@ const links = [
   >
     <span>GitWarren &mdash; a Klarluft B.V. project</span>
 
-    <nav class="flex gap-7">
+    <!-- Five links no longer fit one line on a narrow phone, so they wrap
+         rather than overflowing. -->
+    <nav class="flex flex-wrap gap-x-7 gap-y-2">
       {
         links.map(({ label, href }) => (
           <a href={href} class="transition-colors hover:text-white">
