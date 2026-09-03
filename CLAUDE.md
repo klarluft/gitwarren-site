@@ -93,6 +93,14 @@ The scripts that regenerate the screenshots live in the app repo
 | `agents.png` | 2400x1600 | `design/screenshots/08-agent-thread.png` |
 | `narrow.png` | 1520x1800 | `design/screenshots/07-files-narrow.png` |
 | `logo.png` | 600x600 | `design/brand/gitwarren-logo.png` |
+| `hero.webm`, `hero.mp4` | 2400x1600, ~24s | `scripts/capture-hero-video.mjs` in the app repo |
+
+The two videos are the one exception to "sources, not shippable files": Vite
+copies them through with a hashed name and no processing, so they are encoded
+for delivery already (VP9 and H.264, no audio, 2–3MB each). `hero.png` is the
+first frame of the same recording, which is what lets the poster and the video
+start identical. Regenerate the three together — see
+`design/screenshots/README.md`.
 
 **Use Astro's `<Image>` / `<Picture>` component on them** so the build emits
 sized WebP/AVIF derivatives. Do not serve these files directly, and do not

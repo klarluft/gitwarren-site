@@ -87,9 +87,51 @@ all reading "just now". `seed-demo.ts` already does this in the right order.
 script. If the commits tab reads "18 minutes ago" while the review says it was
 last active three hours ago, rewrite the demo branch's commit dates first.
 
-### The demo repositories are gone
+### The demo repositories
 
-The throwaway repositories this set was captured against were deleted.
-Recreating them is the only manual part: a clone of the app with a feature
-branch that has one staged file, one unstaged file and one untracked file at
-the same time, plus two other small repos to populate the repository list.
+The repositories the reviews point at are throwaway, and
+`scripts/make-demo-repos.sh` in the app repo builds them in a few seconds: a
+clone of the app with a feature branch carrying one staged, one unstaged and
+one untracked file at the same time, the two other branches the seed expects,
+and two small repos to fill the list. The repository path is printed in the
+uncommitted-changes banner, so for anything that will be published put them
+somewhere that reads like a real checkout:
+
+```bash
+DEMO_REPO_ROOT=~/Developer/klarluft scripts/make-demo-repos.sh
+```
+
+and pass the same `DEMO_REPO_ROOT` to `seed-demo.ts`.
+
+## The hero video
+
+`src/assets/hero.webm` and `hero.mp4` are a ~24s silent loop of the same
+review, recorded by `scripts/capture-hero-video.mjs` in the app repo over the
+same DevTools connection as the screenshots: `u` folds the working tree out and
+back in, `]` steps to the untracked file, a line comment is typed on it, and
+the agent's reply lands with its `(AI)` attribution. The last half-second
+crossfades back to the opening frame so it loops cleanly. There is no cursor by
+design; the one pointer gesture (opening the comment) shows its hover state.
+
+`hero.png` is written by the same run — the first frame — so the poster under
+the video and the video itself start identical.
+
+```bash
+cd ~/github.com/klarluft/gitwarren-app
+brew install ffmpeg                       # once
+
+DEMO_REPO_ROOT=~/Developer/klarluft scripts/make-demo-repos.sh
+rm -rf /tmp/gw-demo
+GITWARREN_DATA_DIR=/tmp/gw-demo DEMO_REPO_ROOT=~/Developer/klarluft \
+  npx tsx scripts/seed-demo.ts
+npx electron-vite build
+GITWARREN_DATA_DIR=/tmp/gw-demo \
+  ./node_modules/.bin/electron . --remote-debugging-port=9222 &
+
+GITWARREN_DATA_DIR=/tmp/gw-demo \
+VIDEO_DIR=~/github.com/klarluft/gitwarren-site/src/assets \
+  node scripts/capture-hero-video.mjs
+```
+
+Every take posts a comment and a reply into the database, so reseed (and
+restart the app) between takes.
