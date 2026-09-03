@@ -53,10 +53,12 @@ URLs on pull requests, or push a build by hand:
 npm run deploy
 ```
 
-The build environment needs a **`GITHUB_TOKEN`** — a fine-grained PAT with no
-scopes is enough. Without one, the releases API call is rate-limited on a
-shared build IP, and rather than ship a page whose download buttons point at
-the wrong release the build fails. See `CLAUDE.md` for the whole story.
+No build secrets required. Download URLs are resolved from the GitHub releases
+API, and if that call is rate-limited — which it is, routinely, on a shared
+build IP — the build falls through to a github.com lookup that has no quota to
+exhaust. A `GITHUB_TOKEN` in the environment makes the first path more reliable
+but is optional. If *both* lookups fail the build stops rather than deploy a
+page pointing at the wrong release. See `CLAUDE.md` for the whole story.
 
 ## Licence
 
