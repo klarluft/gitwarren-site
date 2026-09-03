@@ -1,0 +1,19 @@
+# GitWarren
+
+> A free, open-source (GPL-3.0) desktop app for local git code review on macOS, Windows and Linux. It reads the worktree directly — staged, unstaged and untracked changes — so you can review what an AI coding agent wrote on your own machine, before it becomes a commit or a pull request.
+
+- Website and downloads: https://gitwarren.com
+- Source code: https://github.com/klarluft/gitwarren-app
+- Releases: https://github.com/klarluft/gitwarren-app/releases
+
+## What it does
+
+- Opens reviews against your local repositories, presented like a pull request: conversation, commits and files changed.
+- Includes uncommitted work. If the branch under review is checked out in a worktree, its staged, unstaged and untracked files are folded into the diff.
+- Nothing is cached: every branch, commit and diff is read from git when shown.
+- Runs with no account, no server and no telemetry. State lives in one SQLite file on the machine.
+- Ships an MCP server over stdio, so agents such as Claude Code and Codex can read the same reviews, leave threaded comments and reply to yours. Every agent comment is attributed to the agent that wrote it.
+
+## Who it is for
+
+Developers who run coding agents locally and want to read the agent's diff before pushing it to GitHub, GitLab or anywhere else.

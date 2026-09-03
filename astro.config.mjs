@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
+import sitemap from "@astrojs/sitemap";
 
 /**
  * Astro emits each image source alongside the AVIF/WebP/JPEG derivatives it
@@ -66,7 +67,9 @@ export default defineConfig({
     // Cloudflare's asset server resolves /path to /path/index.html.
     format: "directory",
   },
-  integrations: [pruneUnreferencedImages()],
+  // The sitemap is what Search Console and Bing Webmaster Tools are handed;
+  // one page today, but it also carries lastmod for every page that follows.
+  integrations: [sitemap(), pruneUnreferencedImages()],
   vite: {
     plugins: [tailwindcss()],
   },
