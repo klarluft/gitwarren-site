@@ -48,9 +48,14 @@ const ogUrl = new URL(ogImage.src, site);
 
 // Cloudflare Web Analytics. It is cookieless and writes no identifier to the
 // visitor's device, which is the whole reason this site carries no consent
-// banner — see src/pages/privacy.astro. Set PUBLIC_CF_BEACON_TOKEN in the
-// Cloudflare Workers Builds environment; unset (dev, forks, previews) the
-// script is simply not emitted, so nothing is measured locally.
+// banner — see src/pages/privacy.astro.
+//
+// This is the FALLBACK path, and PUBLIC_CF_BEACON_TOKEN is deliberately unset:
+// Web Analytics is configured for automatic injection, so Cloudflare adds the
+// beacon at the edge and setting the token here would double-count every
+// visit. Kept because edge injection depends on Cloudflare being able to
+// rewrite the response, and this turns measurement back on without a code
+// change if it stops. See CLAUDE.md, "The measurement".
 const beaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 ---
 

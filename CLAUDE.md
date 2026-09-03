@@ -291,15 +291,37 @@ inside the account that hosts the site. Cookieless: no identifier reaches the
 browser, and visit uniqueness is computed server-side from a hash Cloudflare
 discards.
 
-The beacon is emitted by `Layout.astro`, and only when
-`PUBLIC_CF_BEACON_TOKEN` is set — see `.env.example`. Unset, no script is
-emitted at all, which is what keeps dev, previews and forks out of the
-production numbers. Set it in **Workers Builds → Settings → Variables**.
+**The beacon is injected at the edge, not built into the page.** Web Analytics
+is set to automatic injection (dashboard → Web Analytics → Manage site →
+*Enable*), so Cloudflare rewrites the HTML on the way out and this repo ships
+no analytics JavaScript at all. Two things follow, and both matter:
 
-This is the *second* deliberate exception to the zero-JS rule, after the
-platform picker. Both are third-party-free in the sense that matters: the
-picker talks to nobody, and the beacon is the page's only outbound
-third-party request.
+- **`PUBLIC_CF_BEACON_TOKEN` must stay unset.** `Layout.astro` still knows how
+  to emit the beacon itself, and setting the variable would put a second copy
+  on the page and double-count every visit. The manual path is kept
+  deliberately, as a dormant fallback: edge injection depends on Cloudflare
+  being able to rewrite the response, and if it ever stops working the fix is
+  one environment variable rather than a code change. See `.env.example`.
+- **Automatic injection only changes where the data goes**, not where the
+  script comes from. `beacon.min.js` is still fetched from
+  `static.cloudflareinsights.com`; what becomes first-party is the
+  measurement POST, which goes to `gitwarren.com/cdn-cgi/rum` instead of
+  Cloudflare's domain. So the privacy policy's claim that the page makes
+  exactly one third-party request is still true. Do not "improve" it into
+  *no* third-party requests — that is wrong.
+
+Injection is also what keeps dev, previews and forks out of the production
+numbers: it happens on this zone only, and Workers Builds previews live on
+`*.workers.dev`.
+
+Two things silently break it. A `Cache-Control` containing `no-transform`
+stops Cloudflare rewriting the payload, and so does invalid HTML. The live
+check is a GET to `/cdn-cgi/rum`: **405** means the endpoint is armed, **404**
+means injection is not active.
+
+This is still the *second* deliberate exception to the zero-JS rule, after the
+platform picker — the page runs the beacon, even though the repo does not
+contain it.
 
 ### The pages
 
