@@ -105,7 +105,7 @@ and pass the same `DEMO_REPO_ROOT` to `seed-demo.ts`.
 
 ## The hero video
 
-`src/assets/hero.webm` and `hero.mp4` are a ~28s silent loop of the same
+`src/assets/hero.webm` and `hero.mp4` are a ~24s silent loop of the same
 review, recorded by `scripts/capture-hero-video.mjs` in the app repo over the
 same DevTools connection as the screenshots: `u` folds the working tree out and
 back in, `]` steps to the untracked file, a line comment is typed on it, and
