@@ -331,8 +331,15 @@ curl -s -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) \
 The docs suggest a GET to `/cdn-cgi/rum` should answer **405** when the
 endpoint is armed. It does not here — it answers **404** even with injection
 demonstrably working — so that check is useless on this site. Grep the HTML
-instead, and read the token it prints: it identifies *which* Web Analytics
-site entry the data lands in, which is the failure worth catching.
+instead.
+
+**The token it prints will not match the `siteTag` in the dashboard URL, and
+that is correct.** Cloudflare gives each Web Analytics site two identifiers:
+`site_tag` names it in the dashboard, `site_token` goes in the beacon. Both
+are 32 hex characters, so the mismatch reads like two separate site entries
+with the traffic landing in the wrong one. It isn't. For the record, this
+site's tag is `85d349df…` and its token is `c170321…`. Don't go looking for a
+duplicate to delete.
 
 This is still the *second* deliberate exception to the zero-JS rule, after the
 platform picker — the page runs the beacon, even though the repo does not
