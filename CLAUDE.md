@@ -241,6 +241,29 @@ The one difference, and why the web lookup is second: `/releases/latest` skips
 prereleases. If the newest release is flagged as one it resolves the newest
 stable instead — older, but true, with every link pointing at a real file.
 
+### Where the token lives
+
+Set in both places the site is built, so the API lookup is the one that
+normally answers and prereleases stay visible:
+
+- **Cloudflare Workers Builds** — dashboard, the Worker, **Settings → Build →
+  Build variables and secrets**, type *Secret*, name `GITHUB_TOKEN`. A
+  fine-grained PAT scoped to public repositories with **no permissions
+  selected**: fine-grained tokens carry public read implicitly, and reading a
+  public repo's releases needs nothing beyond that. The token exists to make
+  the request attributable, not to grant access.
+- **GitHub Actions**, in the app repo's `deploy-site.yml` — `${{ github.token }}`.
+  Nothing to create or rotate.
+
+**Do not confuse Settings → Build with Settings → Variables & Secrets.** The
+latter is *runtime*, and it refuses outright on this Worker — with no `main`
+there is no script to inject anything into. That refusal is correct and says
+nothing about the build. An hour went into that distinction; it is written down
+so the next hour does not.
+
+Neither is load-bearing. `resolveFromWeb` covers a build with no token at all,
+and both paths were verified to emit byte-identical URLs.
+
 **`SUFFIX` is the single naming table** both lookups derive from — the API one
 turns it into anchored match patterns, the web one into literal filenames.
 `npm test` pins it against the real v0.1.3 asset list, including that the
