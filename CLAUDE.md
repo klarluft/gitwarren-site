@@ -67,11 +67,15 @@ assets. Keep this repo free of app code, and the app repo free of this.
 | `design/screenshots/` | Full-resolution app screenshots, 2400x1600 @2x. |
 | `design/brand/` | The 1710px master logo. |
 | `src/assets/` | Image **sources** for the site. Full resolution — see below. |
-| `src/pages/index.astro` | The only route. Composes the sections, nothing else. |
+| `src/pages/index.astro` | The main route. Composes the sections, nothing else. |
+| `src/pages/privacy.astro` | Privacy policy. Prose only — see **Analytics and the legal pages**. |
+| `src/pages/legal.astro` | Legal notice / imprint. Who operates the site. |
 | `src/components/` | The page, in pieces. |
-| `src/layouts/Layout.astro` | Shell: fonts, meta, OG tags, canonical. |
+| `src/layouts/Layout.astro` | Shell: fonts, meta, OG tags, canonical, analytics beacon. |
+| `src/layouts/Legal.astro` | Prose shell for the two legal pages. Carries their type styles. |
 | `src/styles/global.css` | The `@theme` block. Tokens live here, not in markup. |
-| `src/config.ts` | Every real URL, and the download placeholders. |
+| `src/config.ts` | Every real URL, the company details, and the download placeholders. |
+| `src/env.d.ts` | Types the one build-time env var. |
 | `src/lib/images.ts` | `srcset` builder used by `Screenshot.astro`. |
 
 The scripts that regenerate the screenshots live in the app repo
@@ -329,12 +333,119 @@ live outside this repo:
   JSON-LD. Keep every value in it something the page already says.
 - **`public/llms.txt`** — a plain-text summary for AI assistants. Keep it in
   step with the page copy.
-- **Cloudflare's managed robots.txt** is prepended at the edge when *Manage
-  robots.txt* is on for the zone. It disallows ClaudeBot, GPTBot and friends,
-  which stops assistants recommending the app. That is a dashboard setting,
-  not a file in this repo.
+- **Cloudflare's managed robots.txt** was switched **off** for the zone on
+  3 September 2026, so `/robots.txt` now serves this repo's file unmodified.
+  Left on, Cloudflare prepends disallows for ClaudeBot, GPTBot and others,
+  which stops assistants reading the page and recommending the app. It is a
+  dashboard setting (Security → Settings → Bot traffic), not a file here, so
+  a zone-wide change can undo it silently — `curl https://gitwarren.com/robots.txt`
+  is the check.
 - **OG image** is cropped from the hero at build time in `Layout.astro`. The
   GitHub repo's social preview is a separate upload in the repo settings.
+
+## Analytics and the legal pages
+
+**There is no cookie banner, and adding one would be a mistake.** The rule that
+produces consent banners is ePrivacy Article 5(3): you must ask before storing
+or reading information on the visitor's device. Nothing here does that, so
+there is nothing to consent to. A banner would be pure friction with no legal
+work to do.
+
+That is a constraint on what may be added later, not just a description of
+today. **Anything that sets a cookie, writes to local storage, or fingerprints
+the visitor changes the answer** and drags a consent flow onto the page with
+it. Weigh that cost before adding one.
+
+### The measurement
+
+Cloudflare Web Analytics, chosen over Plausible because it is free and already
+inside the account that hosts the site. Cookieless: no identifier reaches the
+browser, and visit uniqueness is computed server-side from a hash Cloudflare
+discards.
+
+**The beacon is injected at the edge, not built into the page.** Web Analytics
+is set to automatic injection (dashboard → Web Analytics → Manage site →
+*Enable*), so Cloudflare rewrites the HTML on the way out and this repo ships
+no analytics JavaScript at all. Two things follow, and both matter:
+
+- **`PUBLIC_CF_BEACON_TOKEN` must stay unset.** `Layout.astro` still knows how
+  to emit the beacon itself, and setting the variable would put a second copy
+  on the page and double-count every visit. The manual path is kept
+  deliberately, as a dormant fallback: edge injection depends on Cloudflare
+  being able to rewrite the response, and if it ever stops working the fix is
+  one environment variable rather than a code change. See `.env.example`.
+- **Automatic injection only changes where the data goes**, not where the
+  script comes from. `beacon.min.js` is still fetched from
+  `static.cloudflareinsights.com`; what becomes first-party is the
+  measurement POST, which goes to `gitwarren.com/cdn-cgi/rum` instead of
+  Cloudflare's domain. So the privacy policy's claim that the page makes
+  exactly one third-party request is still true. Do not "improve" it into
+  *no* third-party requests — that is wrong.
+
+Injection is also what keeps dev, previews and forks out of the production
+numbers: it happens on this zone only, and Workers Builds previews live on
+`*.workers.dev`.
+
+Two things silently break it. A `Cache-Control` containing `no-transform`
+stops Cloudflare rewriting the payload, and so does invalid HTML.
+
+**To check whether injection is live, send a browser `User-Agent`.** Cloudflare
+only rewrites HTML for requests that look like a browser, so a plain `curl`
+sees no beacon on a working site and it is easy to conclude, wrongly, that
+injection is off:
+
+```bash
+curl -s -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) \
+  AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36" \
+  -H 'Accept: text/html' https://gitwarren.com | grep -o '"token":"[a-f0-9]*"'
+```
+
+The docs suggest a GET to `/cdn-cgi/rum` should answer **405** when the
+endpoint is armed. It does not here — it answers **404** even with injection
+demonstrably working — so that check is useless on this site. Grep the HTML
+instead.
+
+**The token it prints will not match the `siteTag` in the dashboard URL, and
+that is correct.** Cloudflare gives each Web Analytics site two identifiers:
+`site_tag` names it in the dashboard, `site_token` goes in the beacon. Both
+are 32 hex characters, so the mismatch reads like two separate site entries
+with the traffic landing in the wrong one. It isn't. For the record, this
+site's tag is `85d349df…` and its token is `c170321…`. Don't go looking for a
+duplicate to delete.
+
+This is still the *second* deliberate exception to the zero-JS rule, after the
+platform picker — the page runs the beacon, even though the repo does not
+contain it.
+
+### The pages
+
+`privacy.astro` and `legal.astro`, both on `layouts/Legal.astro`, which carries
+their prose styles as scoped `:global()` rules — legal pages are the only place
+on the site with real reading length, so they get a 42rem measure and a smaller
+type scale than the marketing sections. No new tokens were invented for them.
+
+**The privacy policy is a factual document, not boilerplate.** Every claim in
+it was checked against this repo and the app repo: no storage in
+`PlatformDownloads.astro`, no telemetry anywhere in the app, self-hosted fonts,
+and the updater's six-hourly GitHub check as the app's only outbound request.
+If any of those change, the policy is wrong and must change with them.
+
+A legal notice is there because EU rules entitle a visitor to identify the
+operator of an online service before downloading from it. Terms of Use and a
+separate cookie policy were considered and deliberately skipped: GPL-3.0
+governs the app, and a page saying "we set no cookies" is one line, not a page.
+
+## Placeholders that must be replaced
+
+- `PUBLIC_CF_BEACON_TOKEN` is not set anywhere yet, so nothing is measured.
+
+**`COMPANY` in `src/config.ts` is filled in**, from the details published on
+klarluft.com and cross-checked against the page source: Van Aerssenlaan 40C,
+3039 KE Rotterdam, KvK 86875590, VAT NL864128915B01,
+`contact@klarluft.com`. These are load-bearing rather than decorative — the
+legal notice exists so a visitor can identify who operates the service — so if
+the company moves or the contact address changes, both legal pages are wrong
+until `COMPANY` changes with it.
 
 ## Copy rules
 

@@ -1,0 +1,89 @@
+---
+import Legal from "../layouts/Legal.astro";
+import { COMPANY, LICENCE, PRIVACY, REPO } from "../config";
+---
+
+<Legal
+  title="Legal notice — GitWarren"
+  description="Who operates gitwarren.com: Klarluft B.V., its registration details, and the terms under which the site and the GitWarren app are provided."
+  eyebrow="Legal notice"
+  heading="Who is behind this site."
+  intro="EU rules entitle you to know who is running an online service before you download anything from it. This page says who we are and how to reach us."
+>
+  <h2>Operator</h2>
+
+  <!-- The legal name ends in a full stop, so never end a sentence with it. -->
+  <p>
+    This website and the GitWarren desktop app are published by {
+      COMPANY.legalName
+    }, a company registered in the Netherlands.
+  </p>
+
+  <dl>
+    <dt>Company</dt>
+    <dd>{COMPANY.legalName}</dd>
+
+    <dt>Registered address</dt>
+    <dd>{COMPANY.address}</dd>
+
+    <dt>Chamber of Commerce</dt>
+    <dd>KvK {COMPANY.kvk}</dd>
+
+    <dt>VAT number</dt>
+    <dd>{COMPANY.vat}</dd>
+
+    <dt>Email</dt>
+    <dd><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></dd>
+  </dl>
+
+  <h2>The software</h2>
+
+  <p>
+    GitWarren is free software, released under the <a href={LICENCE} rel="noopener"
+      >GNU General Public License, version 3</a
+    >. That licence — not this page — governs your use of the app, including its
+    terms on copying, modification and the absence of any warranty. The source is
+    at <a href={REPO} rel="noopener">github.com/klarluft/gitwarren-app</a>.
+  </p>
+
+  <h2>This website</h2>
+
+  <p>
+    The pages here describe what the app does and point at its releases. We keep
+    them accurate and check every claim against the app itself, but the site is
+    provided as it is, with no warranty, and we are not liable for any loss
+    arising from relying on it. Downloads are served by GitHub, whose availability
+    is not ours to promise.
+  </p>
+
+  <p>
+    The GitWarren name, logo and the text and design of this site belong to {
+      COMPANY.legalName
+    }, and are not covered by the app's GPL licence. The screenshots show the app
+    itself.
+  </p>
+
+  <h2>Links out</h2>
+
+  <p>
+    Where this site links elsewhere — GitHub above all — the content on the other
+    end is not ours and not something we can vouch for.
+  </p>
+
+  <h2>Privacy</h2>
+
+  <p>
+    What the site and the app collect, which is close to nothing, is set out in
+    the <a href={PRIVACY}>privacy policy</a>.
+  </p>
+
+  <h2>Getting in touch</h2>
+
+  <p>
+    Email <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a> for anything on
+    this page. Bugs
+    and feature requests are better filed as <a href={`${REPO}/issues`} rel="noopener"
+      >issues on the repository</a
+    >, where they are public and get tracked.
+  </p>
+</Legal>

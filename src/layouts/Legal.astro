@@ -1,0 +1,171 @@
+---
+import Layout from "./Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import { LEGAL_UPDATED } from "../config";
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  heading: string;
+  intro: string;
+}
+
+const { title, description, eyebrow, heading, intro } = Astro.props;
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+
+  <main class="mx-auto w-full max-w-page px-gutter pt-section">
+    <!-- 42rem is roughly 70 characters at the body size: the legal pages are
+         the only ones on the site with real reading length, so they get a
+         measure rather than the page container's full width. -->
+    <div class="max-w-[42rem]">
+      <Eyebrow>{eyebrow}</Eyebrow>
+
+      <h1 class="mt-stack font-display text-h2">{heading}</h1>
+
+      <p class="mt-stack text-lead text-muted">{intro}</p>
+
+      <p class="mt-7 font-mono text-note tracking-[0.06em] text-faint uppercase">
+        Last updated {LEGAL_UPDATED}
+      </p>
+
+      <div class="prose mt-14 pb-4">
+        <slot />
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /*
+    Slotted content carries the *page's* scope, not this layout's, so every
+    rule below has to be :global() under the scoped .prose hook. Values come
+    from the same @theme tokens as the rest of the site — nothing new is
+    invented here, the type is just set smaller than the marketing sections.
+  */
+  .prose :global(h2) {
+    margin-top: 3.5rem;
+    margin-bottom: 0.875rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.3904rem + 0.4494vw, 1.75rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(h3) {
+    margin-top: 2.25rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: var(--text-cardtitle);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-ink);
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    font-size: var(--text-cardbody);
+    line-height: 1.75;
+    color: var(--color-muted);
+  }
+
+  .prose :global(p) {
+    margin-top: 1rem;
+  }
+
+  .prose :global(ul) {
+    margin-top: 1rem;
+    padding-left: 1.125rem;
+    list-style: disc;
+  }
+
+  .prose :global(li) {
+    margin-top: 0.5rem;
+    padding-left: 0.25rem;
+  }
+
+  /* The amber marker is the same accent the app uses to badge uncommitted
+     work — it is the one place these pages get to look like the rest of the
+     site. */
+  .prose :global(li)::marker {
+    color: var(--color-accent);
+  }
+
+  .prose :global(strong) {
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .prose :global(a) {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-strong);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 150ms;
+  }
+
+  .prose :global(a:hover) {
+    text-decoration-color: var(--color-accent);
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    color: var(--color-ink);
+  }
+
+  /* Definition lists carry the imprint's registration details. */
+  .prose :global(dl) {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 0.75rem 1.5rem;
+  }
+
+  @media (width >= 40rem) {
+    .prose :global(dl) {
+      grid-template-columns: 11rem 1fr;
+    }
+  }
+
+  .prose :global(dt) {
+    font-family: var(--font-mono);
+    font-size: var(--text-note);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+    align-self: baseline;
+  }
+
+  .prose :global(dd) {
+    font-size: var(--text-cardbody);
+    line-height: 1.6;
+    color: var(--color-ink);
+  }
+
+  /* The lead-in panel each legal page opens with: the plain-language summary
+     that a visitor reads instead of the whole page. */
+  .prose :global(.summary) {
+    margin-bottom: 3rem;
+    border: 1px solid var(--color-line);
+    border-left: 2px solid var(--color-accent);
+    border-radius: 10px;
+    background-color: var(--color-surface);
+    padding: var(--spacing-card);
+  }
+
+  .prose :global(.summary > p:first-child) {
+    margin-top: 0;
+  }
+</style>

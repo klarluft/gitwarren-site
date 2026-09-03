@@ -1,0 +1,260 @@
+---
+import Legal from "../layouts/Legal.astro";
+import { COMPANY, LEGAL, LICENCE, REPO } from "../config";
+---
+
+<Legal
+  title="Privacy — GitWarren"
+  description="What GitWarren's website and desktop app do and do not collect. No cookies, no accounts, no cross-site tracking, and nothing leaves your machine."
+  eyebrow="Privacy"
+  heading="What we collect, which is almost nothing."
+  intro="GitWarren is built so that your code never reaches us. This page says exactly what the website measures, what the app stores on your own disk, and why there is no consent banner in your way."
+>
+  <div class="summary">
+    <p>
+      <strong>The short version.</strong> This site sets no cookies and stores nothing
+      on your device. It has no accounts, no forms, no ad networks and no social
+      embeds. We count page views in aggregate and cannot tie one to a person. The
+      desktop app sends your repositories, diffs and comments nowhere — they stay
+      in a file on your own machine — and its only outbound request is an update
+      check to GitHub.
+    </p>
+  </div>
+
+  <h2>Who is responsible</h2>
+
+  <p>
+    {COMPANY.legalName} is the controller for the personal data described on this
+    page. The full registration details are on the <a href={LEGAL}>legal notice</a>.
+  </p>
+
+  <dl>
+    <dt>Controller</dt>
+    <dd>{COMPANY.legalName}</dd>
+
+    <dt>Address</dt>
+    <dd>{COMPANY.address}</dd>
+
+    <dt>Contact</dt>
+    <dd><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></dd>
+  </dl>
+
+  <h2>Why there is no cookie banner</h2>
+
+  <p>
+    Consent banners exist because of a specific rule: under the EU ePrivacy
+    rules, you must be asked before a site <strong
+      >stores or reads information on your device</strong
+    >. Cookies are the usual example, but the rule covers local storage and
+    device fingerprinting too.
+  </p>
+
+  <p>
+    This site does none of those things. It writes no cookie, no local storage
+    entry, and no identifier of any kind to your browser. There is therefore
+    nothing for you to consent to, and asking anyway would be theatre.
+  </p>
+
+  <p>
+    The GDPR still applies to the small amount of data described below, which is
+    handled on the basis of legitimate interests rather than consent. You can
+    object to that at any time — see <a href="#your-rights">your rights</a>.
+  </p>
+
+  <h2>What this website collects</h2>
+
+  <h3>Aggregate page-view statistics</h3>
+
+  <p>
+    We use <a
+      href="https://developers.cloudflare.com/web-analytics/"
+      rel="noopener">Cloudflare Web Analytics</a
+    >, which is cookieless by design. It reports the page visited, the referring
+    site, browser and operating system, device type, country, and how quickly the
+    page loaded. It does not build a profile, and it does not follow you to any
+    other site.
+  </p>
+
+  <p>
+    To count a visit as distinct, Cloudflare hashes properties of the request —
+    including your IP address and user agent — on its own servers and discards
+    them. Nothing is written to your device, and nothing that identifies you is
+    stored. Loading this measurement is the only third-party request the page
+    makes: a small script from <code>static.cloudflareinsights.com</code>.
+  </p>
+
+  <h3>Serving and securing the site</h3>
+
+  <p>
+    The site is hosted on Cloudflare's network. Like any web server, it processes
+    your IP address and request headers in order to deliver the page and to
+    defend against attacks and abuse. Cloudflare acts as our processor for this,
+    under its <a href="https://www.cloudflare.com/cloudflare-customer-dpa/" rel="noopener"
+      >data processing addendum</a
+    >.
+  </p>
+
+  <h3>The one script that runs in your browser</h3>
+
+  <p>
+    The download buttons reorder themselves to put your own platform first,
+    because handing a Windows visitor a macOS disk image helps nobody. That
+    decision is made entirely inside your browser: it reads the platform your
+    browser reports and, on a Mac, the graphics renderer string to tell Apple
+    silicon from Intel. It stores nothing, and it sends nothing anywhere — not to
+    us, not to anyone. Every download link works identically with JavaScript
+    switched off.
+  </p>
+
+  <h3>What we deliberately do not do</h3>
+
+  <ul>
+    <li>No accounts, sign-ups, forms or newsletter.</li>
+    <li>No advertising, retargeting or conversion pixels.</li>
+    <li>No social media embeds or share widgets.</li>
+    <li>No session recording or heatmaps.</li>
+    <li>No fingerprinting for the purpose of tracking anyone.</li>
+    <li>
+      No third-party fonts or image hosts. Typefaces are served from this domain
+      rather than linked from Google Fonts, so loading the page tells Google
+      nothing.
+    </li>
+  </ul>
+
+  <h3>When you click a download</h3>
+
+  <p>
+    Downloads are hosted as <a href={REPO} rel="noopener">GitHub</a> release assets,
+    so following one sends you to GitHub. At that point GitHub receives your request
+    and its own privacy statement governs what happens next. We receive no notification
+    that you downloaded anything.
+  </p>
+
+  <h2>What the desktop app collects</h2>
+
+  <p>
+    Nothing that reaches us. GitWarren has no server, no account and no telemetry
+    of any kind. Your repository paths, reviews, comment threads and comments are
+    written to a single SQLite file in your operating system's application-data
+    directory, alongside a folder holding any images you paste into a comment.
+    That file is the whole of it.
+  </p>
+
+  <p>
+    Branch names, commits and diffs are not stored at all. They are read from git
+    each time they are shown, which is also why the app can review work that has
+    not been committed yet.
+  </p>
+
+  <p>
+    The one exception is <strong>updates</strong>. A packaged copy of the app asks
+    GitHub for the latest release on launch and every six hours after that. That
+    request tells GitHub your IP address, the version you are running and your
+    platform, in the same way visiting any web page would. It tells us nothing —
+    we never see it. The Linux <code>deb</code> and <code>rpm</code> packages do not
+    auto-update, so they make no such request.
+  </p>
+
+  <p>
+    Local AI agents talk to the app over a standard-input/output MCP connection
+    on your own machine. No network is involved in that either.
+  </p>
+
+  <h2>If you email us</h2>
+
+  <p>
+    We keep the correspondence for as long as it takes to deal with your question,
+    and for a reasonable period afterwards in case you follow up. We do not add
+    your address to any mailing list, because there isn't one.
+  </p>
+
+  <h2>Legal bases</h2>
+
+  <ul>
+    <li>
+      <strong>Delivering and securing the site</strong> — our legitimate interests
+      in running a website that works and stays up (Article 6(1)(f) GDPR).
+    </li>
+    <li>
+      <strong>Aggregate statistics</strong> — our legitimate interests in knowing
+      roughly how many people arrive and from where. The balance falls in your favour
+      easily here: there is no identifier, no profile, and no way to single you out.
+    </li>
+    <li>
+      <strong>Answering your email</strong> — our legitimate interests in replying
+      to someone who wrote to us.
+    </li>
+  </ul>
+
+  <h2>How long anything is kept</h2>
+
+  <p>
+    Cloudflare keeps the aggregate statistics for a short rolling window — around
+    a month on our plan — after which they are gone. We do not export them,
+    archive them, or combine them with any other source. Request and security logs
+    are retained by Cloudflare for a short period under its own policy. Email is
+    kept as described above.
+  </p>
+
+  <h2>Who else is involved</h2>
+
+  <ul>
+    <li>
+      <strong>Cloudflare, Inc.</strong> — hosting, content delivery, protection against
+      attack, and the aggregate statistics.
+    </li>
+    <li>
+      <strong>GitHub, Inc.</strong> — the source code, and the release files the download
+      buttons and the app's updater point at.
+    </li>
+  </ul>
+
+  <p>
+    That is the complete list. Nothing is sold, and there is nothing here that
+    could be sold.
+  </p>
+
+  <h2>Transfers outside the EEA</h2>
+
+  <p>
+    Both companies above are based in the United States. Cloudflare relies on its
+    certification under the EU–U.S. Data Privacy Framework, with the European
+    Commission's standard contractual clauses as the fallback, as set out in its
+    data processing addendum. GitHub sets out its own safeguards in its privacy
+    statement.
+  </p>
+
+  <h2 id="your-rights">Your rights</h2>
+
+  <p>
+    Under the GDPR you may ask us for access to your personal data, or for its
+    correction or erasure; you may ask us to restrict how we use it; you may
+    object to processing based on legitimate interests; and you may ask for a
+    portable copy. Write to <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a> and we will
+    answer within a month.
+  </p>
+
+  <p>
+    One honest caveat: because the statistics hold no identifier, we usually
+    cannot find <em>your</em> data in them, and so cannot hand it over or delete it
+    on request. That is a consequence of collecting so little rather than an
+    evasion — there is no key that would let us look you up, by design.
+  </p>
+
+  <p>
+    If you think we have got this wrong, you can complain to the Dutch data
+    protection authority, the <a
+      href="https://www.autoriteitpersoonsgegevens.nl/"
+      rel="noopener">Autoriteit Persoonsgegevens</a
+    >, or to the supervisory authority where you live.
+  </p>
+
+  <h2>Changes</h2>
+
+  <p>
+    If this policy changes, the date at the top of the page changes with it. The
+    app itself is <a href={LICENCE} rel="noopener">GPL-3.0</a>, so if you would
+    rather verify the claims above than take them on trust, the source is there
+    to read.
+  </p>
+</Legal>
