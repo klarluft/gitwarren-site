@@ -6,6 +6,8 @@ import Button from "./Button.astro";
 import Screenshot from "./Screenshot.astro";
 import logo from "../assets/logo.png";
 import hero from "../assets/hero.png";
+import heroMp4 from "../assets/hero.mp4";
+import heroWebm from "../assets/hero.webm";
 import narrow from "../assets/narrow.png";
 import { REPO } from "../config";
 import type { Downloads } from "../lib/releases";
@@ -91,6 +93,7 @@ const alt =
     <Screenshot
       src={hero}
       narrowSrc={narrow}
+      video={{ webm: heroWebm, mp4: heroMp4 }}
       alt="A GitWarren review showing uncommitted changes folded into the diff"
       dots
       eager

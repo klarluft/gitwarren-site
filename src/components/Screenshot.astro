@@ -13,6 +13,15 @@ interface Props {
   dots?: boolean;
   /** Above the fold: load eagerly and raise its priority. */
   eager?: boolean;
+  /**
+   * A silent loop played over the image, from 640px up.
+   *
+   * The image stays underneath as the poster: it is the LCP element, it is
+   * what shows until the first frame decodes, and it is what a viewer with
+   * reduced motion or a failed download sees. Below 640px the portrait crop
+   * is the whole story - the wide video would be unreadable there anyway.
+   */
+  video?: { webm: string; mp4: string };
   class?: string;
 }
 
@@ -23,6 +32,7 @@ const {
   caption,
   dots = false,
   eager = false,
+  video,
   class: className,
 } = Astro.props;
 
@@ -105,6 +115,39 @@ const wideRatio = `${src.width}/${src.height}`;
         class="block h-auto w-full"
       />
     </picture>
+
+    {
+      video && (
+        <>
+          <video
+            class="absolute inset-0 hidden h-full w-full object-cover sm:block"
+            autoplay
+            muted
+            loop
+            playsinline
+            disablepictureinpicture
+            preload="metadata"
+            aria-hidden="true"
+            tabindex="-1"
+            data-shot-video
+          >
+            <source src={video.webm} type="video/webm" />
+            <source src={video.mp4} type="video/mp4" />
+          </video>
+          {/*
+            Taken out of the document, not just hidden: `autoplay` would still
+            fetch a display:none video, and the whole point of the preference
+            is not to be shown motion. Inline so it runs before the browser
+            gets far with the download.
+          */}
+          <script is:inline>
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+              document.querySelectorAll("[data-shot-video]").forEach((v) => v.remove());
+            }
+          </script>
+        </>
+      )
+    }
   </div>
 
   {
