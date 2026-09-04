@@ -1,5 +1,6 @@
 ---
 import { LEGAL, LICENCE, PRIVACY, RELEASES, REPO } from "../config";
+import FooterRabbit from "./FooterRabbit.astro";
 
 const links = [
   { label: "GitHub", href: REPO },
@@ -10,7 +11,10 @@ const links = [
 ];
 ---
 
-<footer class="mt-footertop border-t border-line">
+<!-- `relative` anchors the rabbit, which climbs out of this top border. -->
+<footer class="relative mt-footertop border-t border-line">
+  <FooterRabbit />
+
   <div
     class="mx-auto flex w-full max-w-page flex-col gap-4 px-gutter py-[clamp(1.625rem,1.4062rem+0.8989vw,2.125rem)] text-[13px] text-faint sm:flex-row sm:items-center sm:justify-between sm:text-sm"
   >

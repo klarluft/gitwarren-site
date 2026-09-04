@@ -1,0 +1,244 @@
+---
+/*
+  An easter egg. Scroll to the very bottom of a page and a white rabbit — the
+  one from the logo — climbs out of the footer to ask where you were going.
+  Scroll back up and it drops out of sight again.
+
+  Purely decorative, so it is aria-hidden and ignores the pointer, and it
+  does not exist without JavaScript: the markup is here, but the hidden state
+  is the default and only the script below lifts it. Nothing is stored, so
+  it does not touch the no-cookies promise in the privacy policy.
+
+  The third deliberate exception to the zero-JS rule, after the platform
+  picker and the analytics beacon. See CLAUDE.md, "The one piece of
+  JavaScript".
+*/
+---
+
+<div class="rabbit-hole" data-rabbit aria-hidden="true">
+  <div class="peek">
+    <!-- Drawn in the logo's language: flat white, dark ink lines, facing
+         right. The bottom edge sits on the footer's border, which reads as
+         the rim of the burrow; the clipping box above hides it below that
+         line until it climbs out. -->
+    <svg
+      class="rabbit"
+      viewBox="0 0 120 104"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="#f2efe9"
+      stroke="#121110"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <!-- Back ear, then front ear; the head is drawn over their roots. -->
+      <g transform="rotate(-16 44 36)">
+        <ellipse cx="44" cy="36" rx="9.5" ry="28" />
+        <ellipse cx="44" cy="38" rx="4" ry="19" fill="none" stroke-width="1.75" />
+      </g>
+      <g transform="rotate(9 66 32)">
+        <ellipse cx="66" cy="32" rx="9.5" ry="29" />
+        <ellipse cx="66" cy="34" rx="4" ry="20" fill="none" stroke-width="1.75" />
+      </g>
+
+      <!-- Head. Slightly fuller at the cheek than at the crown. -->
+      <path
+        d="M27 82
+           C27 62 40 52 58 52
+           C78 52 91 62 91 78
+           C91 90 84 100 74 104
+           L40 104
+           C31 100 27 92 27 82 Z"
+      />
+
+      <!-- Eye, with the catch-light the logo has. -->
+      <circle cx="69" cy="73" r="3.7" fill="#121110" stroke="none" />
+      <circle cx="70.3" cy="71.7" r="1.15" fill="#f2efe9" stroke="none" />
+
+      <!-- Nose and mouth. -->
+      <path d="M84.5 79.5 h6.5 l-3.25 4.25 Z" fill="#121110" stroke="none" />
+      <path d="M87.75 83.5 q-1 4.5 -5.5 4" fill="none" stroke-width="1.6" />
+
+      <!-- Paws over the rim. Drawn last so they sit on top of the head. -->
+      <rect x="35" y="92" width="18" height="16" rx="6.5" />
+      <path d="M41 95.5 v5 M47 95.5 v5" fill="none" stroke-width="1.5" />
+      <rect x="63" y="94" width="18" height="14" rx="6.5" />
+      <path d="M69 97 v4.5 M75 97 v4.5" fill="none" stroke-width="1.5" />
+    </svg>
+
+    <span class="bubble">You lost, buddy?</span>
+  </div>
+</div>
+
+<style>
+  /*
+    The clipping box. It stands on the footer's top edge and reaches up into
+    the empty margin above it, so everything in it appears to rise out of
+    the footer line rather than fade in.
+  */
+  .rabbit-hole {
+    position: absolute;
+    right: var(--spacing-gutter);
+    bottom: 100%;
+    width: 236px;
+    height: 176px;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .peek {
+    position: absolute;
+    inset: 0;
+    transform: translateY(100%);
+    transition: transform 0.32s cubic-bezier(0.5, 0, 0.9, 0.6);
+    will-change: transform;
+  }
+
+  .rabbit {
+    position: absolute;
+    left: 10px;
+    bottom: -1px;
+    width: 108px;
+    height: auto;
+  }
+
+  .bubble {
+    position: absolute;
+    right: 0;
+    bottom: 104px;
+    padding: 0.5rem 0.8rem 0.55rem;
+    border-radius: 0.8rem;
+    background: #fff;
+    color: var(--color-ground);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    transform: rotate(-3deg) scale(0);
+    transform-origin: 20% 120%;
+    transition: transform 0.14s ease-in;
+  }
+
+  /* The balloon's tail, aimed at the rabbit's mouth. */
+  .bubble::after {
+    content: "";
+    position: absolute;
+    left: 1.1rem;
+    bottom: -0.55rem;
+    width: 0;
+    height: 0;
+    border-left: 0.55rem solid #fff;
+    border-right: 0.35rem solid transparent;
+    border-bottom: 0.7rem solid transparent;
+    transform: skewX(-18deg);
+  }
+
+  /* Out of the burrow. The rabbit overshoots a little on the way up, and the
+     balloon pops once it is there. */
+  [data-out] .peek {
+    transform: translateY(0);
+    transition: transform 0.55s cubic-bezier(0.22, 1.2, 0.36, 1);
+  }
+
+  [data-out] .bubble {
+    transform: rotate(-3deg) scale(1);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.42s;
+  }
+
+  /*
+    Below the `lg` breakpoint, 64rem, which is 1024px at the browser's default
+    16px root: the same threshold as the `lg:` utilities on the rest of the
+    page, written in rem for the same reason Tailwind writes it that way.
+
+    The full-size rabbit and its balloon need the gutter to hold them clear
+    of the centred download buttons and the licence line beneath them, which
+    it only does from about 900px up. Below that the rabbit shrinks and tucks
+    into the right edge, under the end of the licence line, and the balloon
+    sits beside it at head height instead of above it, tail pointing right.
+    That fits at every width down to a narrow phone.
+  */
+  @media (width < 64rem) {
+    .rabbit-hole {
+      right: 4px;
+      width: 220px;
+      height: 96px;
+    }
+
+    .rabbit {
+      left: auto;
+      right: 4px;
+      width: 64px;
+    }
+
+    .bubble {
+      right: 76px;
+      bottom: 14px;
+      padding: 0.4rem 0.65rem 0.45rem;
+      font-size: 0.75rem;
+      transform-origin: 110% 50%;
+    }
+
+    .bubble::after {
+      left: auto;
+      right: -0.5rem;
+      bottom: 0.5rem;
+      border-top: 0.3rem solid transparent;
+      border-bottom: 0.45rem solid transparent;
+      border-left: 0.6rem solid #fff;
+      border-right: 0;
+      transform: skewY(12deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .peek,
+    .bubble,
+    [data-out] .peek,
+    [data-out] .bubble {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const hole = document.querySelector("[data-rabbit]");
+
+  // Reaching the bottom should be something the visitor did, not where the
+  // page already was. A page that does not scroll at all (the 404) would
+  // otherwise show the rabbit permanently, and one that scrolls by a sliver
+  // is no better: a phone's address bar collapsing changes innerHeight by
+  // roughly this much, which can turn a static page into a "scrollable" one
+  // with nobody touching it. So a page has to scroll by at least a step
+  // worth noticing before the rabbit will come out.
+  const MIN_SCROLL_DISTANCE = 48;
+
+  // scrollY is fractional on zoomed displays, and trackpad overscroll goes
+  // past the end rather than stopping on it, so "at the bottom" needs a
+  // little slack on the near side.
+  const BOTTOM_SLACK = 2;
+
+  if (hole) {
+    let queued = false;
+
+    const update = () => {
+      queued = false;
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight > window.innerHeight + MIN_SCROLL_DISTANCE;
+      const atBottom = window.innerHeight + window.scrollY >= doc.scrollHeight - BOTTOM_SLACK;
+      hole.toggleAttribute("data-out", scrollable && atBottom);
+    };
+
+    const schedule = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(update);
+    };
+
+    addEventListener("scroll", schedule);
+    addEventListener("resize", schedule);
+    update();
+  }
+</script>

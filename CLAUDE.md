@@ -320,6 +320,24 @@ so the signals are `userAgentData.getHighEntropyValues`, which Safari does not
 implement, then the WebGL renderer string. An unknown architecture keeps the
 Apple-silicon default rather than guessing Intel.
 
+### The footer rabbit
+
+`src/components/FooterRabbit.astro`, rendered inside `Footer.astro` on every
+page, is an easter egg: scroll to the very bottom and the logo's white rabbit
+climbs out of the footer's top border with a speech balloon, and drops back
+when you scroll up. It is the **third** exception to the zero-JS rule, after
+the platform picker and the analytics beacon, and a small one: a passive
+scroll listener that toggles `data-out` on the element when the page is
+scrolled to its end. It is decorative, so it is `aria-hidden`, ignores the
+pointer, and stays hidden without JavaScript.
+
+Two guards are deliberate. A page that does not scroll (the 404) never shows
+it, or it would just be permanently there. Below 1024px it shrinks and moves
+to the right edge, under the end of the licence line, because the gutter is
+too narrow to hold the full-size rabbit clear of the centred download
+buttons. It stores nothing, so it does not affect the no-cookies claim in the
+privacy policy.
+
 ### Redeploys
 
 The app repo's `.github/workflows/deploy-site.yml` rebuilds and deploys this
