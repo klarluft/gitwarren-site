@@ -132,7 +132,8 @@ Headline: **"Review what your agents wrote, before GitHub ever sees it."**
 
 ### Section order
 
-1. **Hero** — halo treatment (below), headline, sub, download CTA, `hero.jpg`.
+1. **Hero** — halo treatment (below), headline, sub, download CTA, the
+   platform line, the Homebrew one-liner (same as in Download), `hero.jpg`.
 2. **Before the commit** — "An agent's output isn't a commit. It's a dirty
    worktree." Screenshot `untracked.jpg`.
 3. **Agents in the loop** — MCP server, seventeen tools, agents as review
