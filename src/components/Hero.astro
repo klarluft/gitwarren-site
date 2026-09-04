@@ -90,6 +90,15 @@ const alt =
       <a href={downloads.linux} class={alt}>Linux</a>{" too"}
     </p>
 
+    {/*
+      The Homebrew path, repeated from the Download section so a macOS
+      developer arriving at the top of the page does not have to scroll for
+      it. `select-all` so one click selects the whole command.
+    */}
+    <p class="w-full text-center font-mono text-note text-faint">
+      or <code class="text-accent select-all">brew install --cask klarluft/tap/gitwarren</code>
+    </p>
+
     <Screenshot
       src={hero}
       narrowSrc={narrow}

@@ -132,14 +132,18 @@ Headline: **"Review what your agents wrote, before GitHub ever sees it."**
 
 ### Section order
 
-1. **Hero** — halo treatment (below), headline, sub, download CTA, `hero.jpg`.
+1. **Hero** — halo treatment (below), headline, sub, download CTA, the
+   platform line, the Homebrew one-liner (same as in Download), `hero.jpg`.
 2. **Before the commit** — "An agent's output isn't a commit. It's a dirty
    worktree." Screenshot `untracked.jpg`.
 3. **Agents in the loop** — MCP server, seventeen tools, agents as review
    participants. Screenshot `agents.jpg`. Three cards: always attributed / two
    agents stay two / yours to edit.
 4. **Local by construction** — no account, nothing cached, one SQLite file.
-5. **Download** — logo, headline, three platform buttons, GPL-3.0 line.
+5. **Download** — logo, headline, three platform buttons, the Homebrew
+   one-liner (`brew install --cask klarluft/tap/gitwarren`; the cask lives in
+   the `klarluft/homebrew-tap` repo and bumps itself on each release), GPL-3.0
+   line.
 6. **Footer.**
 
 ### Tokens

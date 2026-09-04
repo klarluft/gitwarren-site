@@ -40,6 +40,15 @@ const { downloads } = Astro.props;
     <Button href={downloads.linux} data-download="linux" variant="secondary">Linux</Button>
   </div>
 
+  {/*
+    The Homebrew path, for the macOS users who would rather not click a
+    disk image. `select-all` so a triple-click is not needed to copy it;
+    the amber marks it as the one thing on the line meant to be taken.
+  */}
+  <p class="text-center font-mono text-note text-faint">
+    or <code class="text-accent select-all">brew install --cask klarluft/tap/gitwarren</code>
+  </p>
+
   <p class="text-center font-mono text-note text-faint">
     Free and open source under GPL-3.0
   </p>
