@@ -4,6 +4,7 @@ import HeroHalo from "./HeroHalo.astro";
 import Eyebrow from "./Eyebrow.astro";
 import Button from "./Button.astro";
 import Screenshot from "./Screenshot.astro";
+import ProductHunt from "./ProductHunt.astro";
 import logo from "../assets/logo.png";
 import hero from "../assets/hero.png";
 import heroMp4 from "../assets/hero.mp4";
@@ -98,6 +99,13 @@ const alt =
     <p class="w-full text-center font-mono text-note text-faint">
       or <code class="text-accent select-all">brew install --cask klarluft/tap/gitwarren</code>
     </p>
+
+    {/*
+      Centred at every width, unlike most of the stack above it, which is
+      left-aligned below 640px — a fixed 200px badge in a 390px column reads as
+      shoved against the gutter rather than as placed.
+    */}
+    <ProductHunt class="self-center" />
 
     <Screenshot
       src={hero}

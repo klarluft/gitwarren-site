@@ -1,6 +1,6 @@
 ---
 import Legal from "../layouts/Legal.astro";
-import { COMPANY, LEGAL, LICENCE, REPO } from "../config";
+import { COMPANY, LEGAL, LICENCE, PRODUCT_HUNT, REPO } from "../config";
 ---
 
 <Legal
@@ -121,13 +121,22 @@ import { COMPANY, LEGAL, LICENCE, REPO } from "../config";
     </li>
   </ul>
 
-  <h3>When you click a download</h3>
+  <h3>When you follow a link off this site</h3>
 
   <p>
     Downloads are hosted as <a href={REPO} rel="noopener">GitHub</a> release assets,
     so following one sends you to GitHub. At that point GitHub receives your request
     and its own privacy statement governs what happens next. We receive no notification
     that you downloaded anything.
+  </p>
+
+  <p>
+    The <a href={PRODUCT_HUNT} rel="noopener">Product Hunt</a> badge near the top of
+    the page is a link, not an embed. Product Hunt publishes it as an image served
+    from their own servers; we copied the artwork into this site instead, so
+    displaying it costs no request to them and they learn nothing about you from
+    your simply loading the page. Click it and you are on their site, under their
+    privacy notice, exactly as with GitHub above.
   </p>
 
   <h2>What the desktop app collects</h2>

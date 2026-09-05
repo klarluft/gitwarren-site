@@ -1,0 +1,84 @@
+---
+import { PRODUCT_HUNT } from "../config";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+/*
+  Product Hunt's own badge artwork, inlined rather than hotlinked from
+  api.producthunt.com. The site makes exactly one third-party request — the
+  analytics beacon — and privacy.astro says so in as many words; an embedded
+  badge image would make that false, and put a second host in front of every
+  visitor's IP for the sake of 2 KB of SVG.
+
+  Two edits to their file, both forced:
+
+  - The upvote counter is gone. Their widget renders the count as a literal
+    "???" for this product, in every theme and with the cache buster set, so
+    the block it lived in — a triangle and a text node at x=201 — could only
+    ever have shipped that.
+  - The box therefore shrinks from 250px wide to 200. "Product Hunt" measures
+    exactly 133.0px at Helvetica Bold 21 and ends at x=185, so 200 leaves a
+    14.5px right gutter against the 10.5px on the left — the small extra is
+    deliberate, balancing a flat text edge against a round logo. Arial Bold
+    and Liberation Sans Bold are metric-compatible and land on the same 133.0,
+    which is what makes a fixed width safe off macOS; anything narrower than
+    196 would start crowding the text.
+  - The doubly-nested translate(-130,-73) / translate(130,73) wrapper, which
+    cancels itself out, is flattened away.
+
+  Everything else is theirs, untouched: the wording, #EEF2FF on #221D21, the
+  Helvetica Bold, the mark, and the 10px corner radius. If the counter starts
+  resolving to a real number, the honest fix is to re-export from their widget
+  rather than to hand-letter one in here.
+*/
+---
+
+<a
+  href={PRODUCT_HUNT}
+  target="_blank"
+  rel="noopener noreferrer"
+  class:list={[
+    "inline-block rounded-[10px] opacity-90 transition-opacity duration-150",
+    "hover:opacity-100 focus-visible:opacity-100",
+    className,
+  ]}
+>
+  <svg
+    width="200"
+    height="54"
+    viewBox="0 0 200 54"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label="GitWarren is featured on Product Hunt"
+  >
+    <rect
+      x="0.5"
+      y="0.5"
+      width="199"
+      height="53"
+      rx="10"
+      fill="#221D21"
+      stroke="#221D21"
+      stroke-width="1"></rect>
+    <g
+      fill="#EEF2FF"
+      font-family="Helvetica-Bold, Helvetica, Arial, sans-serif"
+      font-weight="bold"
+    >
+      <text x="53" y="20" font-size="9">FEATURED ON</text>
+      <text x="52" y="40" font-size="21">Product Hunt</text>
+    </g>
+    <g transform="translate(11, 12)">
+      <path
+        d="M31,15.5 C31,24.0603917 24.0603917,31 15.5,31 C6.93960833,31 0,24.0603917 0,15.5 C0,6.93960833 6.93960833,0 15.5,0 C24.0603917,0 31,6.93960833 31,15.5"
+        fill="#FFFFFF"></path>
+      <path
+        d="M17.4329412,15.9558824 L17.4329412,15.9560115 L13.0929412,15.9560115 L13.0929412,11.3060115 L17.4329412,11.3060115 L17.4329412,11.3058824 C18.7018806,11.3058824 19.7305882,12.3468365 19.7305882,13.6308824 C19.7305882,14.9149282 18.7018806,15.9558824 17.4329412,15.9558824 M17.4329412,8.20588235 L17.4329412,8.20601152 L10.0294118,8.20588235 L10.0294118,23.7058824 L13.0929412,23.7058824 L13.0929412,19.0560115 L17.4329412,19.0560115 L17.4329412,19.0558824 C20.3938424,19.0558824 22.7941176,16.6270324 22.7941176,13.6308824 C22.7941176,10.6347324 20.3938424,8.20588235 17.4329412,8.20588235"
+        fill="#221D21"></path>
+    </g>
+  </svg>
+</a>

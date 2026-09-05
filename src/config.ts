@@ -21,6 +21,17 @@ export const PRIVACY = "/privacy";
 export const LEGAL = "/legal";
 
 /**
+ * The Product Hunt listing the hero badge links to.
+ *
+ * Their embed snippet appends `?embed=true` and three `utm_*` parameters,
+ * which are only there to attribute the click back to the badge. We serve the
+ * badge ourselves (see `ProductHunt.astro`), so the campaign name would be
+ * describing an image Product Hunt never sent — the plain product URL is the
+ * one that is true.
+ */
+export const PRODUCT_HUNT = "https://www.producthunt.com/products/gitwarren";
+
+/**
  * Klarluft B.V. is the controller for everything this site processes, and the
  * operator an EU visitor is entitled to be able to identify.
  *
