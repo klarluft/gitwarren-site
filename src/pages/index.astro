@@ -4,6 +4,8 @@ import Nav from "../components/Nav.astro";
 import Hero from "../components/Hero.astro";
 import BeforeCommit from "../components/BeforeCommit.astro";
 import Agents from "../components/Agents.astro";
+import YourMachines from "../components/YourMachines.astro";
+import TwoShells from "../components/TwoShells.astro";
 import LocalByConstruction from "../components/LocalByConstruction.astro";
 import Download from "../components/Download.astro";
 import Footer from "../components/Footer.astro";
@@ -28,7 +30,7 @@ const structuredData = {
   name: "GitWarren",
   url: site,
   description:
-    "A desktop app for local git code review. Reads the worktree directly — staged, unstaged and untracked — so you can review what an AI coding agent wrote on your own machine, before it becomes a commit.",
+    "Code review for your own machines and your own agents. Reads the worktree directly — staged, unstaged and untracked — so you can review what an AI coding agent wrote before it becomes a commit, on whichever of your machines it wrote it on. Desktop app or browser tab; reaches other machines over SSH, WSL or your own tailnet.",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "macOS, Windows, Linux",
   softwareVersion: downloads.version.replace(/^v/, ""),
@@ -45,13 +47,13 @@ const structuredData = {
   sameAs: [REPO],
   author: { "@type": "Organization", name: "Klarluft", url: "https://klarluft.com" },
   keywords:
-    "code review, git, diff, uncommitted changes, worktree, AI coding agents, Claude Code, Codex, MCP server, local-first",
+    "code review, git, diff, uncommitted changes, worktree, AI coding agents, Claude Code, Codex, MCP server, local-first, self-hosted, SSH, WSL, Tailscale, tailnet, headless, remote code review",
 };
 ---
 
 <Layout
   title="GitWarren — review what your agents wrote, before GitHub ever sees it"
-  description="A desktop app for local git code review. GitWarren reads the worktree directly — staged, unstaged and untracked — so you read an agent's diff on your own machine, before it becomes a commit."
+  description="Code review for your own machines and your own agents. GitWarren reads the worktree directly — staged, unstaged and untracked — so you read an agent's diff before it becomes a commit, on whichever of your machines it is on. Desktop app or browser tab, over SSH, WSL or your own tailnet."
   structuredData={structuredData}
 >
   <Nav />
@@ -59,6 +61,8 @@ const structuredData = {
     <Hero downloads={downloads} />
     <BeforeCommit />
     <Agents />
+    <YourMachines />
+    <TwoShells />
     <LocalByConstruction />
     <Download downloads={downloads} />
   </main>

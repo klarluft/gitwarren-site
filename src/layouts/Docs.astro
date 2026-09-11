@@ -1,0 +1,252 @@
+---
+import Layout from "./Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import { DOCS, DOCS_INDEX } from "../config";
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  heading: string;
+  intro: string;
+}
+
+const { title, description, eyebrow, heading, intro } = Astro.props;
+
+// The next guide in the reading order from config, wrapping at the end. The
+// order is an argument about what to read first, so following it is the
+// whole point of offering a link at all.
+const here = DOCS.findIndex((doc) => doc.href === Astro.url.pathname.replace(/\/$/, ""));
+const next = here === -1 ? null : DOCS[(here + 1) % DOCS.length];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  headline: heading,
+  description,
+  about: { "@type": "SoftwareApplication", name: "GitWarren" },
+  author: { "@type": "Organization", name: "Klarluft", url: "https://klarluft.com" },
+};
+---
+
+<Layout title={title} description={description} structuredData={structuredData}>
+  <Nav />
+
+  <main class="mx-auto w-full max-w-page px-gutter pt-section">
+    <!-- The same 42rem measure the legal pages use. These are the other pages
+         on the site with real reading length. -->
+    <div class="max-w-[42rem]">
+      <a
+        href={DOCS_INDEX}
+        class="font-mono text-note text-faint transition-colors hover:text-ink"
+        >&larr; All guides</a
+      >
+
+      <Eyebrow class="mt-7">{eyebrow}</Eyebrow>
+
+      <h1 class="mt-stack font-display text-h2">{heading}</h1>
+
+      <p class="mt-stack text-lead text-muted">{intro}</p>
+
+      <div class="prose mt-14 pb-4">
+        <slot />
+      </div>
+
+      {
+        next && (
+          <a
+            href={next.href}
+            class="mt-16 flex flex-col gap-1.5 rounded-xl border border-line bg-surface p-card transition-colors hover:border-line-strong"
+          >
+            <span class="font-mono text-note tracking-[0.06em] text-faint uppercase">
+              Next
+            </span>
+            <span class="text-cardtitle font-semibold">{next.title}</span>
+            <span class="text-cardbody text-muted">{next.blurb}</span>
+          </a>
+        )
+      }
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /*
+    Slotted content carries the page's scope rather than this layout's, so
+    every rule is :global() under the scoped .prose hook — the same
+    arrangement, and the same @theme tokens, as Legal.astro. What is added
+    here is what a guide needs and a legal page never does: code blocks,
+    tables, and the platform callout.
+  */
+  .prose :global(h2) {
+    margin-top: 3.5rem;
+    margin-bottom: 0.875rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.3904rem + 0.4494vw, 1.75rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(h3) {
+    margin-top: 2.25rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: var(--text-cardtitle);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-ink);
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    font-size: var(--text-cardbody);
+    line-height: 1.75;
+    color: var(--color-muted);
+  }
+
+  .prose :global(p) {
+    margin-top: 1rem;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-top: 1rem;
+    padding-left: 1.125rem;
+  }
+
+  .prose :global(ul) {
+    list-style: disc;
+  }
+
+  .prose :global(ol) {
+    list-style: decimal;
+  }
+
+  .prose :global(li) {
+    margin-top: 0.5rem;
+    padding-left: 0.25rem;
+  }
+
+  .prose :global(li)::marker {
+    color: var(--color-accent);
+  }
+
+  .prose :global(strong) {
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .prose :global(a) {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-strong);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 150ms;
+  }
+
+  .prose :global(a:hover) {
+    text-decoration-color: var(--color-accent);
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    color: var(--color-ink);
+  }
+
+  /*
+    A command is a thing people copy, and a wrapped command is a command that
+    gets copied wrong. So these scroll sideways rather than wrapping — the one
+    place on the site where horizontal overflow is the correct answer.
+  */
+  .prose :global(pre) {
+    margin-top: 1.25rem;
+    overflow-x: auto;
+    border: 1px solid var(--color-line);
+    border-radius: 10px;
+    background-color: var(--color-well);
+    padding: 1rem 1.125rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-note);
+    line-height: 1.75;
+    color: var(--color-ink);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .prose :global(pre code) {
+    font-size: inherit;
+  }
+
+  /* A comment in a shell block is guidance, not a command — so it reads as
+     the surrounding prose does rather than competing with the command. */
+  .prose :global(pre .c) {
+    color: var(--color-faint);
+  }
+
+  .prose :global(.table-scroll) {
+    margin-top: 1.25rem;
+    overflow-x: auto;
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-cardbody);
+  }
+
+  .prose :global(th) {
+    border-bottom: 1px solid var(--color-line-strong);
+    padding: 0 1rem 0.625rem 0;
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: var(--text-note);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+    white-space: nowrap;
+  }
+
+  .prose :global(td) {
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.75rem 1rem 0.75rem 0;
+    line-height: 1.6;
+    color: var(--color-muted);
+    vertical-align: top;
+  }
+
+  .prose :global(td:first-child) {
+    color: var(--color-ink);
+  }
+
+  /* The same amber-edged panel the legal pages open with, used here for the
+     thing on a page that will otherwise be found out the hard way. */
+  .prose :global(.note) {
+    margin-top: 1.75rem;
+    border: 1px solid var(--color-line);
+    border-left: 2px solid var(--color-accent);
+    border-radius: 10px;
+    background-color: var(--color-surface);
+    padding: var(--spacing-card);
+  }
+
+  .prose :global(.note > p:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(.note-title) {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+</style>

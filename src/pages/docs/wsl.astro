@@ -1,0 +1,84 @@
+---
+import Docs from "../../layouts/Docs.astro";
+---
+
+<Docs
+  title="GitWarren and WSL — reviewing Linux repositories from the Windows app"
+  description="A WSL distro is a host like any other. The Windows app lists your distributions, installs into the one you pick, and reviews its repositories as Linux paths."
+  eyebrow="WSL"
+  heading="A distro is a host, not a folder."
+  intro="If your code lives inside a WSL distribution, that distribution is a machine. GitWarren treats it as one — it installs a daemon inside the distro and talks to it, rather than reaching across the boundary and reading Linux files as though they were Windows ones."
+>
+  <h2>Adding a distro</h2>
+
+  <p>
+    Open <strong>Other machines</strong> in the Windows app and add a host of
+    kind <strong>WSL</strong>. The distributions on the machine are listed, you
+    pick one, and GitWarren installs itself inside it over{" "}
+    <code>wsl.exe</code> — the same installer that runs over ssh, because it was
+    written against &ldquo;a machine with a shell and a <code>tar</code>&rdquo;
+    rather than against ssh specifically.
+  </p>
+
+  <p>
+    GitWarren runs as that distribution&#39;s own default user, so the files it
+    reads have the ownership and the permissions they would have if you had
+    opened a shell yourself.
+  </p>
+
+  <p>
+    From there it is an ordinary host: add its repositories by their Linux
+    paths, open reviews, point the agent that runs in that distro at the
+    launcher inside it.
+  </p>
+
+  <h2>Why not just open the Windows path?</h2>
+
+  <p>
+    Windows can see a distro&#39;s files at <code>\\wsl$\…</code>, and it is
+    tempting to add one as an ordinary local repository. GitWarren{" "}
+    <strong>refuses</strong> a WSL path offered as a local repository, on
+    purpose.
+  </p>
+
+  <p>
+    Reading a Linux repository through the Windows filesystem redirector gets
+    you different line endings, different permissions, different case
+    sensitivity, and a git that disagrees with the git inside the distro about
+    what is modified. Worse, the agent working in that repo is a Linux process
+    with Linux paths — a review keyed on Windows paths could not anchor a
+    comment to anything it said.
+  </p>
+
+  <p>
+    Installing into the distro costs one dialog and makes all of that go away:
+    one git, one set of paths, one idea of what is dirty.
+  </p>
+
+  <div class="note">
+    <span class="note-title">Windows-native repositories stay first class</span>
+    <p>
+      None of this makes the Windows app worse for people who do not use WSL.
+      Most Windows developers do not, and coding agents have run natively on
+      Windows since late 2025. A repository on <code>C:\</code> is an ordinary
+      local repository with no host in front of it. See <a
+        href="/docs/windows">Running on Windows</a>.
+    </p>
+  </div>
+
+  <h2>Reaching a distro from somewhere else</h2>
+
+  <p>
+    <code>wsl.exe</code> only exists on the Windows machine itself. To review
+    that distro&#39;s code from a Mac or a Linux laptop, reach it the way you
+    would reach any other Linux box — over ssh, or over your tailnet if
+    Tailscale runs inside the distro.
+  </p>
+
+  <p>
+    Both work, and both are the same host from GitWarren&#39;s point of view; a
+    distro added over ssh from your laptop and over <code>wsl.exe</code> from the
+    Windows app is the same machine, with the same reviews, because the identity
+    that settles it is the install rather than the route to it.
+  </p>
+</Docs>

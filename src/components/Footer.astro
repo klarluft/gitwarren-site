@@ -1,8 +1,9 @@
 ---
-import { LEGAL, LICENCE, PRIVACY, RELEASES, REPO } from "../config";
+import { DOCS_INDEX, LEGAL, LICENCE, PRIVACY, RELEASES, REPO } from "../config";
 import FooterRabbit from "./FooterRabbit.astro";
 
 const links = [
+  { label: "Guides", href: DOCS_INDEX },
   { label: "GitHub", href: REPO },
   { label: "Licence", href: LICENCE },
   { label: "Releases", href: RELEASES },
@@ -20,7 +21,7 @@ const links = [
   >
     <span>GitWarren &mdash; a Klarluft B.V. project</span>
 
-    <!-- Five links no longer fit one line on a narrow phone, so they wrap
+    <!-- Six links no longer fit one line on a narrow phone, so they wrap
          rather than overflowing. -->
     <nav class="flex flex-wrap gap-x-7 gap-y-2">
       {

@@ -10,7 +10,7 @@ import hero from "../assets/hero.png";
 import heroMp4 from "../assets/hero.mp4";
 import heroWebm from "../assets/hero.webm";
 import narrow from "../assets/narrow.png";
-import { REPO } from "../config";
+import { DOCS, REPO } from "../config";
 import type { Downloads } from "../lib/releases";
 
 interface Props {
@@ -40,7 +40,7 @@ const alt =
       class="hero-logo block"
     />
 
-    <Eyebrow>Local review for AI-written code</Eyebrow>
+    <Eyebrow>Your machines. Your agents.</Eyebrow>
 
     <h1 class="max-w-[940px] font-display text-h1 sm:text-center">
       Review what your agents wrote,<br class="hidden lg:inline" /> before GitHub
@@ -50,8 +50,9 @@ const alt =
     <p class="max-w-[690px] text-lead text-muted sm:text-center">
       An agent finishes a task and leaves you a worktree full of changes that
       aren&#39;t committed yet. Every other review tool waits for a pull request.
-      GitWarren reads the worktree directly &mdash; staged, unstaged and
-      untracked &mdash; so you read the diff on your own machine first.
+      GitWarren reads that worktree directly &mdash; staged, unstaged and
+      untracked &mdash; on whichever of your machines it is on. Your laptop, a
+      VPS, a WSL distro, a box with no screen at all.
     </p>
 
     <div
@@ -98,6 +99,18 @@ const alt =
     */}
     <p class="w-full text-center font-mono text-note text-faint">
       or <code class="text-accent select-all">brew install --cask klarluft/tap/gitwarren</code>
+    </p>
+
+    {/*
+      The third line is the one the rest of the page has to earn: there is a
+      way in that installs nothing and runs no Electron. It is a footnote here
+      and a section further down, because it is the answer to an objection
+      rather than the reason anybody came.
+    */}
+    <p class="w-full text-center font-mono text-note text-faint">
+      no Electron?{" "}
+      <code class="text-accent select-all">npx gitwarren serve</code>{" "}
+      <a href={DOCS[0].href} class={alt}>serves the same UI to a browser</a>
     </p>
 
     {/*
