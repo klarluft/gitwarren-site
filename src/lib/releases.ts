@@ -97,7 +97,7 @@ const UA = { "User-Agent": "gitwarren-site-build" };
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /* ------------------------------------------------------------------ */
-/* The API lookup — preferred, because it sees prereleases              */
+/* The API lookup — preferred, because it reads real asset names        */
 /* ------------------------------------------------------------------ */
 
 interface GitHubAsset {
@@ -105,7 +105,7 @@ interface GitHubAsset {
   browser_download_url: string;
 }
 
-interface GitHubRelease {
+export interface GitHubRelease {
   tag_name: string;
   draft: boolean;
   prerelease: boolean;
@@ -113,10 +113,33 @@ interface GitHubRelease {
 }
 
 /**
- * NOT `/releases/latest` — that endpoint excludes prereleases, and v0.1.0 is
- * flagged as one, so it 404s. Take the newest non-draft release instead, which
- * keeps working whether or not a release is marked prerelease.
+ * The release these buttons should point at: the newest that is neither a
+ * draft nor a prerelease.
+ *
+ * A prerelease is published so that testers can be handed a link to it
+ * directly. This page is where everyone else arrives, so it goes on offering
+ * the newest stable build until a stable build replaces it. Every other path
+ * out of the app repository now agrees: `/releases/latest` — which the
+ * github.com fallback below asks for, and which every installed app's updater
+ * asks for on its own behalf — skips prereleases, and the Homebrew cask is no
+ * longer told about them.
+ *
+ * Drafts are excluded for an unrelated reason: their assets are visible only
+ * to the repository's own maintainers, so a link to one is a 404 for everyone
+ * who would click it.
+ *
+ * Not `/releases/latest` itself, which would express both conditions in one
+ * request: that endpoint 404s when every release is a prerelease, which is
+ * exactly what this repository looked like at v0.1.0. Filtering the list
+ * degrades more kindly — it keeps answering with the last stable release,
+ * however old, and the staleness is visible on the page rather than as a
+ * failed build.
  */
+export function selectRelease(releases: GitHubRelease[]): GitHubRelease | null {
+  return releases.find((release) => !release.draft && !release.prerelease) ?? null;
+}
+
+/** The whole list, newest first — see `selectRelease` for why not `/latest`. */
 const API = `https://api.github.com/repos/${SLUG}/releases`;
 
 /**
@@ -174,9 +197,9 @@ async function resolveFromApi(): Promise<Downloads | null> {
         return null;
       }
 
-      const release = ((await res.json()) as GitHubRelease[]).find((r) => !r.draft);
+      const release = selectRelease((await res.json()) as GitHubRelease[]);
       if (!release) {
-        console.warn("[releases] api: no non-draft release");
+        console.warn("[releases] api: no published stable release");
         return null;
       }
 
