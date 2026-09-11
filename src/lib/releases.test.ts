@@ -7,7 +7,9 @@ import {
   matcher,
   OVERRIDE,
   PLATFORMS,
+  selectRelease,
   type Downloads,
+  type GitHubRelease,
   type Source,
 } from "./releases.ts";
 
@@ -57,6 +59,53 @@ describe("assertResolved", () => {
   it("ignores anything but 1 in the override", () => {
     process.env[OVERRIDE] = "true";
     assert.throws(() => assertResolved(downloads("none"), false));
+  });
+});
+
+/**
+ * Which release the download buttons are allowed to point at.
+ *
+ * The prerelease clause is the one worth a test: for a while this lookup
+ * deliberately took the newest non-draft release *because* v0.1.0 was a
+ * prerelease and there was nothing else to show. Once stable releases existed,
+ * that same line became the way a beta would reach everyone arriving at the
+ * site — the opposite of what publishing a beta is for.
+ */
+describe("selectRelease", () => {
+  const entry = (tag: string, flags: Partial<GitHubRelease> = {}): GitHubRelease => ({
+    tag_name: tag,
+    draft: false,
+    prerelease: false,
+    assets: [],
+    ...flags,
+  });
+
+  /** The app repository's own list, newest first, while v0.1.7 was in beta. */
+  const real = [
+    entry("v0.1.7-beta.2", { draft: true, prerelease: true }),
+    entry("v0.1.7-beta.1", { draft: true, prerelease: true }),
+    entry("v0.1.6"),
+    entry("v0.1.5"),
+    entry("v0.1.0", { prerelease: true }),
+  ];
+
+  it("takes the newest stable release", () => {
+    assert.equal(selectRelease(real)?.tag_name, "v0.1.6");
+  });
+
+  it("walks past a published prerelease", () => {
+    const published = [entry("v0.1.7-beta.2", { prerelease: true }), ...real];
+    assert.equal(selectRelease(published)?.tag_name, "v0.1.6");
+  });
+
+  it("walks past a draft, whose assets nobody else can download", () => {
+    const drafted = [entry("v0.2.0", { draft: true }), ...real];
+    assert.equal(selectRelease(drafted)?.tag_name, "v0.1.6");
+  });
+
+  it("answers with nothing when there is no stable release at all", () => {
+    assert.equal(selectRelease([entry("v0.1.0", { prerelease: true })]), null);
+    assert.equal(selectRelease([]), null);
   });
 });
 
