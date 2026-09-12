@@ -102,7 +102,7 @@ the built HTML for `[a-z]<code` before shipping prose changes.
 
 | File | Size | From |
 | --- | --- | --- |
-| `hero.png` | 2400x1600 | `design/screenshots/01-review-files-uncommitted.png` |
+| `hero.png` | 2400x1600 | `scripts/capture-hero-video.mjs` — the video's first frame, not a screenshot |
 | `untracked.png` | 2400x1600 | `design/screenshots/09-untracked-file.png` |
 | `agents.png` | 2400x1600 | `design/screenshots/08-agent-thread.png` |
 | `narrow.png` | 1520x1800 | `design/screenshots/07-files-narrow.png` |
