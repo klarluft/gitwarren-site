@@ -70,9 +70,11 @@ assets. Keep this repo free of app code, and the app repo free of this.
 | `src/pages/index.astro` | The main route. Composes the sections, nothing else. |
 | `src/pages/privacy.astro` | Privacy policy. Prose only — see **Analytics and the legal pages**. |
 | `src/pages/legal.astro` | Legal notice / imprint. Who operates the site. |
+| `src/pages/docs/` | The guides. One page each, ordered by `DOCS` in `config.ts`. |
 | `src/components/` | The page, in pieces. |
 | `src/layouts/Layout.astro` | Shell: fonts, meta, OG tags, canonical, analytics beacon. |
 | `src/layouts/Legal.astro` | Prose shell for the two legal pages. Carries their type styles. |
+| `src/layouts/Docs.astro` | Prose shell for the guides. Legal's styles plus code blocks, tables and callouts. |
 | `src/styles/global.css` | The `@theme` block. Tokens live here, not in markup. |
 | `src/config.ts` | Every real URL, the company details, and the download placeholders. |
 | `src/env.d.ts` | Types the one build-time env var. |
@@ -81,6 +83,18 @@ assets. Keep this repo free of app code, and the app repo free of this.
 The scripts that regenerate the screenshots live in the app repo
 (`scripts/seed-demo.ts`, `scripts/capture-demo.mjs`) — see
 `design/screenshots/README.md`.
+
+## Writing prose in an `.astro` file
+
+Astro drops whitespace that contains a newline where it touches an element
+boundary. A line ending in a word followed by a line that opens with
+`<code>`, `<strong>`, `<em>` or `<a>` renders with no space between them —
+`runstailscale serve` — and the same happens after a closing tag. It is
+invisible in the source and obvious on the page.
+
+Put an explicit `{" "}` at the end of the earlier line whenever an inline tag
+starts or ends one. The guides under `src/pages/docs/` do this throughout; grep
+the built HTML for `[a-z]<code` before shipping prose changes.
 
 ## Images
 
@@ -204,9 +218,10 @@ follows — change these deliberately, not by accident:
   are `clamp()`s interpolating linearly between the two artboards, so 900px is
   covered rather than snapping at a breakpoint.
 - **The breakpoint is 640px** (`sm`), where the artboards themselves diverge.
-  Nav links appear at 768px (`md`); the three-card grids go to three columns at
-  1024px (`lg`), because three columns any narrower leaves ~24 characters a
-  line.
+  Nav links appear at 1024px (`lg`) — there are five of them plus a button
+  since the guides were added, and they no longer fit beside the wordmark at
+  768px. The three-card grids go to three columns at the same 1024px, because
+  three columns any narrower leaves ~24 characters a line.
 - **The hero screenshot is art-directed**, not just scaled: `narrow.png` below
   640px, `hero.png` above. A 2400px-wide app UI is unreadable at 390px.
 - **The two section screenshots are dropped below 640px**, as the mobile

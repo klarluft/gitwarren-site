@@ -1,0 +1,144 @@
+---
+import Docs from "../../layouts/Docs.astro";
+---
+
+<Docs
+  title="Reviewing code on another machine — GitWarren over SSH"
+  description="Add a machine you can already reach over ssh and GitWarren installs itself there over the same connection. The host needs nothing but git."
+  eyebrow="Another machine"
+  heading="Reviewing code that is somewhere else."
+  intro="A repository lives on one machine, and so does its review. GitWarren does not copy either one — it reaches the machine the code is already on, runs the review there, and renders it in the window in front of you."
+>
+  <h2>What actually happens</h2>
+
+  <p>
+    Nothing is replicated and nothing is synced. The window you are looking at
+    is a view onto a host; git is read on the host, SQLite lives on the host,
+    and the agent that works on that code talks to the GitWarren next to it
+    rather than across a network.
+  </p>
+
+  <p>
+    That means a machine which is switched off is shown as offline, not as
+    whatever it last said. It also means there is no merge conflict to have, no
+    replication to fall behind, and nothing of yours sitting on a server.
+  </p>
+
+  <h2>Adding a host</h2>
+
+  <p>
+    Open <strong>Other machines</strong> and add one. There are three ways to
+    reach a machine, and the form asks for whichever the carrier needs:
+  </p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Kind</th><th>You give it</th><th>Good for</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SSH</td>
+          <td><code>user@machine</code></td>
+          <td>A VPS, a build box, a PC — anything with an ssh daemon.</td>
+        </tr>
+        <tr>
+          <td>Tailnet</td>
+          <td><code>pc-wsl</code></td>
+          <td>
+            A machine on your tailnet that is listening. See <a
+              href="/docs/tailnet">the tailnet guide</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>WSL</td>
+          <td>a distro, picked from a list</td>
+          <td>
+            Windows only. See <a href="/docs/wsl">WSL, from the Windows app</a>.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    For SSH, the only prerequisite is that <code>ssh user@machine</code> already
+    works from a terminal without asking you anything. GitWarren does not manage
+    keys, agents or config — it uses the ssh you already have, with the setup
+    you already trust.
+  </p>
+
+  <h2>The install</h2>
+
+  <p>
+    A machine added this way has GitWarren installed on it over the same
+    connection. <strong>The host needs nothing but git.</strong> The daemon is
+    shipped as a self-contained tarball with a Node binary inside it, so there
+    is no runtime to install first and nothing on the host that can upgrade out
+    from under it.
+  </p>
+
+  <p>
+    The tarball is a release asset. The machine you are sitting at fetches it
+    and streams it down the pipe — a couple of seconds on a normal connection —
+    unpacks it under <code>~/.gitwarren/</code>, and writes the same{" "}
+    <code>~/.gitwarren/bin/</code> launchers you would get from{" "}
+    <code>gitwarren service install</code> locally.
+  </p>
+
+  <div class="note">
+    <span class="note-title">Nothing is left running</span>
+    <p>
+      GitWarren spawns <code>gitwarren serve --stdio</code> over ssh on demand
+      and talks to it down that pipe. There is no daemon sitting on the host
+      waiting for you, no port opened, and no service registered unless you ask
+      for one. A connection pool hangs up after ten idle minutes.
+    </p>
+  </div>
+
+  <h2>Once it is there</h2>
+
+  <p>
+    The host&#39;s repositories are added and reviewed exactly as local ones
+    are. What travels with a review is the host it belongs to: a link names the
+    machine that minted it, so opening review 4 from one install lands on{" "}
+    <em>that</em> machine&#39;s review 4 rather than this one&#39;s.
+  </p>
+
+  <p>Per-host, you also get:</p>
+
+  <ul>
+    <li>
+      <strong>Editors and reveal.</strong> Opening a file from a review on a
+      remote host opens it the way that host is configured to, rather than
+      guessing a path that only means something locally.
+    </li>
+    <li>
+      <strong>Agent access.</strong> The launcher path to paste into whatever
+      agent runs over there, printed for that host rather than for this one.
+    </li>
+    <li>
+      <strong>Attachments.</strong> Images pasted into a comment are ingested on
+      the host that owns the review, and served from it.
+    </li>
+  </ul>
+
+  <h2>When it goes away</h2>
+
+  <p>
+    A request that fails tells GitWarren the host has gone, and the screen says
+    so rather than showing stale data: a banner, a reconnect with backoff, and a
+    refetch when it comes back. There is one honest limit — a host reached over
+    ssh has no process of its own to push from, so a machine nobody has asked
+    anything in a while is noticed the next time you look at it. Over the
+    tailnet it is greyed within a second, because there the socket is held open.
+  </p>
+
+  <h2>Removing one</h2>
+
+  <p>
+    Removing a host takes it out of this GitWarren&#39;s list. Nothing is
+    uninstalled and nothing is deleted: the reviews stay on the machine that
+    owns them, and adding it back finds them again.
+  </p>
+</Docs>

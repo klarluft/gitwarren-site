@@ -1,0 +1,123 @@
+---
+import Docs from "../../layouts/Docs.astro";
+---
+
+<Docs
+  title="GitWarren on your tailnet — live updates, and reviews on your phone"
+  description="Let your machines discover each other over Tailscale, get comments the moment they are written, and open a review on your phone with no token to copy."
+  eyebrow="Tailnet"
+  heading="Your machines, finding each other."
+  intro="SSH is the universal way to reach a machine you own, and it needs no extra software. A tailnet buys three things on top of it: machines that appear by themselves, updates that arrive the moment they happen, and a review you can open on your phone."
+>
+  <h2>Turning it on</h2>
+
+  <p>
+    On <strong>Other machines</strong>, under <em>On your tailnet</em>, switch on{" "}
+    <strong>Reachable on your tailnet</strong>. GitWarren runs{" "}
+    <code>tailscale serve</code> in front of the loopback port it already
+    listens on. Nothing new is opened, and nothing is exposed to the internet —{" "}
+    <code>tailscale funnel</code> is deliberately never used.
+  </p>
+
+  <p>
+    You need Tailscale installed and logged in on the machine. GitWarren does
+    not bundle it, does not manage it, and works without it.
+  </p>
+
+  <div class="note">
+    <span class="note-title">One extra step on Linux</span>
+    <p>
+      <code>tailscale serve</code> refuses to run without root unless it has
+      been told your user may drive it. Once, per machine:
+    </p>
+    <pre><code>sudo tailscale set --operator=$USER</code></pre>
+    <p>
+      macOS and Windows both apply it as the ordinary user, so this is a
+      Linux-only step. If it has not been done, GitWarren reports what Tailscale
+      actually said rather than silently failing to turn the switch on.
+    </p>
+  </div>
+
+  <h2>Who is allowed in</h2>
+
+  <p>
+    Every request that arrives this way has to carry a Tailscale login equal to
+    the owner&#39;s — the identity Tailscale itself asserts, taken from{" "}
+    <code>tailscale status</code>. Anything else is refused before it reaches
+    anything that could answer it.
+  </p>
+
+  <p>
+    There is no pairing token, no password, and no credential GitWarren issued
+    or stores. Authorisation is <em>the same login as the owner</em>, which is
+    also why sharing a review with another person is not a thing this does —
+    that is GitHub&#39;s job.
+  </p>
+
+  <h2>Machines that appear by themselves</h2>
+
+  <p>
+    Peers on your tailnet are probed, and the ones running a GitWarren that
+    answers are proposed as hosts. You confirm them; nothing is added behind
+    your back. Manual entry stays for everything else.
+  </p>
+
+  <p>
+    A machine you added over ssh and then find again on the tailnet is
+    recognised as the same machine rather than listed twice — what settles it is
+    the identity the install reports, not the address you happened to type.
+  </p>
+
+  <h2>Live updates</h2>
+
+  <p>
+    A listening host pushes. Reviews and comments arrive the moment they are
+    written, including writes from an agent — when an agent leaves a comment,
+    the MCP process pokes the GitWarren that owns the data directory, and the
+    change is on your screen about a second later.
+  </p>
+
+  <p>
+    It is also what greys a machine that goes away: the socket is held open with
+    a heartbeat on it, so a host that vanishes is marked offline within a second
+    rather than the next time something asks it a question.
+  </p>
+
+  <p>
+    A fifteen-second poll remains underneath all of it, everywhere. A lost
+    update costs you seconds, never correctness.
+  </p>
+
+  <h2>Your phone</h2>
+
+  <p>
+    Nothing was built for the phone. The same review UI the browser gets on
+    loopback is reachable at the host&#39;s tailnet address from any device on
+    your tailnet, and Tailscale supplies the identity — so there is no token to
+    get onto a phone and nothing to log into.
+  </p>
+
+  <pre><code>https://&lt;machine&gt;.&lt;your-tailnet&gt;.ts.net/review/4/conversation</code></pre>
+
+  <p>
+    Below a laptop width the files list and the diff become separate screens
+    rather than two columns crushed together, and the comment composer sits
+    above the keyboard instead of under it.
+  </p>
+
+  <p>
+    Links an agent prints carry both addresses once a host is listening: a
+    loopback one, which always works and depends on nothing, and the tailnet one
+    for the device you are actually holding.
+  </p>
+
+  <div class="note">
+    <span class="note-title">HTTPS is a tailnet-wide setting</span>
+    <p>
+      Whether those URLs are <code>https</code> or plain <code>http</code>{" "}
+      depends on whether HTTPS certificates are enabled for your tailnet, which
+      is a Tailscale setting rather than a GitWarren one. Either way the traffic
+      is inside WireGuard, which is encrypting it regardless.
+    </p>
+  </div>
+</Docs>

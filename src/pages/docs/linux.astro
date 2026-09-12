@@ -1,0 +1,110 @@
+---
+import Docs from "../../layouts/Docs.astro";
+---
+
+<Docs
+  title="Running GitWarren on Linux — AppImage, headless daemon, systemd"
+  description="Install the GitWarren AppImage on a Linux desktop, or run the headless daemon on a server with no screen and review it from somewhere else."
+  eyebrow="Linux"
+  heading="A desktop, or a box with no screen."
+  intro="Linux is where GitWarren's two shells matter most, because Linux is where half the machines have no screen. A workstation gets the app; a server gets the daemon and is reviewed from the laptop you are actually sitting at."
+>
+  <h2>On a desktop</h2>
+
+  <p>
+    Download the AppImage for your architecture — x86_64 or arm64 — from{" "}
+    <a href="/#download">the front page</a>, make it executable, and run it.
+  </p>
+
+  <pre><code>chmod +x GitWarren-*.AppImage
+./GitWarren-*.AppImage</code></pre>
+
+  <p>
+    There is deliberately no <code>.deb</code> and no <code>.rpm</code>. Neither
+    can update itself without a package manager and a sudo prompt, and silent
+    background updates are worth more here than distribution packaging is.
+  </p>
+
+  <div class="note">
+    <span class="note-title">No system tray? Still fine</span>
+    <p>
+      GitWarren wants to live in the tray, and plenty of Linux desktops do not
+      have one. Where there is no tray to put an icon in, you get an ordinary
+      window instead of an app that starts and appears to do nothing.
+    </p>
+  </div>
+
+  <h2>On a server</h2>
+
+  <p>
+    A machine with no screen runs the command-line half: the same daemon, the
+    same MCP server, no Electron.
+  </p>
+
+  <pre><code><span class="c"># brings its own Node</span>
+brew install klarluft/tap/gitwarren-cli
+
+<span class="c"># or use the Node already on the box</span>
+npx gitwarren serve</code></pre>
+
+  <p>
+    You usually do not have to do even that. If you can reach the box over ssh
+    from a machine running the app, <a href="/docs/another-machine"
+      >add it as a host</a
+    > and GitWarren installs itself there over the same connection — the host
+    needs nothing but git.
+  </p>
+
+  <h3>Starting at boot</h3>
+
+  <p>
+    <code>gitwarren service install</code> writes the{" "}
+    <code>~/.gitwarren/bin/</code> launchers and registers a{" "}
+    <code>systemd --user</code> unit that runs{" "}
+    <code>gitwarren serve --listen</code> at login.
+  </p>
+
+  <pre><code>gitwarren service install
+gitwarren service status
+
+<span class="c"># launchers only, no login item — what a host reached over ssh wants</span>
+gitwarren service install --no-login-item</code></pre>
+
+  <p>
+    Nothing restarts a dead daemon, and that is deliberate rather than an
+    oversight. <code>serve --listen</code> is <em>meant</em> to exit when the
+    desktop app is already running — a data directory has one owner — and under
+    a <code>Restart=</code> policy that refusal would become a process
+    respawning every ten seconds for as long as GitWarren is open.
+  </p>
+
+  <p>
+    A <code>systemd --user</code> unit stops when you log out unless lingering is
+    enabled for the account. On a server you want{" "}
+    <code>loginctl enable-linger $USER</code>, which is a systemd setting rather
+    than anything GitWarren does.
+  </p>
+
+  <h2>On your tailnet</h2>
+
+  <p>
+    Linux needs one permission the other platforms do not.{" "}
+    <code>tailscale serve</code> refuses to run without root until it has been
+    told your user may drive it:
+  </p>
+
+  <pre><code>sudo tailscale set --operator=$USER</code></pre>
+
+  <p>
+    Once, per machine. Then <strong>Reachable on your tailnet</strong> works as
+    it does everywhere else — see <a href="/docs/tailnet">the tailnet guide</a>.
+  </p>
+
+  <h2>git, and nothing else</h2>
+
+  <p>
+    GitWarren shells out to your own <code>git</code> rather than bundling an
+    implementation, so git has to be installed and on the <code>PATH</code>. If
+    it is not, the app says so explicitly instead of showing you an empty list.
+  </p>
+</Docs>
