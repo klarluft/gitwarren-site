@@ -41,33 +41,49 @@ import Docs from "../../layouts/Docs.astro";
     same MCP server, no Electron.
   </p>
 
-  <pre><code><span class="c"># brings its own Node</span>
+  <pre><code><span class="c"># needs nothing on the box but curl and tar; brings its own Node</span>
+curl -fsSL https://gitwarren.com/install.sh | sh
+
+<span class="c"># the same tarball, through Homebrew on Linux</span>
 brew install klarluft/tap/gitwarren-cli
 
-<span class="c"># or use the Node already on the box</span>
+<span class="c"># or use the Node already on the box (22 or newer)</span>
 npx gitwarren serve</code></pre>
+
+  <p>
+    The script puts GitWarren in <code>~/.gitwarren/daemon/&lt;version&gt;/</code>{" "}
+    and the command at <code>~/.gitwarren/bin/gitwarren</code>, and tells you to
+    add that directory to your <code>PATH</code> if it is not already there.
+    Then <code>gitwarren serve</code> prints the URL, or <code
+      >gitwarren serve --open</code
+    > opens it. <a href="/docs/install">Installing GitWarren</a> has the whole
+    command.
+  </p>
 
   <p>
     You usually do not have to do even that. If you can reach the box over ssh
     from a machine running the app, <a href="/docs/another-machine"
       >add it as a host</a
     > and GitWarren installs itself there over the same connection — the host
-    needs nothing but git.
+    needs nothing but git. The layout it leaves behind is the one the script
+    produces, so the two can upgrade each other's install.
   </p>
 
   <h3>Starting at boot</h3>
 
   <p>
-    <code>gitwarren service install</code> writes the{" "}
-    <code>~/.gitwarren/bin/</code> launchers and registers a{" "}
+    <code>gitwarren service install</code> registers a{" "}
     <code>systemd --user</code> unit that runs{" "}
-    <code>gitwarren serve --listen</code> at login.
+    <code>gitwarren serve --listen</code>, starts it now, and starts it again at
+    every login. <code>gitwarren service uninstall</code> stops it and removes
+    the unit.
   </p>
 
   <pre><code>gitwarren service install
 gitwarren service status
+gitwarren service uninstall
 
-<span class="c"># launchers only, no login item — what a host reached over ssh wants</span>
+<span class="c"># launchers only, no unit — what a host reached only over ssh wants</span>
 gitwarren service install --no-login-item</code></pre>
 
   <p>

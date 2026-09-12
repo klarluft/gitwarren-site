@@ -1,8 +1,9 @@
 # GitWarren
 
-> A free, open-source (GPL-3.0) desktop app for local git code review on macOS, Windows and Linux. It reads the worktree directly — staged, unstaged and untracked changes — so you can review what an AI coding agent wrote on your own machine, before it becomes a commit or a pull request.
+> A free, open-source (GPL-3.0) tool for local git code review on macOS, Windows and Linux — a desktop app, or a command that serves the same review UI into a browser tab. It reads the worktree directly — staged, unstaged and untracked changes — so you can review what an AI coding agent wrote on your own machine, before it becomes a commit or a pull request.
 
 - Website and downloads: https://gitwarren.com
+- Guides: https://gitwarren.com/docs
 - Source code: https://github.com/klarluft/gitwarren-app
 - Releases: https://github.com/klarluft/gitwarren-app/releases
 
@@ -13,6 +14,19 @@
 - Nothing is cached: every branch, commit and diff is read from git when shown.
 - Runs with no account, no server and no telemetry. State lives in one SQLite file on the machine.
 - Ships an MCP server over stdio, so agents such as Claude Code and Codex can read the same reviews, leave threaded comments and reply to yours. Every agent comment is attributed to the agent that wrote it.
+- Reaches your other machines over ssh, wsl.exe or your own tailnet, and installs itself onto them. Nothing is relayed or stored anywhere but the computers you own.
+
+## Installing
+
+- Desktop app: download from https://gitwarren.com, or on macOS `brew install --cask klarluft/tap/gitwarren`. Linux ships as an AppImage.
+- Command line, macOS and Linux, brings its own Node: `brew install klarluft/tap/gitwarren-cli` or `curl -fsSL https://gitwarren.com/install.sh | sh`.
+- Command line anywhere Node 22+ is, including Windows: `npx gitwarren serve`.
+
+## The command line
+
+- `gitwarren serve --open` runs GitWarren in the terminal, serving on 127.0.0.1 behind a per-launch token, and opens the browser. Ctrl-C stops it.
+- `gitwarren service install` keeps it running in the background, from now and at every login; `gitwarren service uninstall` undoes that.
+- `gitwarren agent-setup` prints the sentence to give a coding agent so it can reach GitWarren over MCP. The MCP server reads the same SQLite file, so it works whether or not GitWarren is being served.
 
 ## Who it is for
 

@@ -66,26 +66,51 @@ import { DOCS_INDEX } from "../../config";
     WSL distro, a box an agent works on.
   </p>
 
-  <pre><code><span class="c"># uses the Node you already have</span>
-npx gitwarren serve
+  <pre><code><span class="c"># brings its own Node — macOS and Linux</span>
+brew install klarluft/tap/gitwarren-cli
 
-<span class="c"># brings its own Node, macOS and Linux</span>
-brew install klarluft/tap/gitwarren-cli</code></pre>
+<span class="c"># the same, without Homebrew — macOS and Linux</span>
+curl -fsSL https://gitwarren.com/install.sh | sh
+
+<span class="c"># uses the Node you already have (22 or newer) — anywhere, including Windows</span>
+npx gitwarren serve</code></pre>
 
   <p>
     The formula is <code>gitwarren-cli</code> and the cask is <code
       >gitwarren</code
     >, so <code>brew install --cask klarluft/tap/gitwarren</code> keeps meaning
-    the app. The binary is called <code>gitwarren</code> in both.
+    the app. The binary is called <code>gitwarren</code> whichever way it
+    arrived.
   </p>
 
-  <h3>What the command does</h3>
+  <p>
+    The install script unpacks the release tarball into{" "}
+    <code>~/.gitwarren/daemon/&lt;version&gt;/</code> and writes{" "}
+    <code>~/.gitwarren/bin/gitwarren</code>, which you add to your{" "}
+    <code>PATH</code>. That is the same layout the app produces when it installs
+    GitWarren onto <a href="/docs/another-machine">another machine</a> over
+    ssh, so either can upgrade what the other installed. To remove it,{" "}
+    <code>rm -rf ~/.gitwarren</code>; your reviews are not in there.
+  </p>
 
-  <pre><code>gitwarren serve            <span class="c"># serve the UI on 127.0.0.1, print its URL</span>
-gitwarren serve --stdio    <span class="c"># answer GitWarren's protocol on stdin/stdout</span>
-gitwarren open [link]      <span class="c"># open this machine's GitWarren in a browser</span>
-gitwarren service install  <span class="c"># write the launchers, and start at login</span>
-gitwarren agent-setup      <span class="c"># print the sentence that points an agent here</span></code></pre>
+  <h3>Which command you want</h3>
+
+  <p>
+    Three things a person wants from it, and one command for each. They are
+    independent — none of them needs another to have been run first.
+  </p>
+
+  <pre><code><span class="c"># Run it now — in this terminal, until Ctrl-C</span>
+gitwarren serve --open     <span class="c"># serve the UI on 127.0.0.1 and open it (or just print the URL, without --open)</span>
+gitwarren open [link]      <span class="c"># open the running GitWarren in your browser, later</span>
+
+<span class="c"># Keep it running — in the background, from now and at every login</span>
+gitwarren service install
+gitwarren service uninstall
+gitwarren service status
+
+<span class="c"># Let a coding agent in</span>
+gitwarren agent-setup      <span class="c"># the one sentence to give an agent, see below</span></code></pre>
 
   <div class="note">
     <span class="note-title">Nothing is copied by hand</span>
@@ -99,20 +124,28 @@ gitwarren agent-setup      <span class="c"># print the sentence that points an a
     </p>
   </div>
 
-  <h2>Starting at login</h2>
+  <h2>Keeping it running</h2>
 
   <p>
-    <code>gitwarren service install</code> does two things, and only the second
-    is about logging in. It writes the launchers at{" "}
-    <code>~/.gitwarren/bin/</code> — the stable paths everything else names,
-    including the one you point an agent at — and then registers a login item: a
-    LaunchAgent on macOS, a <code>systemd --user</code> unit on Linux, an
-    at-logon Scheduled Task on Windows.
+    <code>gitwarren serve</code> stops when you close the terminal. <code
+      >gitwarren service install</code
+    > is for wanting GitWarren there whenever you are: it registers a login item
+    — a LaunchAgent on macOS, a <code>systemd --user</code> unit on Linux, an
+    at-logon Scheduled Task on Windows — and starts it right away, so <code
+      >gitwarren open</code
+    > and the links an agent hands you always have something to open. <code
+      >gitwarren service uninstall</code
+    > stops it and removes the item.
   </p>
 
   <p>
-    On a headless host you usually want the first without the second, which is
-    what <code>--no-login-item</code> is for.
+    Whichever command you run first also writes two small scripts to{" "}
+    <code>~/.gitwarren/bin/</code>: <code>gitwarren</code>, the stable path the
+    app spawns this install by from another machine, and <code
+      >gitwarren-mcp</code
+    >, the one you point an agent at. On a headless host that is reached only
+    from elsewhere, <code>gitwarren service install --no-login-item</code>{" "}
+    writes them and registers nothing.
   </p>
 
   <h2>Pointing an agent at it</h2>
@@ -132,8 +165,16 @@ agent_identity tool to confirm it works.</code></pre>
     Agents know their own configuration format better than a settings panel
     does; what they need from us is a stable command. <code
       >gitwarren agent-setup</code
-    > prints the same sentence on any host, and <code>--manual</code> adds
-    hand-editable snippets for the three config formats that exist.
+    > prints the same sentence on any host, writes the launcher it names if it
+    is not there yet, and <code>--manual</code> adds hand-editable snippets for
+    the three config formats that exist.
+  </p>
+
+  <p>
+    The MCP server is part of every install and reads the same SQLite file the
+    browser view does, so an agent can open and comment on reviews whether or
+    not GitWarren is being served. What serving adds is that the link an agent
+    hands back opens in a browser.
   </p>
 
   <p>

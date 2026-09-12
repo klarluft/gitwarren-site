@@ -79,6 +79,7 @@ assets. Keep this repo free of app code, and the app repo free of this.
 | `src/config.ts` | Every real URL, the company details, and the download placeholders. |
 | `src/env.d.ts` | Types the one build-time env var. |
 | `src/lib/images.ts` | `srcset` builder used by `Screenshot.astro`. |
+| `public/_redirects` | Cloudflare's static-asset redirects. Holds `/install.sh`, which 302s to `packaging/install.sh` on the app repo's `main` — the script stays with the CLI it installs, and this repo stays free of app code. Check with `curl -sI https://gitwarren.com/install.sh`. |
 
 The scripts that regenerate the screenshots live in the app repo
 (`scripts/seed-demo.ts`, `scripts/capture-demo.mjs`) — see
