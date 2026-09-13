@@ -7,11 +7,12 @@ const link =
   "underline decoration-dotted decoration-faint/50 underline-offset-4 transition-colors hover:text-ink hover:decoration-faint";
 
 // One row per way in. The comment is the reason to pick it, which is the only
-// thing that distinguishes three commands that all end up at the same UI.
+// thing that distinguishes four commands that all end up at the same UI.
 const installs = [
   { cmd: "brew install --cask klarluft/tap/gitwarren", note: "the desktop app, macOS" },
   { cmd: "npx gitwarren serve", note: "anywhere Node already is" },
   { cmd: "brew install klarluft/tap/gitwarren-cli", note: "brings its own Node" },
+  { cmd: "curl -fsSL https://gitwarren.com/install.sh | sh", note: "no Homebrew, no Node" },
 ];
 ---
 

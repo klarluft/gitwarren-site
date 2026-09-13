@@ -32,10 +32,11 @@ import Docs from "../../layouts/Docs.astro";
   </p>
 
   <p>
-    For the command-line half, <code>gitwarren service install</code> registers
-    an at-logon Scheduled Task named <code>GitWarren daemon</code> — a name you
-    would actually guess if you went looking through Task Scheduler for what
-    keeps starting.
+    For the command-line half — <code>npx gitwarren serve</code> is the way to
+    get it on Windows — <code>gitwarren service install</code> registers an
+    at-logon Scheduled Task named <code>GitWarren daemon</code> and runs it
+    straight away. The name is one you would actually guess if you went looking
+    through Task Scheduler for what keeps starting.
   </p>
 
   <pre><code>gitwarren service install
