@@ -3,6 +3,45 @@ import Eyebrow from "./Eyebrow.astro";
 import Screenshot from "./Screenshot.astro";
 import Card from "./Card.astro";
 import agents from "../assets/agents.png";
+import { REPO } from "../config";
+
+// The plugin, one way in per tool. The note beside a command is the tool it
+// is typed into, which is the only thing that distinguishes them: all of them
+// install the same server and the same note for the agent.
+const slug = REPO.replace("https://github.com/", "");
+const installs = [
+  { cmd: `/plugin marketplace add ${slug}`, note: "Claude Code, then" },
+  { cmd: "/plugin install gitwarren@gitwarren", note: "" },
+  { cmd: `gemini extensions install ${REPO}`, note: "Gemini CLI" },
+  { cmd: `npx skills add ${slug}`, note: "the note alone, into any agent" },
+];
+
+// One click for the server alone, in the tools that publish a link format for
+// it. Every link carries the same command the MCP registry entry names, so a
+// tool that reads the registry and a tool that reads this link agree.
+const server = { command: "npx", args: ["-y", "gitwarren", "mcp", "--serve"] };
+const config = JSON.stringify(server);
+const addTo = [
+  {
+    name: "Cursor",
+    href: `cursor://anysphere.cursor-deeplink/mcp/install?name=gitwarren&config=${Buffer.from(config).toString("base64")}`,
+  },
+  {
+    name: "VS Code",
+    href: `https://vscode.dev/redirect/mcp/install?name=gitwarren&config=${encodeURIComponent(config)}`,
+  },
+  {
+    name: "Kiro",
+    href: `https://kiro.dev/launch/mcp/add?name=gitwarren&config=${encodeURIComponent(config)}`,
+  },
+  {
+    name: "Goose",
+    href: `goose://extension?cmd=npx&arg=-y&arg=gitwarren&arg=mcp&arg=--serve&id=gitwarren&name=GitWarren&description=${encodeURIComponent("Code review on your own machine")}`,
+  },
+];
+
+const chip =
+  "inline-flex items-center rounded-lg border border-line-strong px-4 py-2 font-mono text-note text-ink transition-colors hover:border-faint hover:text-white";
 ---
 
 <section
@@ -25,6 +64,34 @@ import agents from "../assets/agents.png";
     Every machine you add runs its own, set up by one sentence you paste into
     whatever agent is running there.
   </p>
+
+  <p class="max-w-[730px] text-body text-muted">
+    Install it as a plugin and the agent also gets a note that teaches it when
+    to open a review and how to answer your comments. Cursor, Codex, VS Code
+    and Kiro read the same repository from their plugin screens.
+  </p>
+
+  <!-- `select-all` on each command so one click takes the whole line, and the
+       note beside it never comes along. Same block as the one in TwoShells. -->
+  <div
+    class="mt-[6px] w-full max-w-[730px] overflow-x-auto rounded-xl border border-line bg-well p-card"
+  >
+    <ul class="flex flex-col gap-3 font-mono text-note">
+      {
+        installs.map(({ cmd, note }) => (
+          <li class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+            <code class="text-accent select-all whitespace-nowrap">{cmd}</code>
+            {note && <span class="text-faint whitespace-nowrap">{note}</span>}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="flex max-w-[730px] flex-wrap items-center gap-3">
+    <span class="font-mono text-note text-faint">Or just the server:</span>
+    {addTo.map(({ name, href }) => <a href={href} class={chip}>Add to {name}</a>)}
+  </div>
 
   <Screenshot
     src={agents}
