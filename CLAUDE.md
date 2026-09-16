@@ -152,14 +152,36 @@ Headline: **"Review what your agents wrote, before GitHub ever sees it."**
 2. **Before the commit** — "An agent's output isn't a commit. It's a dirty
    worktree." Screenshot `untracked.jpg`.
 3. **Agents in the loop** — MCP server, seventeen tools, agents as review
-   participants. Screenshot `agents.jpg`. Three cards: always attributed / two
-   agents stay two / yours to edit.
+   participants; then the plugin install block and the one-click "add the
+   server" chips (below). Screenshot `agents.jpg`. Four cards: always
+   attributed / two agents stay two / yours to edit / never over the network.
 4. **Local by construction** — no account, nothing cached, one SQLite file.
 5. **Download** — logo, headline, three platform buttons, the Homebrew
    one-liner (`brew install --cask klarluft/tap/gitwarren`; the cask lives in
    the `klarluft/homebrew-tap` repo and bumps itself on each release), GPL-3.0
    line.
 6. **Footer.**
+
+### The plugin install block
+
+Three things to hold on to when editing it, or the install guide, or
+`llms.txt` — the three places that tell somebody how to let an agent in:
+
+- **The plugin and the app are not rival installs**, and nothing should imply
+  a choice between them. The plugin connects an agent to the reviews; the app
+  or the command line is where a person reads them. With one already running,
+  the plugin uses it and its links open there; on its own it fetches the
+  published package and serves the page itself.
+- **The commands are checked against the app's README**, under
+  [Installing it as a plugin](https://github.com/klarluft/gitwarren-app#installing-it-as-a-plugin).
+  If one moves, move the other. The version strings in the plugin manifests
+  are deliberately nowhere on this site — they change every release and would
+  be one more thing to forget.
+- **The deep links and the registry must name the same command.** The chips
+  under the block encode `npx -y gitwarren mcp --serve`, which is what
+  `server.json` in the app repo publishes to the MCP registry. A tool that
+  reads the registry and a tool that follows one of these links have to end up
+  with the same server, so change them together.
 
 ### Tokens
 

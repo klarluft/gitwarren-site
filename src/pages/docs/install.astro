@@ -151,8 +151,36 @@ gitwarren agent-setup      <span class="c"># the one sentence to give an agent, 
   <h2>Pointing an agent at it</h2>
 
   <p>
-    GitWarren ships an MCP server over stdio. Rather than a config snippet per
-    harness, paste this into whatever agent runs on that machine:
+    If the agent is one that takes plugins, that is the shortest way in, and it
+    brings more than the connection: the plugin also carries a note that teaches
+    the agent when to open a review and how to answer the comments you leave on
+    it.
+  </p>
+
+  <pre><code><span class="c"># Claude Code — add the marketplace, then install from it</span>
+/plugin marketplace add klarluft/gitwarren-app
+/plugin install gitwarren@gitwarren
+
+<span class="c"># Gemini CLI</span>
+gemini extensions install https://github.com/klarluft/gitwarren-app
+
+<span class="c"># The note on its own, into any agent that reads skills</span>
+npx skills add klarluft/gitwarren-app</code></pre>
+
+  <p>
+    Codex, Cursor, VS Code and Kiro read the same repository from their own
+    plugin screens. The plugin is not an alternative to installing GitWarren
+    here: with one already running on the machine it uses that one, so the links
+    it hands back open in the app or the tab you already have. On a machine with
+    nothing else on it, it fetches the published package and serves the review
+    page itself for as long as the agent is running.
+  </p>
+
+  <p>
+    For everything else &mdash; a harness with no plugin format, or a machine you
+    would rather configure by hand &mdash; GitWarren ships an MCP server over
+    stdio. Rather than a config snippet per harness, paste this into whatever
+    agent runs on that machine:
   </p>
 
   <pre><code>Set up the GitWarren MCP server for yourself. It speaks MCP over
