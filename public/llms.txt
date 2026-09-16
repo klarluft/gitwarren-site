@@ -13,6 +13,18 @@
 - Nothing is cached: every branch, commit and diff is read from git when shown.
 - Runs with no account, no server and no telemetry. State lives in one SQLite file on the machine.
 - Ships an MCP server over stdio, so agents such as Claude Code and Codex can read the same reviews, leave threaded comments and reply to yours. Every agent comment is attributed to the agent that wrote it.
+- Installs into a coding agent as a plugin, which carries the MCP server plus a note that teaches the agent when to open a review and how to answer the comments left on it, a `/gitwarren` command, and a reviewer agent that leaves its findings as line comments.
+
+## Installing it
+
+- Desktop app: download from https://gitwarren.com for macOS, Windows or Linux.
+- macOS, with Homebrew: `brew install --cask klarluft/tap/gitwarren`
+- Claude Code: `/plugin marketplace add klarluft/gitwarren-app`, then `/plugin install gitwarren@gitwarren`
+- Gemini CLI: `gemini extensions install https://github.com/klarluft/gitwarren-app`
+- Codex, Cursor, VS Code and Kiro: add the same repository from the tool's own plugin screen.
+- Any agent, the guidance note on its own: `npx skills add klarluft/gitwarren-app`
+
+The plugin and the desktop app are not alternatives. The plugin connects an agent to the reviews; the app is where a person reads them. Installed together, the plugin finds the running GitWarren and its links open there; installed on its own, it fetches the published package and serves the review page on loopback for as long as the agent is running.
 
 ## Who it is for
 

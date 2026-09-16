@@ -136,15 +136,42 @@ Headline: **"Review what your agents wrote, before GitHub ever sees it."**
    platform line, the Homebrew one-liner (same as in Download), `hero.jpg`.
 2. **Before the commit** — "An agent's output isn't a commit. It's a dirty
    worktree." Screenshot `untracked.jpg`.
-3. **Agents in the loop** — MCP server, seventeen tools, agents as review
-   participants. Screenshot `agents.jpg`. Three cards: always attributed / two
-   agents stay two / yours to edit.
+3. **Agents in the loop** — the plugin install block first (below), then the
+   MCP server, seventeen tools, agents as review participants. Screenshot
+   `agents.jpg`. Three cards: always attributed / two agents stay two / yours
+   to edit.
 4. **Local by construction** — no account, nothing cached, one SQLite file.
 5. **Download** — logo, headline, three platform buttons, the Homebrew
    one-liner (`brew install --cask klarluft/tap/gitwarren`; the cask lives in
    the `klarluft/homebrew-tap` repo and bumps itself on each release), GPL-3.0
    line.
 6. **Footer.**
+
+### The plugin install block
+
+The Agents section leads with the install rather than with the MCP server, and
+the order is the claim: the reader's agent is the thing that installs
+GitWarren, and it is a command, not a configuration file. Don't write "in one
+line" back into the copy — Claude Code's install is two, and the block sits
+directly underneath saying so. The MCP server is what is underneath, and
+"point any MCP client at it by hand" is the fallback — which is how the app's
+own *Agent access* page and `gitwarren agent-setup` are ordered too. Before
+this the section opened with "Point Claude Code, Codex or any MCP client at
+it", which described the only path that existed when the page was written and
+had quietly become the hard one.
+
+Two things to hold on to when editing it:
+
+- **The plugin and the app are not rival installs**, and nothing on the page
+  should imply a choice. The plugin connects an agent to the reviews; the app
+  is where a person reads them. Together, the plugin finds the running
+  GitWarren and its links open there.
+- **The commands are checked against the app's README**, under
+  [Installing it as a plugin](https://github.com/klarluft/gitwarren-app#installing-it-as-a-plugin).
+  That section and this block are the same four lines; if one moves, move the
+  other. The version strings in the plugin manifests are not on this page
+  deliberately — they change every release and would be one more thing to
+  forget.
 
 ### Tokens
 
