@@ -1,13 +1,15 @@
 ---
 import Wordmark from "./Wordmark.astro";
-import { REPO } from "../config";
+import { DOCS_INDEX, REPO } from "../config";
 
-// Absolute, so they still work from the 404 page rather than scrolling to
-// nothing. On the front page the browser treats them as same-document
-// navigation and scrolls as usual.
+// Absolute, so they still work from the 404 page and from a guide rather than
+// scrolling to nothing. On the front page the browser treats them as
+// same-document navigation and scrolls as usual.
 const links = [
   { label: "How it works", href: "/#how-it-works" },
+  { label: "Your machines", href: "/#your-machines" },
   { label: "Agents", href: "/#agents" },
+  { label: "Guides", href: DOCS_INDEX },
   { label: "Source", href: REPO },
 ];
 ---
@@ -19,7 +21,7 @@ const links = [
     <Wordmark />
 
     <div class="flex items-center gap-[34px] text-[15px]">
-      <div class="hidden items-center gap-[34px] md:flex">
+      <div class="hidden items-center gap-[26px] lg:flex">
         {
           links.map(({ label, href }) => (
             <a href={href} class="text-muted transition-colors hover:text-white">

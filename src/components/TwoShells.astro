@@ -1,0 +1,72 @@
+---
+import Eyebrow from "./Eyebrow.astro";
+import Card from "./Card.astro";
+import { DOCS } from "../config";
+
+const link =
+  "underline decoration-dotted decoration-faint/50 underline-offset-4 transition-colors hover:text-ink hover:decoration-faint";
+
+// One row per way in. The comment is the reason to pick it, which is the only
+// thing that distinguishes four commands that all end up at the same UI.
+const installs = [
+  { cmd: "brew install --cask klarluft/tap/gitwarren", note: "the desktop app, macOS" },
+  { cmd: "npx gitwarren serve", note: "anywhere Node already is" },
+  { cmd: "brew install klarluft/tap/gitwarren-cli", note: "brings its own Node" },
+  { cmd: "curl -fsSL https://gitwarren.com/install.sh | sh", note: "no Homebrew, no Node" },
+];
+---
+
+<section
+  id="anywhere"
+  class="mx-auto flex w-full max-w-page flex-col gap-stack px-gutter pt-section"
+>
+  <Eyebrow>Two shells, one review</Eyebrow>
+
+  <h2 class="max-w-[880px] font-display text-h2">
+    A desktop app, or just a browser tab.
+  </h2>
+
+  <p class="max-w-[730px] text-body text-muted">
+    GitWarren is not an Electron app you have to want. It is a review UI with
+    two shells around it, and every line of the UI is the same in both. Install
+    the app if you want a tray icon and links that open from your terminal. Run
+    the command instead and the identical review UI is served on loopback, for a
+    browser tab to open.
+  </p>
+
+  <!-- `select-all` on each command so one click takes the whole line, and the
+       note beside it never comes along. -->
+  <div
+    class="mt-[22px] w-full max-w-[730px] overflow-x-auto rounded-xl border border-line bg-well p-card"
+  >
+    <ul class="flex flex-col gap-3 font-mono text-note">
+      {
+        installs.map(({ cmd, note }) => (
+          <li class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+            <code class="text-accent select-all whitespace-nowrap">{cmd}</code>
+            <span class="text-faint whitespace-nowrap">{note}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="mt-[38px] grid grid-cols-1 gap-cards lg:grid-cols-3">
+    <Card title="Nothing is built twice">
+      The app and the browser get the same renderer from the same build. A
+      shell supplies a tray, a protocol handler and a window, or it supplies a
+      tab &mdash; and nothing above that layer knows which one it got.
+    </Card>
+    <Card title="No token to copy">
+      <code class="font-mono text-[0.92em] text-ink">gitwarren serve</code> binds
+      loopback only and mints a token for that launch, printed in the URL it
+      hands you. Nothing is typed by a person, and quitting the process revokes
+      it.
+    </Card>
+    <Card title="Headless is the point">
+      A VPS or a WSL distro runs the same daemon with no screen attached, and is
+      reviewed from the machine you are actually sitting at.{" "}
+      <a href={DOCS[0].href} class={link}>Installing GitWarren</a>.
+    </Card>
+  </div>
+</section>

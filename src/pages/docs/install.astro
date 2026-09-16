@@ -1,0 +1,211 @@
+---
+import Docs from "../../layouts/Docs.astro";
+import { DOCS_INDEX } from "../../config";
+---
+
+<Docs
+  title="Installing GitWarren — desktop app or command line"
+  description="Install GitWarren as a desktop app on macOS, Windows or Linux, or run the command that serves the same review UI into a browser tab on any machine with Node."
+  eyebrow="Installing"
+  heading="The app, or the command."
+  intro="GitWarren is a review UI with two shells around it. One is an Electron window with a tray icon; the other is a local daemon serving the same pages to a browser tab. Every line of the UI is the same in both — pick the shell, not the product."
+>
+  <h2>The desktop app</h2>
+
+  <p>
+    The app is what you want on a machine you sit at. It brings a tray icon so
+    GitWarren is always running, a <code>gitwarren://</code> protocol handler so
+    links from your terminal open the right review, and silent background
+    updates.
+  </p>
+
+  <p>
+    Download it from <a href="/#download">the front page</a>, or on macOS:
+  </p>
+
+  <pre><code>brew install --cask klarluft/tap/gitwarren</code></pre>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Platform</th><th>What you get</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>macOS</td>
+          <td>
+            A <code>.dmg</code> per architecture — Apple silicon and Intel are
+            separate downloads. Signed and notarised, so it updates itself.
+          </td>
+        </tr>
+        <tr>
+          <td>Windows</td>
+          <td>
+            One installer that carries both x64 and arm64. It installs per user,
+            so there is no UAC prompt on install or on update. See <a
+              href="/docs/windows">Running on Windows</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>Linux</td>
+          <td>
+            An AppImage, x86_64 or arm64. Deliberately not a deb or an rpm — see{" "}
+            <a href="/docs/linux">Running on Linux</a> for why.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>The command line</h2>
+
+  <p>
+    The same GitWarren, with a browser tab for a shell and no Electron anywhere
+    in it. It exists for two audiences the app cannot serve: someone who will
+    not install an Electron app, and a machine with no screen at all — a VPS, a
+    WSL distro, a box an agent works on.
+  </p>
+
+  <pre><code><span class="c"># brings its own Node — macOS and Linux</span>
+brew install klarluft/tap/gitwarren-cli
+
+<span class="c"># the same, without Homebrew — macOS and Linux</span>
+curl -fsSL https://gitwarren.com/install.sh | sh
+
+<span class="c"># uses the Node you already have (22 or newer) — anywhere, including Windows</span>
+npx gitwarren serve</code></pre>
+
+  <p>
+    The formula is <code>gitwarren-cli</code> and the cask is <code
+      >gitwarren</code
+    >, so <code>brew install --cask klarluft/tap/gitwarren</code> keeps meaning
+    the app. The binary is called <code>gitwarren</code> whichever way it
+    arrived.
+  </p>
+
+  <p>
+    The install script unpacks the release tarball into{" "}
+    <code>~/.gitwarren/daemon/&lt;version&gt;/</code> and writes{" "}
+    <code>~/.gitwarren/bin/gitwarren</code>, which you add to your{" "}
+    <code>PATH</code>. That is the same layout the app produces when it installs
+    GitWarren onto <a href="/docs/another-machine">another machine</a> over
+    ssh, so either can upgrade what the other installed. To remove it,{" "}
+    <code>rm -rf ~/.gitwarren</code>; your reviews are not in there.
+  </p>
+
+  <h3>Which command you want</h3>
+
+  <p>
+    Three things a person wants from it, and one command for each. They are
+    independent — none of them needs another to have been run first.
+  </p>
+
+  <pre><code><span class="c"># Run it now — in this terminal, until Ctrl-C</span>
+gitwarren serve --open     <span class="c"># serve the UI on 127.0.0.1 and open it (or just print the URL, without --open)</span>
+gitwarren open [link]      <span class="c"># open the running GitWarren in your browser, later</span>
+
+<span class="c"># Keep it running — in the background, from now and at every login</span>
+gitwarren service install
+gitwarren service uninstall
+gitwarren service status
+
+<span class="c"># Let a coding agent in</span>
+gitwarren agent-setup      <span class="c"># the one sentence to give an agent, see below</span></code></pre>
+
+  <div class="note">
+    <span class="note-title">Nothing is copied by hand</span>
+    <p>
+      <code>gitwarren serve</code> binds <code>127.0.0.1</code> only and mints a
+      token for that launch, printed in the URL it gives you. <code
+        >gitwarren open</code
+      > reads it and hands the whole URL to your browser, which swaps it for a
+      cookie on the first request. A token is never persisted across a launch,
+      and revoking it is quitting the process.
+    </p>
+  </div>
+
+  <h2>Keeping it running</h2>
+
+  <p>
+    <code>gitwarren serve</code> stops when you close the terminal. <code
+      >gitwarren service install</code
+    > is for wanting GitWarren there whenever you are: it registers a login item
+    — a LaunchAgent on macOS, a <code>systemd --user</code> unit on Linux, an
+    at-logon Scheduled Task on Windows — and starts it right away, so <code
+      >gitwarren open</code
+    > and the links an agent hands you always have something to open. <code
+      >gitwarren service uninstall</code
+    > stops it and removes the item.
+  </p>
+
+  <p>
+    Whichever command you run first also writes two small scripts to{" "}
+    <code>~/.gitwarren/bin/</code>: <code>gitwarren</code>, the stable path the
+    app spawns this install by from another machine, and <code
+      >gitwarren-mcp</code
+    >, the one you point an agent at. On a headless host that is reached only
+    from elsewhere, <code>gitwarren service install --no-login-item</code>{" "}
+    writes them and registers nothing.
+  </p>
+
+  <h2>Pointing an agent at it</h2>
+
+  <p>
+    If the agent is one that takes plugins, that is the shortest way in, and it
+    brings more than the connection: the plugin also carries a note that teaches
+    the agent when to open a review and how to answer the comments you leave on
+    it.
+  </p>
+
+  <pre><code>/plugin marketplace add klarluft/gitwarren-app   # Claude Code, then:
+/plugin install gitwarren@gitwarren
+gemini extensions install https://github.com/klarluft/gitwarren-app
+npx skills add klarluft/gitwarren-app            # the note alone, any agent</code></pre>
+
+  <p>
+    Codex, Cursor, VS Code and Kiro read the same repository from their own
+    plugin screens. The plugin is not an alternative to installing GitWarren
+    here: with one already running on the machine it uses that one, so the links
+    it hands back open in the app or the tab you already have. On a machine with
+    nothing else on it, it fetches the published package and serves the review
+    page itself for as long as the agent is running.
+  </p>
+
+  <p>
+    For everything else &mdash; a harness with no plugin format, or a machine you
+    would rather configure by hand &mdash; GitWarren ships an MCP server over
+    stdio. Rather than a config snippet per harness, paste this into whatever
+    agent runs on that machine:
+  </p>
+
+  <pre><code>Set up the GitWarren MCP server for yourself. It speaks MCP over
+stdio and is started with the command ~/.gitwarren/bin/gitwarren-mcp
+(no arguments, no environment). Register it under the name
+"gitwarren" in your own MCP configuration, then call its
+agent_identity tool to confirm it works.</code></pre>
+
+  <p>
+    Agents know their own configuration format better than a settings panel
+    does; what they need from us is a stable command. <code
+      >gitwarren agent-setup</code
+    > prints the same sentence on any host, writes the launcher it names if it
+    is not there yet, and <code>--manual</code> adds hand-editable snippets for
+    the three config formats that exist.
+  </p>
+
+  <p>
+    The MCP server is part of every install and reads the same SQLite file the
+    browser view does, so an agent can open and comment on reviews whether or
+    not GitWarren is being served. What serving adds is that the link an agent
+    hands back opens in a browser.
+  </p>
+
+  <p>
+    Every machine you add runs its own MCP server, local to itself, reading real
+    paths on its own disk. An agent never talks to GitWarren over a network.
+  </p>
+
+  <p>
+    Next: <a href={DOCS_INDEX}>all the guides</a>, or carry on below.
+  </p>
+</Docs>

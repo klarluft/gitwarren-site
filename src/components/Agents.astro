@@ -3,6 +3,45 @@ import Eyebrow from "./Eyebrow.astro";
 import Screenshot from "./Screenshot.astro";
 import Card from "./Card.astro";
 import agents from "../assets/agents.png";
+import { REPO } from "../config";
+
+// The plugin, one way in per tool. The note beside a command is the tool it
+// is typed into, which is the only thing that distinguishes them: all of them
+// install the same server and the same note for the agent.
+const slug = REPO.replace("https://github.com/", "");
+const installs = [
+  { cmd: `/plugin marketplace add ${slug}`, note: "Claude Code, then" },
+  { cmd: "/plugin install gitwarren@gitwarren", note: "" },
+  { cmd: `gemini extensions install ${REPO}`, note: "Gemini CLI" },
+  { cmd: `npx skills add ${slug}`, note: "the note alone, into any agent" },
+];
+
+// One click for the server alone, in the tools that publish a link format for
+// it. Every link carries the same command the MCP registry entry names, so a
+// tool that reads the registry and a tool that reads this link agree.
+const server = { command: "npx", args: ["-y", "gitwarren", "mcp", "--serve"] };
+const config = JSON.stringify(server);
+const addTo = [
+  {
+    name: "Cursor",
+    href: `cursor://anysphere.cursor-deeplink/mcp/install?name=gitwarren&config=${Buffer.from(config).toString("base64")}`,
+  },
+  {
+    name: "VS Code",
+    href: `https://vscode.dev/redirect/mcp/install?name=gitwarren&config=${encodeURIComponent(config)}`,
+  },
+  {
+    name: "Kiro",
+    href: `https://kiro.dev/launch/mcp/add?name=gitwarren&config=${encodeURIComponent(config)}`,
+  },
+  {
+    name: "Goose",
+    href: `goose://extension?cmd=npx&arg=-y&arg=gitwarren&arg=mcp&arg=--serve&id=gitwarren&name=GitWarren&description=${encodeURIComponent("Code review on your own machine")}`,
+  },
+];
+
+const chip =
+  "inline-flex items-center rounded-lg border border-line-strong px-4 py-2 font-mono text-note text-ink transition-colors hover:border-faint hover:text-white";
 ---
 
 <section
@@ -17,57 +56,42 @@ import agents from "../assets/agents.png";
   </h2>
 
   <p class="max-w-[730px] text-body text-muted">
-    Install GitWarren into your agent as a plugin. It brings more than the
-    connection: a note that teaches the agent the habit &mdash; open a review
-    when it has finished changing code, hand you the link, then read your
-    comments before it starts the next thing. You stop having to ask.
+    GitWarren ships an MCP server over stdio. Point Claude Code, Codex or any MCP
+    client at it and it gets the same seventeen tools the app itself uses: open a
+    review, read the whole discussion, reply in a thread, leave a comment on a
+    line, resolve one. Ask an agent to explain its own diff, or to answer the
+    question you left on line 40 &mdash; in the review, where the answer stays.
+    Every machine you add runs its own, set up by one sentence you paste into
+    whatever agent is running there.
   </p>
-
-  {/*
-    The install block. The Homebrew line elsewhere on the page is one command
-    and fits on a centred line; this is four, across three families of tool, so
-    it gets a box instead — the Card's own border and surface, so a new shape
-    is not introduced for it. `select-all` on each line for the same reason as
-    the Homebrew one: one click takes the whole command.
-
-    Left-aligned and `overflow-x-auto`, because a command must not be centred
-    into ambiguity or wrapped into a second line that looks like a second
-    command.
-  */}
-  <div
-    class="flex flex-col gap-3 overflow-x-auto rounded-[11px] border border-line bg-surface p-card max-w-[730px]"
-  >
-    <p class="font-mono text-note text-faint">
-      <span class="text-muted">Claude Code</span><br />
-      <code class="text-accent select-all"
-        >/plugin marketplace add klarluft/gitwarren-app</code
-      ><br />
-      <code class="text-accent select-all">/plugin install gitwarren@gitwarren</code>
-    </p>
-    <p class="font-mono text-note text-faint">
-      <span class="text-muted">Gemini CLI</span><br />
-      <code class="text-accent select-all"
-        >gemini extensions install https://github.com/klarluft/gitwarren-app</code
-      >
-    </p>
-    <p class="font-mono text-note text-faint">
-      <span class="text-muted">Any agent, the note on its own</span><br />
-      <code class="text-accent select-all">npx skills add klarluft/gitwarren-app</code>
-    </p>
-    <p class="text-cardbody text-faint">
-      Codex, Cursor, VS Code and Kiro read the same repository from their own
-      plugin screens.
-    </p>
-  </div>
 
   <p class="max-w-[730px] text-body text-muted">
-    Underneath it is an MCP server over stdio, and through it the agent gets the
-    same seventeen tools the app itself uses: open a review, read the whole
-    discussion, reply in a thread, leave a comment on a line, resolve one. Any
-    MCP client can be pointed at it by hand instead. Ask an agent to explain its
-    own diff, or to answer the question you left on line 40 &mdash; in the
-    review, where the answer stays.
+    Install it as a plugin and the agent also gets a note that teaches it when
+    to open a review and how to answer your comments. Cursor, Codex, VS Code
+    and Kiro read the same repository from their plugin screens.
   </p>
+
+  <!-- `select-all` on each command so one click takes the whole line, and the
+       note beside it never comes along. Same block as the one in TwoShells. -->
+  <div
+    class="mt-[6px] w-full max-w-[730px] overflow-x-auto rounded-xl border border-line bg-well p-card"
+  >
+    <ul class="flex flex-col gap-3 font-mono text-note">
+      {
+        installs.map(({ cmd, note }) => (
+          <li class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+            <code class="text-accent select-all whitespace-nowrap">{cmd}</code>
+            {note && <span class="text-faint whitespace-nowrap">{note}</span>}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="flex max-w-[730px] flex-wrap items-center gap-3">
+    <span class="font-mono text-note text-faint">Or just the server:</span>
+    {addTo.map(({ name, href }) => <a href={href} class={chip}>Add to {name}</a>)}
+  </div>
 
   <Screenshot
     src={agents}
@@ -76,7 +100,7 @@ import agents from "../assets/agents.png";
     class="mt-[28px] max-w-shot max-sm:hidden"
   />
 
-  <div class="mt-[38px] grid grid-cols-1 gap-cards lg:grid-cols-3">
+  <div class="mt-[38px] grid grid-cols-1 gap-cards sm:grid-cols-2">
     <Card title="Always attributed">
       A machine-written comment is always marked as one, and the tool&#39;s name
       comes from the MCP handshake rather than from whatever the model decides to
@@ -89,6 +113,11 @@ import agents from "../assets/agents.png";
     <Card title="Yours to edit">
       You can edit or delete anything in a review. An agent is held to its own
       messages &mdash; it can fix its own typo, not quietly rewrite yours.
+    </Card>
+    <Card title="Never over the network">
+      An agent talks to the GitWarren on its own machine, over stdio, reading
+      real paths on a real disk. The part that crosses a network is the window
+      you are looking at &mdash; never the agent.
     </Card>
   </div>
 </section>

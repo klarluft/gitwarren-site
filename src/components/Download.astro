@@ -3,6 +3,10 @@ import { Image } from "astro:assets";
 import Button from "./Button.astro";
 import logo from "../assets/logo.png";
 import type { Downloads } from "../lib/releases";
+import { DOCS } from "../config";
+
+const link =
+  "underline decoration-dotted decoration-faint/50 underline-offset-4 transition-colors hover:text-ink hover:decoration-faint";
 
 interface Props {
   downloads: Downloads;
@@ -47,6 +51,19 @@ const { downloads } = Astro.props;
   */}
   <p class="text-center font-mono text-note text-faint">
     or <code class="text-accent select-all">brew install --cask klarluft/tap/gitwarren</code>
+  </p>
+
+  {/*
+    The way in that is not a download sits under the download buttons on
+    purpose: someone who scrolled this far without clicking one may be
+    declining the installer rather than the product.
+  */}
+  <p class="max-w-[560px] text-center text-cardbody text-muted">
+    Or install nothing: <code
+      class="font-mono text-[0.92em] text-accent select-all">npx gitwarren serve</code
+    > runs the same review UI in a browser tab, on any machine with Node &mdash;
+    including one with no screen. <a href={DOCS[0].href} class={link}>All the
+    ways in</a>.
   </p>
 
   <p class="text-center font-mono text-note text-faint">

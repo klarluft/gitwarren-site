@@ -1,0 +1,11 @@
+# Served by Cloudflare's static-asset router, which reads this file from dist/.
+#
+# /install.sh is the one-line installer for the command line:
+#
+#   curl -fsSL https://gitwarren.com/install.sh | sh
+#
+# The script itself lives in the app repository as packaging/install.sh, next
+# to the tarball it installs and the CLI whose `service install` it runs, so
+# it is versioned with them and this site stays free of app code. A 302 so
+# curl -L follows it; the body a visitor gets is always whatever is on main.
+/install.sh https://raw.githubusercontent.com/klarluft/gitwarren-app/main/packaging/install.sh 302

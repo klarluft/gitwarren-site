@@ -1,0 +1,99 @@
+---
+import Docs from "../../layouts/Docs.astro";
+---
+
+<Docs
+  title="Running GitWarren on Windows — install, start at logon, WSL"
+  description="Install GitWarren on Windows, have it start at logon, point an agent at a Windows-native repository, and reach a WSL distro as a separate host."
+  eyebrow="Windows"
+  heading="Windows-native, and first class."
+  intro="Most Windows developers do not use WSL, and coding agents have run natively on Windows since late 2025. A repository on C: is an ordinary local repository — no host in front of it, and nothing about the Windows app made worse to accommodate the ones that are."
+>
+  <h2>Installing</h2>
+
+  <p>
+    One installer, from <a href="/#download">the front page</a>, carrying both
+    x64 and arm64. It installs per user, which is what makes the whole thing
+    quiet: no UAC prompt on install, and no UAC prompt when it updates itself in
+    the background.
+  </p>
+
+  <p>
+    The per-architecture <code>.exe</code> files sit beside it on the releases
+    page. They are build artefacts; the universal installer is the one to hand
+    anybody.
+  </p>
+
+  <h2>Starting at logon</h2>
+
+  <p>
+    The desktop app registers itself to start with Windows, and lives in the
+    notification area so links from your terminal have something to open.
+  </p>
+
+  <p>
+    For the command-line half — <code>npx gitwarren serve</code> is the way to
+    get it on Windows — <code>gitwarren service install</code> registers an
+    at-logon Scheduled Task named <code>GitWarren daemon</code> and runs it
+    straight away. The name is one you would actually guess if you went looking
+    through Task Scheduler for what keeps starting.
+  </p>
+
+  <pre><code>gitwarren service install
+gitwarren service status
+gitwarren service uninstall</code></pre>
+
+  <h2>Pointing an agent at it</h2>
+
+  <p>
+    Paste this into whatever agent you run on the machine — Claude Code, Codex,
+    or anything else speaking MCP:
+  </p>
+
+  <pre><code>Set up the GitWarren MCP server for yourself. It speaks MCP over
+stdio and is started with the command ~/.gitwarren/bin/gitwarren-mcp
+(no arguments, no environment). Register it under the name
+"gitwarren" in your own MCP configuration, then call its
+agent_identity tool to confirm it works.</code></pre>
+
+  <p>
+    Agents know their own config format better than a settings panel does — and
+    on Windows there are more of them to know, since VS Code renamed the object
+    and Codex keeps its configuration in TOML. <code>gitwarren agent-setup
+    --manual</code> prints all three formats if you would rather edit a file.
+  </p>
+
+  <h2>Code inside WSL</h2>
+
+  <p>
+    A WSL distribution is a separate machine with its own git, its own paths and
+    its own agents. The Windows app installs into it and talks to it over{" "}
+    <code>wsl.exe</code>, rather than reading its files through{" "}
+    <code>\\wsl$</code>.
+  </p>
+
+  <p>
+    A WSL path offered as an ordinary local repository is refused for that
+    reason. <a href="/docs/wsl">WSL, from the Windows app</a> explains what goes
+    wrong otherwise.
+  </p>
+
+  <h2>git has to be installed</h2>
+
+  <p>
+    GitWarren shells out to your own <code>git</code> rather than bundling one,
+    so it needs to be on the <code>PATH</code> — Git for Windows is the usual
+    answer. If it is missing, the app says so explicitly rather than showing an
+    empty list.
+  </p>
+
+  <div class="note">
+    <span class="note-title">Every release is tested here</span>
+    <p>
+      Windows is not a platform this gets ported to afterwards. CI builds and
+      runs the test suite on Windows, macOS and Linux on every change, and the
+      first run of that pipeline duly found a Windows bug — which is what it is
+      for.
+    </p>
+  </div>
+</Docs>

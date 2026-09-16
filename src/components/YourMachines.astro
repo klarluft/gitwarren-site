@@ -1,0 +1,63 @@
+---
+import Eyebrow from "./Eyebrow.astro";
+import Card from "./Card.astro";
+import { DOCS } from "../config";
+
+// Quiet enough to stay prose, obvious enough to be clickable — the same
+// treatment the hero's footnote links use.
+const link =
+  "underline decoration-dotted decoration-faint/50 underline-offset-4 transition-colors hover:text-ink hover:decoration-faint";
+---
+
+<section
+  id="your-machines"
+  class="mx-auto flex w-full max-w-page flex-col gap-stack px-gutter pt-section"
+>
+  <Eyebrow>Across your machines</Eyebrow>
+
+  <h2 class="max-w-[880px] font-display text-h2">
+    The review happens where the code is.
+  </h2>
+
+  <p class="max-w-[730px] text-body text-muted">
+    A repository lives on one machine, and so does its review. GitWarren does
+    not copy either one. It reaches the machine the code is already on, runs the
+    review there, and renders it in the window in front of you &mdash; so the
+    diff is read from the real git, and the agent that wrote it is sitting next
+    to the files rather than across a network.
+  </p>
+
+  <p class="max-w-[730px] text-body text-muted">
+    Nothing is replicated, relayed or stored anywhere but the computers you
+    already own. There is no pairing token and nothing is exposed to the
+    internet.
+  </p>
+
+  <div class="mt-[38px] grid grid-cols-1 gap-cards lg:grid-cols-3">
+    <Card title="Over SSH">
+      Add a machine you can already reach &mdash; a VPS, a build box, a PC
+      &mdash; and GitWarren installs itself there over the same connection. The
+      host needs nothing but git: the daemon brings its own Node.{" "}
+      <a href={DOCS[1].href} class={link}>How that works</a>.
+    </Card>
+    <Card title="WSL, from Windows">
+      A WSL distro is a host like any other, reached over{" "}
+      <code class="font-mono text-[0.92em] text-ink">wsl.exe</code> instead of
+      ssh. Windows-native repositories stay first class &mdash; most Windows
+      developers never open a distro.{" "}
+      <a href={DOCS[3].href} class={link}>The WSL guide</a>.
+    </Card>
+    <Card title="On your tailnet">
+      Your machines find each other by themselves, comments arrive the moment
+      they are written, and a review opens on your phone with no token to copy.
+      Identity is your own Tailscale login.{" "}
+      <a href={DOCS[2].href} class={link}>Set it up</a>.
+    </Card>
+  </div>
+
+  <p class="mt-[26px] max-w-[730px] text-body text-muted">
+    A machine that goes away is shown as offline rather than as its last known
+    state. Nothing is cached across a disconnect, so what is on screen is either
+    true now or visibly not there.
+  </p>
+</section>

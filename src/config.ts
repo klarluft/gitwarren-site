@@ -21,6 +21,55 @@ export const PRIVACY = "/privacy";
 export const LEGAL = "/legal";
 
 /**
+ * The guides, in the order they are listed everywhere that lists them: the
+ * docs index, the footer, and the "next" link at the foot of each page.
+ *
+ * One array rather than a link in each template, because the ordering is the
+ * argument — install, then reach another machine, then the platform-specific
+ * corners — and three copies of it drift.
+ */
+export const DOCS = [
+  {
+    href: "/docs/install",
+    title: "Installing GitWarren",
+    blurb:
+      "The desktop app, or the command line that serves the same review UI into a browser tab.",
+  },
+  {
+    href: "/docs/another-machine",
+    title: "Reviewing on another machine",
+    blurb:
+      "Add a machine you can reach over ssh, and GitWarren installs itself there over the same connection.",
+  },
+  {
+    href: "/docs/tailnet",
+    title: "Your tailnet, and your phone",
+    blurb:
+      "Let your machines find each other by themselves, get live updates, and open a review on a phone.",
+  },
+  {
+    href: "/docs/wsl",
+    title: "WSL, from the Windows app",
+    blurb:
+      "A WSL distro is a host like any other. Windows-native repositories stay first class.",
+  },
+  {
+    href: "/docs/linux",
+    title: "Running on Linux",
+    blurb:
+      "The AppImage, the headless daemon, the systemd user unit, and the one Tailscale permission.",
+  },
+  {
+    href: "/docs/windows",
+    title: "Running on Windows",
+    blurb:
+      "The installer, starting at logon, and pointing an agent at a Windows-native repository.",
+  },
+] as const;
+
+export const DOCS_INDEX = "/docs";
+
+/**
  * The Product Hunt listing the hero badge links to.
  *
  * Their embed snippet appends `?embed=true` and three `utm_*` parameters,

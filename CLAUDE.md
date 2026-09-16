@@ -70,17 +70,32 @@ assets. Keep this repo free of app code, and the app repo free of this.
 | `src/pages/index.astro` | The main route. Composes the sections, nothing else. |
 | `src/pages/privacy.astro` | Privacy policy. Prose only — see **Analytics and the legal pages**. |
 | `src/pages/legal.astro` | Legal notice / imprint. Who operates the site. |
+| `src/pages/docs/` | The guides. One page each, ordered by `DOCS` in `config.ts`. |
 | `src/components/` | The page, in pieces. |
 | `src/layouts/Layout.astro` | Shell: fonts, meta, OG tags, canonical, analytics beacon. |
 | `src/layouts/Legal.astro` | Prose shell for the two legal pages. Carries their type styles. |
+| `src/layouts/Docs.astro` | Prose shell for the guides. Legal's styles plus code blocks, tables and callouts. |
 | `src/styles/global.css` | The `@theme` block. Tokens live here, not in markup. |
 | `src/config.ts` | Every real URL, the company details, and the download placeholders. |
 | `src/env.d.ts` | Types the one build-time env var. |
 | `src/lib/images.ts` | `srcset` builder used by `Screenshot.astro`. |
+| `public/_redirects` | Cloudflare's static-asset redirects. Holds `/install.sh`, which 302s to `packaging/install.sh` on the app repo's `main` — the script stays with the CLI it installs, and this repo stays free of app code. Check with `curl -sI https://gitwarren.com/install.sh`. |
 
 The scripts that regenerate the screenshots live in the app repo
 (`scripts/seed-demo.ts`, `scripts/capture-demo.mjs`) — see
 `design/screenshots/README.md`.
+
+## Writing prose in an `.astro` file
+
+Astro drops whitespace that contains a newline where it touches an element
+boundary. A line ending in a word followed by a line that opens with
+`<code>`, `<strong>`, `<em>` or `<a>` renders with no space between them —
+`runstailscale serve` — and the same happens after a closing tag. It is
+invisible in the source and obvious on the page.
+
+Put an explicit `{" "}` at the end of the earlier line whenever an inline tag
+starts or ends one. The guides under `src/pages/docs/` do this throughout; grep
+the built HTML for `[a-z]<code` before shipping prose changes.
 
 ## Images
 
@@ -88,7 +103,7 @@ The scripts that regenerate the screenshots live in the app repo
 
 | File | Size | From |
 | --- | --- | --- |
-| `hero.png` | 2400x1600 | `design/screenshots/01-review-files-uncommitted.png` |
+| `hero.png` | 2400x1600 | `scripts/capture-hero-video.mjs` — the video's first frame, not a screenshot |
 | `untracked.png` | 2400x1600 | `design/screenshots/09-untracked-file.png` |
 | `agents.png` | 2400x1600 | `design/screenshots/08-agent-thread.png` |
 | `narrow.png` | 1520x1800 | `design/screenshots/07-files-narrow.png` |
@@ -136,10 +151,10 @@ Headline: **"Review what your agents wrote, before GitHub ever sees it."**
    platform line, the Homebrew one-liner (same as in Download), `hero.jpg`.
 2. **Before the commit** — "An agent's output isn't a commit. It's a dirty
    worktree." Screenshot `untracked.jpg`.
-3. **Agents in the loop** — the plugin install block first (below), then the
-   MCP server, seventeen tools, agents as review participants. Screenshot
-   `agents.jpg`. Three cards: always attributed / two agents stay two / yours
-   to edit.
+3. **Agents in the loop** — MCP server, seventeen tools, agents as review
+   participants; then the plugin install block and the one-click "add the
+   server" chips (below). Screenshot `agents.jpg`. Four cards: always
+   attributed / two agents stay two / yours to edit / never over the network.
 4. **Local by construction** — no account, nothing cached, one SQLite file.
 5. **Download** — logo, headline, three platform buttons, the Homebrew
    one-liner (`brew install --cask klarluft/tap/gitwarren`; the cask lives in
@@ -149,29 +164,24 @@ Headline: **"Review what your agents wrote, before GitHub ever sees it."**
 
 ### The plugin install block
 
-The Agents section leads with the install rather than with the MCP server, and
-the order is the claim: the reader's agent is the thing that installs
-GitWarren, and it is a command, not a configuration file. Don't write "in one
-line" back into the copy — Claude Code's install is two, and the block sits
-directly underneath saying so. The MCP server is what is underneath, and
-"point any MCP client at it by hand" is the fallback — which is how the app's
-own *Agent access* page and `gitwarren agent-setup` are ordered too. Before
-this the section opened with "Point Claude Code, Codex or any MCP client at
-it", which described the only path that existed when the page was written and
-had quietly become the hard one.
+Three things to hold on to when editing it, or the install guide, or
+`llms.txt` — the three places that tell somebody how to let an agent in:
 
-Two things to hold on to when editing it:
-
-- **The plugin and the app are not rival installs**, and nothing on the page
-  should imply a choice. The plugin connects an agent to the reviews; the app
-  is where a person reads them. Together, the plugin finds the running
-  GitWarren and its links open there.
+- **The plugin and the app are not rival installs**, and nothing should imply
+  a choice between them. The plugin connects an agent to the reviews; the app
+  or the command line is where a person reads them. With one already running,
+  the plugin uses it and its links open there; on its own it fetches the
+  published package and serves the page itself.
 - **The commands are checked against the app's README**, under
   [Installing it as a plugin](https://github.com/klarluft/gitwarren-app#installing-it-as-a-plugin).
-  That section and this block are the same four lines; if one moves, move the
-  other. The version strings in the plugin manifests are not on this page
-  deliberately — they change every release and would be one more thing to
-  forget.
+  If one moves, move the other. The version strings in the plugin manifests
+  are deliberately nowhere on this site — they change every release and would
+  be one more thing to forget.
+- **The deep links and the registry must name the same command.** The chips
+  under the block encode `npx -y gitwarren mcp --serve`, which is what
+  `server.json` in the app repo publishes to the MCP registry. A tool that
+  reads the registry and a tool that follows one of these links have to end up
+  with the same server, so change them together.
 
 ### Tokens
 
@@ -231,9 +241,10 @@ follows — change these deliberately, not by accident:
   are `clamp()`s interpolating linearly between the two artboards, so 900px is
   covered rather than snapping at a breakpoint.
 - **The breakpoint is 640px** (`sm`), where the artboards themselves diverge.
-  Nav links appear at 768px (`md`); the three-card grids go to three columns at
-  1024px (`lg`), because three columns any narrower leaves ~24 characters a
-  line.
+  Nav links appear at 1024px (`lg`) — there are five of them plus a button
+  since the guides were added, and they no longer fit beside the wordmark at
+  768px. The three-card grids go to three columns at the same 1024px, because
+  three columns any narrower leaves ~24 characters a line.
 - **The hero screenshot is art-directed**, not just scaled: `narrow.png` below
   640px, `hero.png` above. A 2400px-wide app UI is unreadable at 390px.
 - **The two section screenshots are dropped below 640px**, as the mobile

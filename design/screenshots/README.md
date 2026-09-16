@@ -77,7 +77,26 @@ SHOT_DIR=~/github.com/klarluft/gitwarren-site/design/screenshots \
 The unpackaged app works for every shot except `11-agent-access.png`, where the
 MCP config would print the dev checkout's path instead of an install path.
 
-### Two things that will bite
+### Three things that will bite
+
+**A GitWarren you already have running will stop this dead.** The app takes a
+single-instance lock, so a dev build started while the installed one is open
+prints `DevTools listening` and then exits with status 0 — which looks like a
+capture script that cannot connect rather than an app that quit. The lock lives
+in Electron's own user-data directory, and `GITWARREN_DATA_DIR` does not move
+it, so give the capture build its own:
+
+```bash
+GITWARREN_DATA_DIR=/tmp/gw-demo \
+  ./node_modules/.bin/electron . \
+  --remote-debugging-port=9222 \
+  --user-data-dir=/tmp/gw-electron-profile
+```
+
+Note also that a dev build rewrites `~/.gitwarren/bin/gitwarren-mcp` to point at
+*itself* on startup, which leaves your agents pointing at a checkout after the
+capture is over. Reopen the installed app afterwards, or write the launcher back
+by hand.
 
 **Backdate the reviews last.** Every comment thread bumps its review's
 `updatedAt`, so backdating reviews before creating the discussion leaves them

@@ -1,0 +1,56 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import Eyebrow from "../../components/Eyebrow.astro";
+import { DOCS, REPO } from "../../config";
+
+const title = "GitWarren guides — install, and reach your other machines";
+const description =
+  "How to install GitWarren as a desktop app or a command, add a machine over SSH, run it inside WSL, put it on your tailnet, and open a review on your phone.";
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+
+  <main class="mx-auto w-full max-w-page px-gutter pt-section">
+    <div class="max-w-[42rem]">
+      <Eyebrow>Guides</Eyebrow>
+
+      <h1 class="mt-stack font-display text-h2">
+        Getting GitWarren onto the machines your code is on.
+      </h1>
+
+      <p class="mt-stack text-lead text-muted">
+        A repository lives on one machine, and so does its review. These pages
+        are about the second part of that: getting GitWarren onto the machine
+        the code is already on, and reaching it from the one you are sitting at.
+      </p>
+
+      <nav class="mt-14 flex flex-col gap-cards">
+        {
+          DOCS.map(({ href, title: name, blurb }) => (
+            <a
+              href={href}
+              class="flex flex-col gap-1.5 rounded-xl border border-line bg-surface p-card transition-colors hover:border-line-strong"
+            >
+              <span class="text-cardtitle font-semibold">{name}</span>
+              <span class="text-cardbody text-muted">{blurb}</span>
+            </a>
+          ))
+        }
+      </nav>
+
+      <p class="mt-14 text-cardbody text-faint">
+        Everything here is also in the project&#39;s{" "}
+        <a
+          href={`${REPO}#readme`}
+          class="text-ink underline decoration-line-strong underline-offset-[3px] transition-colors hover:decoration-accent"
+          >README</a
+        >, at more length and with the reasoning attached.
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

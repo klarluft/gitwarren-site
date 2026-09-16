@@ -1,8 +1,9 @@
 # GitWarren
 
-> A free, open-source (GPL-3.0) desktop app for local git code review on macOS, Windows and Linux. It reads the worktree directly — staged, unstaged and untracked changes — so you can review what an AI coding agent wrote on your own machine, before it becomes a commit or a pull request.
+> A free, open-source (GPL-3.0) tool for local git code review on macOS, Windows and Linux — a desktop app, or a command that serves the same review UI into a browser tab. It reads the worktree directly — staged, unstaged and untracked changes — so you can review what an AI coding agent wrote on your own machine, before it becomes a commit or a pull request.
 
 - Website and downloads: https://gitwarren.com
+- Guides: https://gitwarren.com/docs
 - Source code: https://github.com/klarluft/gitwarren-app
 - Releases: https://github.com/klarluft/gitwarren-app/releases
 
@@ -13,18 +14,30 @@
 - Nothing is cached: every branch, commit and diff is read from git when shown.
 - Runs with no account, no server and no telemetry. State lives in one SQLite file on the machine.
 - Ships an MCP server over stdio, so agents such as Claude Code and Codex can read the same reviews, leave threaded comments and reply to yours. Every agent comment is attributed to the agent that wrote it.
-- Installs into a coding agent as a plugin, which carries the MCP server plus a note that teaches the agent when to open a review and how to answer the comments left on it, a `/gitwarren` command, and a reviewer agent that leaves its findings as line comments.
+- Reaches your other machines over ssh, wsl.exe or your own tailnet, and installs itself onto them. Nothing is relayed or stored anywhere but the computers you own.
+- Installs into a coding agent as a plugin, which carries that MCP server plus a note that teaches the agent when to open a review and how to answer the comments left on it, a `/gitwarren` command, and a reviewer agent that leaves its findings as line comments.
 
-## Installing it
+## Installing
 
-- Desktop app: download from https://gitwarren.com for macOS, Windows or Linux.
-- macOS, with Homebrew: `brew install --cask klarluft/tap/gitwarren`
+- Desktop app: download from https://gitwarren.com, or on macOS `brew install --cask klarluft/tap/gitwarren`. Linux ships as an AppImage.
+- Command line, macOS and Linux, brings its own Node: `brew install klarluft/tap/gitwarren-cli` or `curl -fsSL https://gitwarren.com/install.sh | sh`.
+- Command line anywhere Node 22+ is, including Windows: `npx gitwarren serve`.
+
+## Installing it into a coding agent
+
+The plugin is the shortest way in, and it is not an alternative to the app: it connects an agent to the reviews, while the app or the command line is where a person reads them. With one already running on the machine, the plugin uses it and its links open there; on its own, it fetches the published package and serves the review page on loopback for as long as the agent runs.
+
 - Claude Code: `/plugin marketplace add klarluft/gitwarren-app`, then `/plugin install gitwarren@gitwarren`
 - Gemini CLI: `gemini extensions install https://github.com/klarluft/gitwarren-app`
 - Codex, Cursor, VS Code and Kiro: add the same repository from the tool's own plugin screen.
 - Any agent, the guidance note on its own: `npx skills add klarluft/gitwarren-app`
+- The MCP server by itself, without the note: `npx -y gitwarren mcp --serve`. It is listed in the MCP registry as `io.github.klarluft/gitwarren`.
 
-The plugin and the desktop app are not alternatives. The plugin connects an agent to the reviews; the app is where a person reads them. Installed together, the plugin finds the running GitWarren and its links open there; installed on its own, it fetches the published package and serves the review page on loopback for as long as the agent is running.
+## The command line
+
+- `gitwarren serve --open` runs GitWarren in the terminal, serving on 127.0.0.1 behind a per-launch token, and opens the browser. Ctrl-C stops it.
+- `gitwarren service install` keeps it running in the background, from now and at every login; `gitwarren service uninstall` undoes that.
+- `gitwarren agent-setup` prints the sentence to give a coding agent so it can reach GitWarren over MCP. The MCP server reads the same SQLite file, so it works whether or not GitWarren is being served.
 
 ## Who it is for
 
