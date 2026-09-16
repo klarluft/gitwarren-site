@@ -157,10 +157,15 @@ gitwarren agent-setup      <span class="c"># the one sentence to give an agent, 
     it.
   </p>
 
-  <pre><code>/plugin marketplace add klarluft/gitwarren-app   # Claude Code, then:
+  <pre><code><span class="c"># Claude Code — add the marketplace, then install from it</span>
+/plugin marketplace add klarluft/gitwarren-app
 /plugin install gitwarren@gitwarren
+
+<span class="c"># Gemini CLI</span>
 gemini extensions install https://github.com/klarluft/gitwarren-app
-npx skills add klarluft/gitwarren-app            # the note alone, any agent</code></pre>
+
+<span class="c"># The note on its own, into any agent that reads skills</span>
+npx skills add klarluft/gitwarren-app</code></pre>
 
   <p>
     Codex, Cursor, VS Code and Kiro read the same repository from their own
