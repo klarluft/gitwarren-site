@@ -38,6 +38,9 @@ The plugin is the shortest way in, and it is not an alternative to the app: it c
 - `gitwarren serve --open` runs GitWarren in the terminal, serving on 127.0.0.1 behind a per-launch token, and opens the browser. Ctrl-C stops it.
 - `gitwarren service install` keeps it running in the background, from now and at every login; `gitwarren service uninstall` undoes that.
 - `gitwarren agent-setup` prints the sentence to give a coding agent so it can reach GitWarren over MCP. The MCP server reads the same SQLite file, so it works whether or not GitWarren is being served.
+- `gitwarren update` moves an install made by `install.sh` (or by GitWarren over ssh) to the newest release, checking the download against the sha256 the release published, restarting the background daemon and deleting the version it replaced. A Homebrew, npm or npx copy belongs to its package manager, and the command names the right one instead. `gitwarren update --check` only says whether there is a newer release; nothing ever checks in the background.
+- `gitwarren uninstall` removes GitWarren from the machine: the login item, the launchers in `~/.gitwarren/bin` that name this install, and the install itself when GitWarren put it there. It asks first, and reviews are kept unless `--data` is given. A launcher belonging to another GitWarren, such as the desktop app, is named and left alone.
+- `gitwarren doctor` checks that every path GitWarren hands another program still points at something, and exits non-zero when one does not; `--fix` repoints a stale launcher and never deletes anything.
 
 ## Who it is for
 

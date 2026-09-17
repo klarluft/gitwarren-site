@@ -43,6 +43,18 @@ import Docs from "../../layouts/Docs.astro";
 gitwarren service status
 gitwarren service uninstall</code></pre>
 
+  <p>
+    Because the Windows command line arrives through npx, there is no install of
+    GitWarren's own here to replace — <code>npx gitwarren@latest</code> fetches
+    the newest release every time, and <code>gitwarren update --check</code>{" "}
+    says whether there is one. The other two still have work to do:{" "}
+    <code>gitwarren uninstall</code> removes the Scheduled Task and the
+    launchers in <code>~/.gitwarren/bin</code>, which npm has no record of, and{" "}
+    <code>gitwarren doctor</code> says whether one of them has been left
+    pointing at something that is gone. Your reviews are kept unless you add{" "}
+    <code>--data</code>.
+  </p>
+
   <h2>Pointing an agent at it</h2>
 
   <p>
