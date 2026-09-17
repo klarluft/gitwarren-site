@@ -69,6 +69,31 @@ npx gitwarren serve</code></pre>
     produces, so the two can upgrade each other's install.
   </p>
 
+  <h3>Moving it forward, and taking it off</h3>
+
+  <p>
+    An install from the script is the one kind GitWarren can replace itself, and{" "}
+    <code>gitwarren update</code> is how: it checks the download against the
+    sha256 the release published in its own formula, has the new binary write
+    the launchers, restarts the unit below if it is running — which re-running
+    the install script cannot do, so a systemd GitWarren would otherwise serve
+    the old code until your next login — and deletes the version it replaced.{" "}
+    <code>gitwarren update --check</code> only says whether there is one.
+  </p>
+
+  <p>
+    <code>gitwarren uninstall</code> takes it back off: the unit, the launchers
+    in <code>~/.gitwarren/bin</code> that name this install, and{" "}
+    <code>~/.gitwarren/daemon</code> itself. Your reviews are kept unless you
+    add <code>--data</code>. For the Homebrew copy the command is still{" "}
+    <code>brew uninstall gitwarren-cli</code>, and running{" "}
+    <code>gitwarren uninstall</code> first is what takes the unit and the
+    launchers with it — brew knows about neither.{" "}
+    <code>gitwarren doctor</code> says whether a launcher has already been left
+    pointing at something that is gone, which is what an agent reporting a
+    failed MCP connection usually turns out to be.
+  </p>
+
   <h3>Starting at boot</h3>
 
   <p>

@@ -89,14 +89,16 @@ npx gitwarren serve</code></pre>
     <code>~/.gitwarren/bin/gitwarren</code>, which you add to your{" "}
     <code>PATH</code>. That is the same layout the app produces when it installs
     GitWarren onto <a href="/docs/another-machine">another machine</a> over
-    ssh, so either can upgrade what the other installed. To remove it,{" "}
-    <code>rm -rf ~/.gitwarren</code>; your reviews are not in there.
+    ssh, so either can upgrade what the other installed — and so can{" "}
+    <code>gitwarren update</code>, which is this script from the inside.{" "}
+    <code>gitwarren uninstall</code> takes the whole of it back off the machine.
+    Your reviews are in neither place and are kept by both.
   </p>
 
   <h3>Which command you want</h3>
 
   <p>
-    Three things a person wants from it, and one command for each. They are
+    Four things a person wants from it, and one command for each. They are
     independent — none of them needs another to have been run first.
   </p>
 
@@ -110,7 +112,12 @@ gitwarren service uninstall
 gitwarren service status
 
 <span class="c"># Let a coding agent in</span>
-gitwarren agent-setup      <span class="c"># the one sentence to give an agent, see below</span></code></pre>
+gitwarren agent-setup      <span class="c"># the one sentence to give an agent, see below</span>
+
+<span class="c"># Keep it current, or take it off again</span>
+gitwarren update           <span class="c"># move to the newest release (--check only says whether there is one)</span>
+gitwarren doctor           <span class="c"># is every path GitWarren hands out still pointing at something?</span>
+gitwarren uninstall        <span class="c"># remove it from this machine; --data takes the reviews too</span></code></pre>
 
   <div class="note">
     <span class="note-title">Nothing is copied by hand</span>
@@ -147,6 +154,53 @@ gitwarren agent-setup      <span class="c"># the one sentence to give an agent, 
     from elsewhere, <code>gitwarren service install --no-login-item</code>{" "}
     writes them and registers nothing.
   </p>
+
+  <h2>Updating it, and taking it off</h2>
+
+  <p>
+    <code>gitwarren update</code> moves this install to the newest release. It
+    resolves the version, checks the download against the sha256 the release
+    published in its own Homebrew formula, unpacks beside the destination and
+    renames into place, has the <em>new</em> binary write the launchers — which
+    is also the proof that it runs here — restarts the background GitWarren if
+    one is running, and deletes the version it replaced.{" "}
+    <code>gitwarren update --check</code> only says what is installed and what
+    is newest. Neither happens on its own: nothing checks in the background, and
+    the one request either makes is to GitHub, for the release.
+  </p>
+
+  <p>
+    That is for an install GitWarren put there itself — the script above, or the
+    app installing onto <a href="/docs/another-machine">another machine</a> over
+    ssh. A Homebrew, npm or npx copy belongs to its package manager, and{" "}
+    <code>update</code> names the command that is the right one rather than
+    writing over files it does not own.
+  </p>
+
+  <p>
+    <code>gitwarren uninstall</code> goes the other way, and it takes more than
+    the install: the login item, and the launchers in{" "}
+    <code>~/.gitwarren/bin</code> that name this install. It prints the plan and
+    asks before doing any of it. Your reviews are kept unless you add{" "}
+    <code>--data</code> — they are the one thing here that cannot be downloaded
+    again. A launcher belonging to a <em>different</em> GitWarren, commonly the
+    desktop app, which writes <code>gitwarren-mcp</code> too, is named and left
+    exactly where it is.
+  </p>
+
+  <div class="note">
+    <span class="note-title">The failure with no symptom on this machine</span>
+    <p>
+      A launcher whose target is gone — after a <code>brew uninstall</code>,
+      after an AppImage is deleted, after a checkout is rebuilt somewhere else —
+      still sits there, and the only thing anyone sees is their agent reporting
+      that the MCP server failed to connect: in another product, with nothing
+      naming the cause. <code>gitwarren doctor</code> reads every path GitWarren
+      asks another program to run, marks the broken ones and exits non-zero so a
+      script can be what notices; <code>--fix</code> repoints a stale one. It
+      never deletes — a file GitWarren did not write is reported and left alone.
+    </p>
+  </div>
 
   <h2>Pointing an agent at it</h2>
 

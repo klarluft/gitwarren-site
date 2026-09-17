@@ -160,8 +160,10 @@ import { COMPANY, LEGAL, LICENCE, PRODUCT_HUNT, REPO } from "../config";
     GitHub for the latest release on launch and every six hours after that. That
     request tells GitHub your IP address, the version you are running and your
     platform, in the same way visiting any web page would. It tells us nothing —
-    we never see it. The command-line install has no updater and makes no such
-    request; you update it the way you installed it.
+    we never see it. The command-line install never asks on its own — nothing in
+    it checks in the background — and makes the same request only in the moment
+    you run <code>gitwarren update</code>, or ask it with{" "}
+    <code>gitwarren update --check</code> whether there is a newer release.
   </p>
 
   <p>
