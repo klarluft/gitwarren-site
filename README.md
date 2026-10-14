@@ -8,7 +8,8 @@ Static site, built with Astro and Tailwind v4, deployed on Cloudflare Workers.
 
 ## Status
 
-Built. One page, no client-side JavaScript.
+Built. A front page, six guides and two legal pages, with almost no
+client-side JavaScript — `CLAUDE.md` lists the three exceptions.
 
 Download links are resolved at build time from the GitHub releases API, and
 the app repo redeploys this site whenever a release is published. See
