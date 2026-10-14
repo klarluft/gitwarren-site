@@ -11,6 +11,12 @@
 
 - Opens reviews against your local repositories, presented like a pull request: conversation, commits and files changed.
 - Includes uncommitted work. If the branch under review is checked out in a worktree, its staged, unstaged and untracked files are folded into the diff.
+- Shows the directory the branch under review is checked out in, the main checkout or a worktree, with buttons to copy the path and show it in the file manager.
+- Reads a long diff well: unified or side-by-side, with only the changed words highlighted in an edited line; syntax highlighting with GitHub's grammars and light and dark themes; a wrap toggle for long lines; a light/dark switch beside the system default. Files are built as you scroll to them, so a diff of hundreds of files stays usable.
+- Renders Markdown files as a preview with the changes marked in place, like tracked changes, and lets you comment on a paragraph from there. Relative links open the linked file and repository images are drawn.
+- Tracks review progress per file: a "Reviewed" tick that clears itself if the file changes afterwards, and a strip above the diff with one slot per file.
+- Browses a repository's files without a review, from the checkout on disk or any branch or tag, and searches a review's files with git grep.
+- Works on a phone through the browser UI, over your tailnet, with review screens dense enough to comment from.
 - Nothing is cached: every branch, commit and diff is read from git when shown.
 - Runs with no account, no server and no telemetry. State lives in one SQLite file on the machine.
 - Ships an MCP server over stdio, so agents such as Claude Code and Codex can read the same reviews, leave threaded comments and reply to yours. Every agent comment is attributed to the agent that wrote it.
@@ -21,7 +27,7 @@
 
 - Desktop app: download from https://gitwarren.com, or on macOS `brew install --cask klarluft/tap/gitwarren`. Linux ships as an AppImage.
 - Command line, macOS and Linux, brings its own Node: `brew install klarluft/tap/gitwarren-cli` or `curl -fsSL https://gitwarren.com/install.sh | sh`.
-- Command line anywhere Node 22+ is, including Windows: `npx gitwarren serve`.
+- Command line anywhere Node 22.14+ is, including Windows: `npx gitwarren serve`.
 
 ## Installing it into a coding agent
 

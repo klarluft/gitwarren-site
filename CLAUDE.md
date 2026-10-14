@@ -109,6 +109,7 @@ the built HTML for `[a-z]<code` before shipping prose changes.
 | `narrow.png` | 1520x1800 | `design/screenshots/07-files-narrow.png` |
 | `logo.png` | 600x600 | `design/brand/gitwarren-logo.png` |
 | `hero.webm`, `hero.mp4` | 2400x1600, ~24s | `scripts/capture-hero-video.mjs` in the app repo |
+| `side-by-side.png` | 2400x1600 | A Split diff of a Markdown file, dark theme. **Placeholder**: a copy of `hero.png` until the real capture lands |
 
 The two videos are the one exception to "sources, not shippable files": Vite
 copies them through with a hashed name and no processing, so they are encoded
@@ -151,16 +152,25 @@ Headline: **"Review what your agents wrote, before GitHub ever sees it."**
    platform line, the Homebrew one-liner (same as in Download), `hero.jpg`.
 2. **Before the commit** — "An agent's output isn't a commit. It's a dirty
    worktree." Screenshot `untracked.jpg`.
-3. **Agents in the loop** — MCP server, seventeen tools, agents as review
+3. **Reading the diff** — what 1.0 added to reading a review: side by side,
+   Markdown previews with changes, the progress strip, highlighting and
+   themes, the repository Files tab, the worktree path. Screenshot
+   `side-by-side.png`, six cards. Not in the original artboards; added for
+   1.0 from existing components. Each card is checked against the app's
+   source (PRs #111–#120), so change a card when the app changes it.
+4. **Agents in the loop** — MCP server, seventeen tools, agents as review
    participants; then the plugin install block and the one-click "add the
    server" chips (below). Screenshot `agents.jpg`. Four cards: always
    attributed / two agents stay two / yours to edit / never over the network.
-4. **Local by construction** — no account, nothing cached, one SQLite file.
-5. **Download** — logo, headline, three platform buttons, the Homebrew
+5. **Across your machines** — SSH, WSL, tailnet; three cards.
+6. **Two shells, one review** — the app or `npx gitwarren serve`; the install
+   block and three cards.
+7. **Local by construction** — no account, nothing cached, one SQLite file.
+8. **Download** — logo, headline, three platform buttons, the Homebrew
    one-liner (`brew install --cask klarluft/tap/gitwarren`; the cask lives in
    the `klarluft/homebrew-tap` repo and bumps itself on each release), GPL-3.0
    line.
-6. **Footer.**
+9. **Footer.**
 
 ### The plugin install block
 

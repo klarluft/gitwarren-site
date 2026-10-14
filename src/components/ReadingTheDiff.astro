@@ -1,0 +1,79 @@
+---
+import Eyebrow from "./Eyebrow.astro";
+import Screenshot from "./Screenshot.astro";
+import Card from "./Card.astro";
+import sideBySide from "../assets/side-by-side.png";
+---
+
+<!-- What 1.0 added to reading a review. Every card is checked against the
+     app's source, PRs #111-#120; change one when the app changes it. -->
+<section
+  id="reading"
+  class="mx-auto flex w-full max-w-page flex-col gap-stack px-gutter pt-section"
+>
+  <Eyebrow>Reading the diff</Eyebrow>
+
+  <h2 class="max-w-[880px] font-display text-h2">
+    Built for reading a long diff, not just opening one.
+  </h2>
+
+  <p class="max-w-[730px] text-body text-muted">
+    Agents write a lot, and not all of it is code: specs, plans, READMEs,
+    instructions for the next agent. GitWarren 1.0 is about getting through all
+    of it &mdash; side by side or unified, with the prose rendered, and with a
+    clear count of what you have read and what is left.
+  </p>
+
+  <Screenshot
+    src={sideBySide}
+    alt="A side-by-side diff in GitWarren, with only the changed words highlighted inside each edited line"
+    caption="Split view: the old version beside the new, with only the words that changed marked."
+    class="mt-[28px] max-w-shot max-sm:hidden"
+  />
+
+  <div class="mt-[38px] grid grid-cols-1 gap-cards lg:grid-cols-3">
+    <Card title="Side by side">
+      Unified or split, toggled with{" "}
+      <code class="font-mono text-[0.92em] text-ink">s</code> and remembered.
+      In both, an edited line marks the words that changed rather than the whole
+      line &mdash; which is what makes a one-word fix to a long paragraph
+      findable.
+    </Card>
+    <Card title="Markdown, with the changes in it">
+      Every Markdown file can be read as a preview, with added blocks marked,
+      removed ones struck through and edited words changed in place, like
+      tracked changes. Comment on a paragraph there and the thread appears on
+      those lines in the diff too.
+    </Card>
+    <Card title="Progress you can see">
+      A strip above the diff has one slot per file, whatever its size, so a
+      lock file is one file of many rather than most of the bar. Reviewed files
+      go green, files changed since you read them go amber, and a click jumps
+      there.
+    </Card>
+    <Card title="Coloured like GitHub">
+      Syntax highlighting with the same grammars and GitHub&#39;s own light and
+      dark themes, in the diff, the file browser and code in comments. Light,
+      dark or the system&#39;s choice, and a wrap toggle for long lines.
+    </Card>
+    <Card title="A Files tab on every repository">
+      Browse a repository without opening a review: the checkout on disk,
+      uncommitted files included, or any branch or tag. Inside a review, Browse
+      files adds find in files: <code
+        class="font-mono text-[0.92em] text-ink">git grep</code
+      > over the version under review.
+    </Card>
+    <Card title="Where the branch is checked out">
+      A review names the directory its branch is checked out in &mdash; the
+      main checkout or which worktree &mdash; with a button to copy the path and
+      one to show it in your file manager.
+    </Card>
+  </div>
+
+  <p class="mt-[26px] max-w-[730px] text-body text-muted">
+    Big branches stay usable: files are built as you scroll to them, so a diff
+    of hundreds of files opens and scrolls rather than hanging. And the same
+    screens work on a phone, with a comment box that fits above the keyboard and
+    a progress strip you can scrub with a thumb.
+  </p>
+</section>
