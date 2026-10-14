@@ -1,6 +1,7 @@
 # Product screenshots
 
-Dark theme, 2x, captured from a packaged build against a seeded demo database.
+Dark theme (bar `15`), 2x, captured against a seeded demo database. The set
+was last re-recorded against GitWarren 1.0.1.
 Nothing here touches a real repository or the real GitWarren database.
 
 Every image is the app's own renderer, captured over the DevTools protocol —
@@ -12,12 +13,16 @@ which is where a landing page would draw its own traffic lights.
 
 | File | Size | What it shows |
 | --- | --- | --- |
-| `01-review-files-uncommitted.png` | 1200×800 | **The hero.** Branch header with the amber *uncommitted work* badge, the *Include uncommitted* switch, and the "1 staged, 1 unstaged, 1 untracked" banner. |
+| `01-review-files-uncommitted.png` | 1200×800 | **The hero.** Branch header with the amber *uncommitted work* badge, the checkout path, the *Committed / All / Uncommitted* control, the progress strip, and the "1 staged, 1 unstaged, 1 untracked" banner. |
 | `09-untracked-file.png` | 1200×800 | **The differentiator.** A file that exists only in the working tree, badged *untracked*, with a multi-line agent comment anchored to it. |
 | `10-inline-thread.png` | 1200×800 | A file badged *uncommitted*, additions against a deletion, collapsed-context expanders. |
 | `08-agent-thread.png` | 1200×800 | An agent finding something real and a human answering, plus a resolved thread below. |
 | `02-review-conversation.png` | 1200×800 | Top of the conversation tab: description, first thread, the `(AI)` attribution. |
-| `11-agent-access.png` | 1200×800 | The MCP block the app prints for a real install path. |
+| `11-agent-access.png` | 1200×800 | The Agent access page: the plugin install, and the one-sentence prompt with the launcher path. |
+| `12-side-by-side.png` | 1200×800 | A README diff split, with only the changed words marked on the rewritten lines. `src/assets/side-by-side.png`. |
+| `13-markdown-preview.png` | 1200×800 | The same README change as a rendered preview, removals struck through and additions on a green bar. |
+| `14-repository-files.png` | 1200×800 | A repository's Files tab: the tree, the branch picker, a highlighted file read from disk. |
+| `15-light-theme.png` | 1200×800 | `01` in the light theme. |
 | `03-repository-reviews.png` | 1200×800 | Reviews against one repository, open/closed/all filter. |
 | `04-home-repositories.png` | 1200×800 | The entry point: three tracked repositories. |
 | `05-review-commits.png` | 1200×800 | The commits tab. |
@@ -74,8 +79,15 @@ SHOT_DIR=~/github.com/klarluft/gitwarren-site/design/screenshots \
   node scripts/capture-demo.mjs
 ```
 
-The unpackaged app works for every shot except `11-agent-access.png`, where the
-MCP config would print the dev checkout's path instead of an install path.
+The unpackaged app works for every shot, `11-agent-access.png` included: the
+page prints the `~/.gitwarren/bin/gitwarren-mcp` launcher rather than the
+build's own path, and the capture hides the three things on it that belong to
+the capture machine (the port-41427 warning when an installed GitWarren holds
+it, the scratch database path, and the `(dev)` version).
+
+`make-demo-repos.sh` starts with `rm -rf "$DEMO_REPO_ROOT"`. If that directory
+holds anything else, build into a scratch directory and move the three repos
+across instead of pointing the script at it.
 
 ### Three things that will bite
 
@@ -124,10 +136,10 @@ and pass the same `DEMO_REPO_ROOT` to `seed-demo.ts`.
 
 ## The hero video
 
-`src/assets/hero.webm` and `hero.mp4` are a ~24s silent loop of the same
+`src/assets/hero.webm` and `hero.mp4` are a ~26s silent loop of the same
 review, recorded by `scripts/capture-hero-video.mjs` in the app repo over the
-same DevTools connection as the screenshots: `u` folds the working tree out and
-back in, `]` steps to the untracked file, a line comment is typed on it, and
+same DevTools connection as the screenshots: `u` steps through only the
+uncommitted work, only the commits, and both again, `]` steps to the untracked file, a line comment is typed on it, and
 the agent's reply lands with its `(AI)` attribution. The last half-second
 crossfades back to the opening frame so it loops cleanly. There is no cursor by
 design; the one pointer gesture (opening the comment) shows its hover state.

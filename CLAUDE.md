@@ -108,8 +108,8 @@ the built HTML for `[a-z]<code` before shipping prose changes.
 | `agents.png` | 2400x1600 | `design/screenshots/08-agent-thread.png` |
 | `narrow.png` | 1520x1800 | `design/screenshots/07-files-narrow.png` |
 | `logo.png` | 600x600 | `design/brand/gitwarren-logo.png` |
-| `hero.webm`, `hero.mp4` | 2400x1600, ~24s | `scripts/capture-hero-video.mjs` in the app repo |
-| `side-by-side.png` | 2400x1600 | A Split diff of a Markdown file, dark theme. **Placeholder**: a copy of `hero.png` until the real capture lands |
+| `hero.webm`, `hero.mp4` | 2400x1600, ~26s | `scripts/capture-hero-video.mjs` in the app repo |
+| `side-by-side.png` | 2400x1600 | `design/screenshots/12-side-by-side.png` |
 
 The two videos are the one exception to "sources, not shippable files": Vite
 copies them through with a hashed name and no processing, so they are encoded
